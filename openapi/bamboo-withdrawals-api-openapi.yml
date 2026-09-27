@@ -2,24 +2,47 @@ openapi: 3.2.0
 info:
   title: Bamboo Withdrawals API
   version: ''
-  description: Withdrawals allow users to extract funds from their brokerage accounts after successful trades.
+  description: 'Withdrawals allow users to extract funds from their brokerage accounts after successful trades. Understanding the settlement timeline is essential.
+
+
+    #### Settlement Timeline
+
+    - Stock sale proceeds settle at T+1 business day.
+
+    - `unsettled_cash` indicates funds that are pending settlement.
+
+    - Once settled, funds move to `withdrawal_cash` and become available for withdrawal.
+
+
+    Remember that cash represents total funds in the user''s brokerage account from all sources—deposits, stock sales, cancelled and rejected trades. All cash components (`cash`, `unsettled_cash`, `withdrawal_cash`) are available under the <a href="#tag/Portfolio-Reporting/operation/Web.Api.PortfolioController.portfolio">Portfolio endpoint</a>.
+
+    '
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Withdrawals
-  description: Withdrawals allow users to extract funds from their brokerage accounts after successful trades.
+  description: 'Withdrawals allow users to extract funds from their brokerage accounts after successful trades. Understanding the settlement timeline is essential.
+
+
+    #### Settlement Timeline
+
+    - Stock sale proceeds settle at T+1 business day.
+
+    - `unsettled_cash` indicates funds that are pending settlement.
+
+    - Once settled, funds move to `withdrawal_cash` and become available for withdrawal.
+
+
+    Remember that cash represents total funds in the user''s brokerage account from all sources—deposits, stock sales, cancelled and rejected trades. All cash components (`cash`, `unsettled_cash`, `withdrawal_cash`) are available under the <a href="#tag/Portfolio-Reporting/operation/Web.Api.PortfolioController.portfolio">Portfolio endpoint</a>.
+
+    '
 paths:
   /api/tenant_brokerage_withdraw:
     post:
       tags:
       - Withdrawals
       summary: Create Withdrawal
-      description: 'Withdrawal requests follow a similar verification flow as deposits. You send a notification request with the necessary details to debit the user''s brokerage account, we verify that the user has the amount requested.
-
-        Once verified, the specified amount is deducted from the user''s brokerage account, and withdrawal status events are sent via Google Pub/Sub.
-
-
-        Offline settlement happens between our teams using established procedures. (see event details under withdrawal status events)'
+      description: "Withdrawal requests follow a similar verification flow as deposits. You send a notification request with the necessary details to debit the user's brokerage account, we verify that the user has the amount requested. \nOnce verified, the specified amount is deducted from the user's brokerage account, and withdrawal status events are sent via Google Pub/Sub. \n\nOffline settlement happens between our teams using established procedures. (see event details under [withdrawal status events](#section/Withdrawal-Event))\n"
       operationId: Web.Api.WithdrawController.tenant_brokerage_withdraw_ngn
       parameters:
       - name: content-type
@@ -89,7 +112,9 @@ paths:
       tags:
       - Withdrawals
       summary: Fetch All Withdrawals
-      description: Complete withdrawal history with date filtering
+      description: 'Complete withdrawal history with date filtering
+
+        '
       parameters:
       - name: accept-language
         in: header
@@ -155,14 +180,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
-      operationId: getApiTenantWithdraws
-      x-operation-id-source: derived
   /api/tenant/withdraw/{id}:
     get:
       tags:
       - Withdrawals
       summary: Fetch User Withdrawals
-      description: Individual user withdrawal history for performance tracking
+      description: 'Individual user withdrawal history for performance tracking
+
+        '
       parameters:
       - name: accept-language
         in: header
@@ -234,14 +259,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
-      operationId: getApiTenantWithdrawById
-      x-operation-id-source: derived
   /api/tenant/withdraw/status/{reference}:
     get:
       tags:
       - Withdrawals
       summary: Withdrawal Status Check
-      description: Real-time status checking for specific withdrawal transactions
+      description: 'Real-time status checking for specific withdrawal transactions
+
+        '
       operationId: Web.Api.Tenant.WithdrawController.withdraw_status
       parameters:
       - name: content-type
@@ -303,22 +328,38 @@ paths:
                 $ref: '#/components/schemas/Unauthorized'
 components:
   schemas:
-    ErrorChangesetResponse:
-      title: Error changeset response
+    WithdrawStatusResponse:
+      title: Withdraw status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Withdraw status
+          example: pending
+        reference:
+          type: string
+          description: Withdraw reference
+          example: INVKPxiJVc40BNaQBH
+        currency:
+          type: string
+          description: Withdraw currency
+          example: NGN
+        amount:
+          type: number
+          description: Withdraw amount
+          example: 13400
+      description: Withdraw status
+    Unauthorized:
+      title: Unauthorized response
       required:
-      - errors
       - message
       type: object
       properties:
         message:
           type: string
-          description: Message why request didn't succeed
-          example: Invalid credentials
-        errors:
-          type: object
-          properties: {}
-          description: Map of errors
-      description: Error response for request which manipulates data
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
     TenantBrokerageWithdrawBody:
       title: Tenant Brokerage Request body for NGN
       required:
@@ -343,38 +384,22 @@ components:
           type: string
           description: Either "US" or "NGX". It is used to specify desired stock market. If no market is specified, it defaults to US.
           example: US
-    Unauthorized:
-      title: Unauthorized response
+    ErrorChangesetResponse:
+      title: Error changeset response
       required:
+      - errors
       - message
       type: object
       properties:
         message:
           type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
-    WithdrawStatusResponse:
-      title: Withdraw status
-      type: object
-      properties:
-        status:
-          type: string
-          description: Withdraw status
-          example: pending
-        reference:
-          type: string
-          description: Withdraw reference
-          example: INVKPxiJVc40BNaQBH
-        currency:
-          type: string
-          description: Withdraw currency
-          example: NGN
-        amount:
-          type: number
-          description: Withdraw amount
-          example: 13400
-      description: Withdraw status
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
     TenantWithdrawsPaginationResponse:
       title: List of all withdrawals with pagination
       type: object

@@ -12,7 +12,9 @@ paths:
       tags:
       - 'Https:'
       summary: Supported Banks and Sort Codes for NGX Trades
-      description: This endpoint provides a list of all supported banks and sort codes by the Nigerian Brokerage Commissions. The bank details provided are used for sending users their dividends from companies they've traded with in the Nigerian market.
+      description: 'This endpoint provides a list of all supported banks and sort codes by the Nigerian Brokerage Commissions. The bank details  provided are used for sending users their dividends from companies they''ve traded with in the Nigerian market.
+
+        '
       responses:
         '200':
           description: Dictionary response
@@ -42,8 +44,6 @@ paths:
                   Country code can''t be blank'
               schema:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
-      operationId: getHttps:CscsBanksInvestbambooCom
-      x-operation-id-source: derived
 components:
   schemas:
     cscs_banks_and_sortcodes:
@@ -104,6 +104,17 @@ components:
             sort_code: '559'
           - name: Globus Bank
             sort_code: '103'
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
     ErrorChangesetResponse:
       title: Error changeset response
       required:
@@ -120,17 +131,6 @@ components:
           properties: {}
           description: Map of errors
       description: Error response for request which manipulates data
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
     Unauthorized:
       title: Unauthorized response
       required:

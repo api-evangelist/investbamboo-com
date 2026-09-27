@@ -12,7 +12,9 @@ paths:
       tags:
       - NG Withdrawals
       summary: Initiate Withdrawal Request
-      description: This endpoint is used to withdraw from users' cash balances.
+      description: 'This endpoint is used to withdraw from users'' cash balances.
+
+        '
       operationId: Web.Api.WithdrawController.tenant_brokerage_withdraw_ngn
       parameters:
       - name: content-type
@@ -145,26 +147,8 @@ paths:
                   Country code can''t be blank'
               schema:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
-      operationId: getApiLsxNgWithdrawByReference
-      x-operation-id-source: derived
 components:
   schemas:
-    ErrorChangesetResponse:
-      title: Error changeset response
-      required:
-      - errors
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Message why request didn't succeed
-          example: Invalid credentials
-        errors:
-          type: object
-          properties: {}
-          description: Map of errors
-      description: Error response for request which manipulates data
     lsxngwithdraw_by_reference_response:
       title: Withdraw status
       required:
@@ -206,6 +190,17 @@ components:
           description: Unauthorized/Invalid Token/Token has expired
           example: Invalid client token supplied.
       description: Token is invalid or have expired
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
     lsxngwithdraw:
       title: NGX Withdrawal Request body
       required:
@@ -226,17 +221,22 @@ components:
           type: string
           description: reference
           example: INVKPxiJVc40BNaQBH
-    ResourceNotFound:
-      title: Resource not found
+    ErrorChangesetResponse:
+      title: Error changeset response
       required:
+      - errors
       - message
       type: object
       properties:
         message:
           type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

@@ -12,12 +12,7 @@ paths:
       tags:
       - Tenant
       summary: Market Activation for Existing Users
-      description: 'In a situation where a user is interested in a market that was not originally activated during their original account
-
-        creation, this endpoint is used to activate the desired market for that existing user.
-
-
-        It is important to note that if a user has a market already activated, the payload for that market should not be passed.'
+      description: "In a situation where a user is interested in a market that was not originally activated during their original account \ncreation, this endpoint is used to activate the desired market for that existing user. \n\nIt is important to note that if a user has a market already activated, the payload for that market should not be passed.\n"
       parameters:
       - name: content-type
         in: header
@@ -221,8 +216,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFound'
-      operationId: postApiTenantBrokerageAccounts
-      x-operation-id-source: derived
 components:
   schemas:
     ResourceNotFound:

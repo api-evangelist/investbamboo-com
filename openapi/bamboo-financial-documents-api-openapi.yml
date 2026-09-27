@@ -2,31 +2,19 @@ openapi: 3.2.0
 info:
   title: Bamboo Financial Documents API
   version: ''
-  description: Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.
+  description: "Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.\n\n##### Document Types and Generation\nThe system generates three primary document categories to meet regulatory requirements and provide users with comprehensive account records.\n\n**Trade Confirmations:**\n- **Generation:** Generated for users who have engaged in stock trades at the end of each trading day\n- **Content:** Trade details, execution prices, fees, settlement dates \n- **Purpose:** Legal confirmation of executed trades\n\n**Account Statements:** \n- **Generation:** Generated at the end of each month\n- **Content:** Portfolio holdings, cash balances, transaction history \n- **Purpose:** Comprehensive account activity summary\n\n**Tax Documents:** \n- **Generation:** Generated once, at the end of each year\n- **Content:** Realized gains/losses, dividend income, tax obligations \n- **Purpose:** Support user tax filing requirements\n"
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Financial Documents
-  description: Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.
+  description: "Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.\n\n##### Document Types and Generation\nThe system generates three primary document categories to meet regulatory requirements and provide users with comprehensive account records.\n\n**Trade Confirmations:**\n- **Generation:** Generated for users who have engaged in stock trades at the end of each trading day\n- **Content:** Trade details, execution prices, fees, settlement dates \n- **Purpose:** Legal confirmation of executed trades\n\n**Account Statements:** \n- **Generation:** Generated at the end of each month\n- **Content:** Portfolio holdings, cash balances, transaction history \n- **Purpose:** Comprehensive account activity summary\n\n**Tax Documents:** \n- **Generation:** Generated once, at the end of each year\n- **Content:** Realized gains/losses, dividend income, tax obligations \n- **Purpose:** Support user tax filing requirements\n"
 paths:
   /api/document_list:
     get:
       tags:
       - Financial Documents
       summary: Fetch List of All Documents
-      description: 'Document retrieval begins with obtaining available document lists filtered by document type for efficient access to specific document categories.
-
-
-        **Document Type Parameters:**
-
-        - confirms: Trade confirmation documents
-
-        - statements: Monthly account statements
-
-        - taxforms: Annual tax reporting documents
-
-
-        Document metadata includes unique file keys for document retrieval, generation dates showing when documents were created, coverage periods indicating date ranges covered by each document, and file formats with all documents provided as PDF files.'
+      description: "Document retrieval begins with obtaining available document lists filtered by document type for efficient access to specific document categories.\n\n**Document Type Parameters:**\n- confirms: Trade confirmation documents \n- statements: Monthly account statements \n- taxforms: Annual tax reporting documents\n\nDocument metadata includes unique file keys for document retrieval, generation dates showing when documents were created, coverage periods indicating date ranges covered by each document, and file formats with all documents provided as PDF files.\n"
       operationId: Web.Api.Tenant.ExchangeRateController.exchange_rate
       parameters:
       - name: content-type
@@ -88,7 +76,9 @@ paths:
       description: 'This endpoint is used to access individual document download URLs using unique file key identifiers gotten from the `document_list` endpoint.
 
 
-        Security features include expiring URLs where download links expire for security, IP restrictions limiting access to authorized requests, and user verification ensuring documents are only accessible by account owners.'
+        Security features include expiring URLs where download links expire for security, IP restrictions limiting access to authorized requests, and user verification ensuring documents are only accessible by account owners.
+
+        '
       operationId: Web.Api.Tenant.DocumentController.document
       parameters:
       - name: content-type
@@ -145,6 +135,17 @@ paths:
                 $ref: '#/components/schemas/ResourceNotFound'
 components:
   schemas:
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
     USDocumentList:
       title: List of Documents by Document Type
       required:
@@ -183,17 +184,6 @@ components:
           type: link
           description: Document URL
           example: https://dzb6emi8pracf.cloudfront.net/420d2907-bb49-421d-accd-9ad4692b0a51.1722266251918/Confirm_BBOO_001_BBMN000009_08302024.pdf?Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHBzOi8vZHpiNmVtaThwcmFjZi5jbG91ZGZyb250Lm5ldC80MjBkMjkwNy1iYjQ5LTQyMWQtYWNjZC05YWQ0NjkyYjBhNTEuMTcyMjI2NjI1MTkxOC9Db25maXJtX0JCT09fMDAxX0JCTU4wMDAwMDlfMDgzMDIwMjQucGRmIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzI1NTI1Njg2fSwiSXBBZGRyZXNzIjp7IkFXUzpTb3VyY2VJcCI6IjAuMC4wLjAvMCJ9fX1dfQ__&Signature=WL-Cm2B8BMOvT0ZZf6lMbIUmq1m4jF6atbtsalkgFKOyXs08eaA5nPFnOJjlQBmhqdzva8uGsKdV11U2Mmbmk3UXMzU8-sKQSMlMZ-awknHGSGELJbA1aOlbscsxeznP~MZhVL73ouKuX6scyqqk8AXkiTXTwKfJSxVhPiR0EAcrvW0GkrheiydXiti87eed07t-Tl8BGd7Du83ClueJZxJTTMhNGhuYhpvB-G7yzzRUJWIXsVhofGlmC9mChD~2R6OoaruQ7UckxlHL~IobKzm0oZLiRESiqyuHfgGwIZrY~KGVNXFmgbYNIiFZObjDgbMlVWErM-80VYiRtL9Ctw__&Key-Pair-Id=APKAJP3MFGZ6DRA4CW4Q
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

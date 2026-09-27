@@ -12,7 +12,9 @@ paths:
       tags:
       - Stock Trading
       summary: Place An Order on the NGX Market
-      description: 'If the user is eligible to make trades, this endpoint is used to place an order using the result of the calculated order endpoint. Please note: Tenants are to place just MARKET order type.'
+      description: 'If the user is eligible to make trades, this endpoint is used to place an order using the result of the calculated order  endpoint. Please note: Tenants are to place just MARKET order type.
+
+        '
       operationId: Web.Api.OrderController.order
       parameters:
       - name: content-type
@@ -86,17 +88,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
     ErrorResponse:
       title: Error response
       required:
@@ -108,16 +99,6 @@ components:
           description: Error response for external or internal errors not connected to data
           example: Message why request didn't succeed
       description: Error response for external or internal errors not connected to data
-    lsxngorder_response:
-      title: Order response
-      required:
-      - order_id
-      type: object
-      properties:
-        order_id:
-          type: string
-          description: Order ID to fetch status by REST
-          example: BB.LAMB_21046bcd-0400-4ac1-a6a1-91c439455ef2
     ResourceNotFound:
       title: Resource not found
       required:
@@ -129,6 +110,17 @@ components:
           description: Resource not found (an incorrect url may have been used)
           example: Resource Not Found
       description: Error response for when the resource is not found within our data.
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
     lsxngorder:
       title: NGX place order request
       required:
@@ -184,6 +176,16 @@ components:
           type: number
           description: Total invested price, without fee
           default: 1
+    lsxngorder_response:
+      title: Order response
+      required:
+      - order_id
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Order ID to fetch status by REST
+          example: BB.LAMB_21046bcd-0400-4ac1-a6a1-91c439455ef2
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

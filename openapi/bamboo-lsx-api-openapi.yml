@@ -12,7 +12,9 @@ paths:
       tags:
       - Lsx
       summary: NGX Dictionary
-      description: This endpoint provides the acceptable data for fetching the format for the states and LGAs required during account creation. This info is needed to enable users trade in the NG market.
+      description: 'This endpoint provides the acceptable data for fetching the format for the states and LGAs required during account creation. This info is needed to enable users trade in the NG market.
+
+        '
       responses:
         '200':
           description: Dictionary response
@@ -42,37 +44,8 @@ paths:
                   Country code can''t be blank'
               schema:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
-      operationId: getApiLsxNgDictionary
-      x-operation-id-source: derived
 components:
   schemas:
-    ErrorChangesetResponse:
-      title: Error changeset response
-      required:
-      - errors
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Message why request didn't succeed
-          example: Invalid credentials
-        errors:
-          type: object
-          properties: {}
-          description: Map of errors
-      description: Error response for request which manipulates data
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
     Unauthorized:
       title: Unauthorized response
       required:
@@ -84,6 +57,17 @@ components:
           description: Unauthorized/Invalid Token/Token has expired
           example: Invalid client token supplied.
       description: Token is invalid or have expired
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
     lsxngdictionary:
       title: NGX Dictionary
       type: object
@@ -146,6 +130,22 @@ components:
             - Kwali
             - Municipal Area Council
           - etc: null
+    ErrorChangesetResponse:
+      title: Error changeset response
+      required:
+      - errors
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

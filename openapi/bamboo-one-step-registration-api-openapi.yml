@@ -13,16 +13,7 @@ paths:
       - One Step Registration
       summary: Create New User
       operationId: Web.Api.RegisterController.registration_step
-      description: 'This endpoint combines all the registration steps into a single API endpoint. To use this endpoint, you have to provide all
-
-        fields in the defined payload, and also ensure that the user’s ID has been verified. Please note that you are required to
-
-        subscribe to at least one market on user''s first account activation.
-
-
-        A dictionary endpoint is provided below to give insight into all the questions and acceptable
-
-        values for the fields within the payload.'
+      description: "This endpoint combines all the registration steps into a single API endpoint. To use this endpoint, you have to provide all \nfields in the defined payload, and also ensure that the user’s ID has been verified. Please note that you are required to \nsubscribe to at least one market on user's first account activation. \n\nA <a href=\"#tag/Dictionaries\"> dictionary endpoint </a> is provided below to give insight into all the questions and acceptable \nvalues for the fields within the payload.\n"
       parameters:
       - name: content-type
         in: header

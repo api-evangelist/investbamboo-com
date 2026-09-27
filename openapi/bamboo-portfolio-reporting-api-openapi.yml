@@ -2,31 +2,75 @@ openapi: 3.2.0
 info:
   title: Bamboo Portfolio Reporting API
   version: ''
-  description: The user's portfolio provides comprehensive views of investment performance, cash positions, and account status.
+  description: 'The user''s portfolio provides comprehensive views of investment performance, cash positions, and account status. Understanding the different cash types and portfolio calculations is essential for presenting accurate information to users.
+
+
+    ##### Key Portfolio Terms
+
+    #### Cash Categories:
+
+    - **cash:** Total cash in the user’s brokerage account available for investment (buying power). All funds from deposits, stock sales, and cancelled or rejected trades are credited here.
+
+    - **unsettled_cash:** Funds from stock sale are accounted for here, pending when they settle into withdrawal_cash
+
+    - **withdrawal_cash:** Settled cash available for withdrawal from a user brokerage account. (Funds settle here after successful stock sale)
+
+    - **actual_value:** Total portfolio value—sum of US stock holdings, unsettled cash, and cash balance
+
+
+    #### Performance Metrics:
+
+    - **value:** Current total portfolio value
+
+    - **value_change:** Dollar change from previous close
+
+    - **value_percent_change:** Percentage change from previous close
+
+    - **total_return:** Lifetime gains/losses across all investments
+
+    - **total_invested:** Cumulative amount invested by user
+
+    '
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Portfolio Reporting
-  description: The user's portfolio provides comprehensive views of investment performance, cash positions, and account status.
+  description: 'The user''s portfolio provides comprehensive views of investment performance, cash positions, and account status. Understanding the different cash types and portfolio calculations is essential for presenting accurate information to users.
+
+
+    ##### Key Portfolio Terms
+
+    #### Cash Categories:
+
+    - **cash:** Total cash in the user’s brokerage account available for investment (buying power). All funds from deposits, stock sales, and cancelled or rejected trades are credited here.
+
+    - **unsettled_cash:** Funds from stock sale are accounted for here, pending when they settle into withdrawal_cash
+
+    - **withdrawal_cash:** Settled cash available for withdrawal from a user brokerage account. (Funds settle here after successful stock sale)
+
+    - **actual_value:** Total portfolio value—sum of US stock holdings, unsettled cash, and cash balance
+
+
+    #### Performance Metrics:
+
+    - **value:** Current total portfolio value
+
+    - **value_change:** Dollar change from previous close
+
+    - **value_percent_change:** Percentage change from previous close
+
+    - **total_return:** Lifetime gains/losses across all investments
+
+    - **total_invested:** Cumulative amount invested by user
+
+    '
 paths:
   /api/portfolio:
     get:
       tags:
       - Portfolio Reporting
       summary: Fetch User Portfolio
-      description: 'This endpoint returns summarized information about a user''s total portfolio value, gains and losses, cash positions, and pending deposits and withdrawals with regards to the US market.
-
-        ##### The portfolio overview includes:
-
-        - **Current valuation:** with real-time portfolio value and daily changes
-
-        - **Comprehensive cash positions:** breaking down all cash types and availability
-
-        - **Currency conversion:** showing values in both USD and the user''s local currency
-
-        - **Deposit and withdrawal status:** for pending money movement operations
-
-        - **Account restrictions:** indicating any limitations on account activities'
+      description: "This endpoint returns summarized information about a user's total portfolio value, gains and losses, cash positions, and pending deposits and withdrawals with regards to the US market.\n##### The portfolio overview includes:\n  - **Current valuation:** with real-time portfolio value and daily changes\n  - **Comprehensive cash positions:** breaking down all cash types and availability\n  - **Currency conversion:** showing values in both USD and the user's local currency\n  - **Deposit and withdrawal status:** for pending money movement operations\n  - **Account restrictions:** indicating any limitations on account activities\n"
       operationId: Web.Api.PortfolioController.portfolio
       parameters:
       - name: content-type
@@ -112,7 +156,9 @@ paths:
         - **Equity Value:** Current value of all stock holdings
 
 
-        Risk management information covers day trading restrictions based on account equity levels, violation tracking for pattern day trader rule compliance, and overall account health status.'
+        Risk management information covers day trading restrictions based on account equity levels, violation tracking for pattern day trader rule compliance, and overall account health status.
+
+        '
       operationId: Web.Api.PortfolioController.portfolio_breakdown
       parameters:
       - name: content-type
@@ -182,22 +228,7 @@ paths:
       tags:
       - Portfolio Reporting
       summary: Fetch User Ownership Details
-      description: 'This endpoint provides detailed ownership information about a specific stock that a user owns, including insights into portfolio performance since acquiring the stock.
-
-        ##### Individual stock analysis covers:
-
-        - Position size showing shares owned and current market value
-
-        - Performance tracking with total return and daily return for the holding
-
-        - Cost basis indicating average purchase price and total invested amount
-
-        - Portfolio diversity percentage that this holding represents
-
-        - Outstanding buy or sell orders for this stock
-
-
-        This data supports detailed stock performance analysis, portfolio rebalancing decisions, tax reporting and cost basis tracking, and individual position management.'
+      description: "This endpoint provides detailed ownership information about a specific stock that a user owns, including insights into portfolio performance since acquiring the stock.\n##### Individual stock analysis covers:\n  - Position size showing shares owned and current market value\n  - Performance tracking with total return and daily return for the holding\n  - Cost basis indicating average purchase price and total invested amount\n  - Portfolio diversity percentage that this holding represents\n  - Outstanding buy or sell orders for this stock\n  \nThis data supports detailed stock performance analysis, portfolio rebalancing decisions, tax reporting and cost basis tracking, and individual position management.\n"
       operationId: Web.Api.PortfolioController.ownership
       parameters:
       - name: content-type
@@ -264,134 +295,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
-    PortfolioBreakdownResponse:
-      title: Portfolio breakdown response
-      required:
-      - available_to_invest
-      - base_wallet_balance
-      - currency_symbol
-      - equity_value
-      - number_of_violations
-      - restricted_by_dw
-      - total_aum
-      - total_invested
-      - total_percent_change
-      - total_return
-      - value
-      - withdrawable_cash
-      type: object
-      properties:
-        withdrawable_cash:
-          type: number
-          description: Maximum amount that can be withdrawn
-          example: 0
-        value:
-          type: number
-          description: Value of portfolio
-          example: 0
-        total_return:
-          type: number
-          description: Total return
-          example: 0
-        total_percent_change:
-          type: number
-          description: Total portfolio change
-          example: 0
-        total_invested:
-          type: number
-          description: Total invested
-          example: 0
-        total_aum:
-          type: number
-          description: Total AUM
-          example: 0
-        restricted_by_dw:
-          type: boolean
-          description: Restricted by DW
-          example: false
-        number_of_violations:
-          type: number
-          description: Number of GFV for account
-          example: 0
-        equity_value:
-          type: number
-          description: Equity value
-          example: 0
-        currency_symbol:
-          type: string
-          description: Prices currency symbol
-          example: $
-        base_wallet_balance:
-          type: number
-          description: Base wallet Balance
-          example: 0
-        available_to_invest:
-          type: number
-          description: Buying power
-          example: 0
-    USOwnershipResponse:
-      title: User Ownership Details
-      required:
-      - currency_symbol
-      - ownership
-      - pending_orders
-      type: object
-      properties:
-        currency_symbol:
-          type: number
-          description: currency_symbol
-          example: ₦
-        ownership:
-          type: object
-          description: Value of portfolio
-          properties:
-            shares:
-              type: number
-              description: shares
-              example: 1.29493296
-            average_cost:
-              type: number
-              description: average_cost
-              example: 162502.55
-            equity:
-              type: number
-              description: equity
-              example: 220027.57
-            portfolio_diversity:
-              type: number
-              description: portfolio_diversity
-              example: 75
-            todays_return:
-              type: boolean
-              description: todays_return
-              example: -4815.55
-            todays_return_percent:
-              type: number
-              description: todays_return_percent
-              example: -2.14
-            total_return:
-              type: number
-              description: total_return
-              example: 9596.86
-            total_return_percent:
-              type: string
-              description: total_return_percent
-              example: 4.560546875
-        pending_orders:
-          type: string
-          description: pending_orders
-          example: []
     ErrorResponse:
       title: Error response
       required:
@@ -608,6 +511,69 @@ components:
           type: boolean
           description: Account restricted
           example: false
+    USOwnershipResponse:
+      title: User Ownership Details
+      required:
+      - currency_symbol
+      - ownership
+      - pending_orders
+      type: object
+      properties:
+        currency_symbol:
+          type: number
+          description: currency_symbol
+          example: ₦
+        ownership:
+          type: object
+          description: Value of portfolio
+          properties:
+            shares:
+              type: number
+              description: shares
+              example: 1.29493296
+            average_cost:
+              type: number
+              description: average_cost
+              example: 162502.55
+            equity:
+              type: number
+              description: equity
+              example: 220027.57
+            portfolio_diversity:
+              type: number
+              description: portfolio_diversity
+              example: 75
+            todays_return:
+              type: boolean
+              description: todays_return
+              example: -4815.55
+            todays_return_percent:
+              type: number
+              description: todays_return_percent
+              example: -2.14
+            total_return:
+              type: number
+              description: total_return
+              example: 9596.86
+            total_return_percent:
+              type: string
+              description: total_return_percent
+              example: 4.560546875
+        pending_orders:
+          type: string
+          description: pending_orders
+          example: []
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
     ResourceNotFound:
       title: Resource not found
       required:
@@ -619,6 +585,71 @@ components:
           description: Resource not found (an incorrect url may have been used)
           example: Resource Not Found
       description: Error response for when the resource is not found within our data.
+    PortfolioBreakdownResponse:
+      title: Portfolio breakdown response
+      required:
+      - available_to_invest
+      - base_wallet_balance
+      - currency_symbol
+      - equity_value
+      - number_of_violations
+      - restricted_by_dw
+      - total_aum
+      - total_invested
+      - total_percent_change
+      - total_return
+      - value
+      - withdrawable_cash
+      type: object
+      properties:
+        withdrawable_cash:
+          type: number
+          description: Maximum amount that can be withdrawn
+          example: 0
+        value:
+          type: number
+          description: Value of portfolio
+          example: 0
+        total_return:
+          type: number
+          description: Total return
+          example: 0
+        total_percent_change:
+          type: number
+          description: Total portfolio change
+          example: 0
+        total_invested:
+          type: number
+          description: Total invested
+          example: 0
+        total_aum:
+          type: number
+          description: Total AUM
+          example: 0
+        restricted_by_dw:
+          type: boolean
+          description: Restricted by DW
+          example: false
+        number_of_violations:
+          type: number
+          description: Number of GFV for account
+          example: 0
+        equity_value:
+          type: number
+          description: Equity value
+          example: 0
+        currency_symbol:
+          type: string
+          description: Prices currency symbol
+          example: $
+        base_wallet_balance:
+          type: number
+          description: Base wallet Balance
+          example: 0
+        available_to_invest:
+          type: number
+          description: Buying power
+          example: 0
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

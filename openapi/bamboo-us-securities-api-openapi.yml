@@ -2,18 +2,12 @@ openapi: 3.2.0
 info:
   title: Bamboo US Securities API
   version: ''
-  description: 'The section provides comprehensive information about available US stocks, including real-time pricing, company details, and market data.
-
-
-    Stock themes also help users discover investment opportunities based on trends, sectors, and investment strategies. See the Featured Themes section for detailed information about theme-based stock discovery and categorization.'
+  description: "The section provides comprehensive information about available US stocks, including real-time pricing, company details, and market data. \n\nStock themes also help users discover investment opportunities based on trends, sectors, and investment strategies. See the [Featured Themes section](#tag/Featured-Themes) for detailed information about theme-based stock discovery and categorization.\n"
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: US Securities
-  description: 'The section provides comprehensive information about available US stocks, including real-time pricing, company details, and market data.
-
-
-    Stock themes also help users discover investment opportunities based on trends, sectors, and investment strategies. See the Featured Themes section for detailed information about theme-based stock discovery and categorization.'
+  description: "The section provides comprehensive information about available US stocks, including real-time pricing, company details, and market data. \n\nStock themes also help users discover investment opportunities based on trends, sectors, and investment strategies. See the [Featured Themes section](#tag/Featured-Themes) for detailed information about theme-based stock discovery and categorization.\n"
 paths:
   /api/stocks:
     get:
@@ -34,7 +28,9 @@ paths:
         - **High-quality** company logos for UI integration
 
 
-        Integration considerations include caching stock lists to reduce API calls, updating periodically for new stock additions, and using pagination for optimal performance.'
+        Integration considerations include caching stock lists to reduce API calls, updating periodically for new stock additions, and using pagination for optimal performance.
+
+        '
       operationId: Web.Api.StockController.index
       parameters:
       - name: x-user-id
@@ -83,38 +79,7 @@ paths:
       tags:
       - US Securities
       summary: Fetch Stock Details
-      description: 'This endpoint returns comprehensive details of a specific stock, including its pricing information, designed to provide users with in-depth insight into the stock.
-
-
-        **Comprehensive stock information includes:**
-
-        - **Real-time pricing:** with current price, daily change, and percentage movement
-
-        - **Market data:** showing volume, market cap, P/E ratio, and 52-week high/low
-
-        - **Company information:** including business description, CEO, and sector classification
-
-        - **Investment story:** with detailed analysis and investment thesis
-
-        - **Dividend information:** showing yield and payment history
-
-        - **Earnings data:** with historical earnings and upcoming dates
-
-
-        **Enhanced features:**
-
-        - Support multi-currency pricing requests in local currency
-
-        - ich content with company stories and investment analysis
-
-        - Visual assets including company logos and brand colors for UI theming
-
-        - Market context with industry comparisons and sector performance
-
-        - Indicates that extended hours trading is active for that particular stock.
-
-
-        **Note:** We currently only support LIMIT orders and whole unit trading during extended hours.'
+      description: "This endpoint returns comprehensive details of a specific stock, including its pricing information, designed to provide users with in-depth insight into the stock.\n\n**Comprehensive stock information includes:**\n- **Real-time pricing:** with current price, daily change, and percentage movement\n- **Market data:** showing volume, market cap, P/E ratio, and 52-week high/low\n- **Company information:** including business description, CEO, and sector classification\n- **Investment story:** with detailed analysis and investment thesis\n- **Dividend information:** showing yield and payment history\n- **Earnings data:** with historical earnings and upcoming dates\n\n**Enhanced features:** \n- Support multi-currency pricing requests in local currency\n- ich content with company stories and investment analysis\n- Visual assets including company logos and brand colors for UI theming\n- Market context with industry comparisons and sector performance\n- Indicates that extended hours trading is active for that particular stock. \n\n**Note:** We currently only support LIMIT orders and whole unit trading during extended hours.\n"
       operationId: Web.Api.StockDataController.details
       parameters:
       - name: content-type
@@ -196,52 +161,7 @@ paths:
       tags:
       - US Securities
       summary: Search Stocks
-      description: 'This endpoint searches for a stock by a given query phrase or set of phrases, supporting advanced search capabilities with multiple filtering and sorting options.
-
-
-        The search functionality supports complex queries like filtering stocks between specific price ranges, performance thresholds, or market cap sizes, with predefined filters for top gainers, top losers, and user-owned stocks.
-
-
-        ##### Advanced search capabilities include:
-
-
-        **Query Options:**
-
-        - **Text Search:** Query by company names, stock symbols, ticker matching
-
-        - **Theme Filtering:** Filter by investment themes and categories
-
-        - **Multi-Parameter:** Combine text search with theme filters
-
-
-        **Sorting Options:**
-
-        - **Alphabetical:** `alphabetical:asc` or `alphabetical:desc`
-
-        - **Price-Based:** `price:asc`, `percent_change:asc`
-
-        - **Fundamentals:** `market_cap:asc`, `pe_ratio:asc`, `eps:asc`
-
-        - **Trading Metrics:** `volume:asc`, `div_yield:asc`
-
-
-        **Advanced Filtering:**
-
-        - **Price Ranges:** `price;a:10,price;b:50` (between $10-$50)
-
-        - **Performance:** `percent_change;a:5` (gaining above 5%)
-
-        - **Market Cap:** `market_cap;b:1000000000` (under $1B market cap)
-
-        - **Fundamentals:** `pe_ratio;a:15` (P/E ratio above 15)
-
-        - **Predefined Filters:** `top_gainers`, `top_losers`, `my_stocks`
-
-
-        **Example Usage:**
-
-
-        GET /api/stock/search?query=apple&sorting=market_cap:desc&filters=price;a:100,my_stocks'
+      description: "This endpoint searches for a stock by a given query phrase or set of phrases, supporting advanced search capabilities with multiple filtering and sorting options.\n\nThe search functionality supports complex queries like filtering stocks between specific price ranges, performance thresholds, or market cap sizes, with predefined filters for top gainers, top losers, and user-owned stocks.\n\n##### Advanced search capabilities include:\n\n**Query Options:**\n- **Text Search:** Query by company names, stock symbols, ticker matching\n- **Theme Filtering:** Filter by investment themes and categories\n- **Multi-Parameter:** Combine text search with theme filters\n\n**Sorting Options:**\n- **Alphabetical:** `alphabetical:asc` or `alphabetical:desc`\n- **Price-Based:** `price:asc`, `percent_change:asc`\n- **Fundamentals:** `market_cap:asc`, `pe_ratio:asc`, `eps:asc`\n- **Trading Metrics:** `volume:asc`, `div_yield:asc`\n\n**Advanced Filtering:**\n- **Price Ranges:** `price;a:10,price;b:50` (between $10-$50)\n- **Performance:** `percent_change;a:5` (gaining above 5%)\n- **Market Cap:** `market_cap;b:1000000000` (under $1B market cap)\n- **Fundamentals:** `pe_ratio;a:15` (P/E ratio above 15)\n- **Predefined Filters:** `top_gainers`, `top_losers`, `my_stocks`\n\n**Example Usage:**\n\n    GET /api/stock/search?query=apple&sorting=market_cap:desc&filters=price;a:100,my_stocks\n"
       operationId: Web.Api.StockController.search
       parameters:
       - name: content-type
@@ -321,21 +241,7 @@ paths:
       tags:
       - US Securities
       summary: Fetch User Stock Ownership
-      description: 'This endpoint is used to get the list of stocks a user owns, providing a complete view of their current investment positions.
-
-
-        ##### User portfolio stocks include:
-
-        - **Owned positions:** showing all stocks currently held by the user
-
-        - **Position details:** with share quantities, current values, and performance metrics
-
-        - **Equity breakdown:** showing individual stock contributions to total portfolio
-
-        - **Multi-currency support:** displaying local currency values with exchange rates
-
-
-        This endpoint supports portfolio management by tracking all user investments in one view, calculating portfolio diversity and concentration, monitoring individual position performance, and supporting portfolio rebalancing decisions.'
+      description: "This endpoint is used to get the list of stocks a user owns, providing a complete view of their current investment positions.\n\n##### User portfolio stocks include:\n  - **Owned positions:** showing all stocks currently held by the user\n  - **Position details:** with share quantities, current values, and performance metrics\n  - **Equity breakdown:** showing individual stock contributions to total portfolio\n  - **Multi-currency support:** displaying local currency values with exchange rates\n\nThis endpoint supports portfolio management by tracking all user investments in one view, calculating portfolio diversity and concentration, monitoring individual position performance, and supporting portfolio rebalancing decisions.\n"
       operationId: Web.Api.StockDataController.ownership
       parameters:
       - name: content-type
@@ -408,70 +314,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
-    StocksSearchResponse:
-      title: List of all Stock Search Results
-      type: object
-      properties:
-        currency_symbol:
-          type: string
-          description: Currency Symbol
-          example: $
-        result:
-          type: array
-          description: Stock search response
-          items:
-            title: Stock search response
-            type: object
-            properties:
-              value_change:
-                type: number
-                description: Stock value change
-              user_equity:
-                type: number
-                description: Stock user equity
-              total_return:
-                type: number
-                description: Stock total return
-              symbol:
-                type: string
-                description: Stock symbol
-                example: MDY
-              quantity:
-                type: number
-                description: Stock quantity
-              name:
-                type: string
-                description: Stock name
-                example: S&P MidCap 400 ETF SPDR
-              logo:
-                type: string
-                description: Stock logo with a background colour
-                example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
-              favourite:
-                type: string
-                description: Stock favourite
-                example: false
-              background_color:
-                type: string
-                description: Stock background color
-                example: FFFFFF
-              avatar:
-                type: string
-                description: Stock logo without background colour
-                example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
-            description: Stock basic details
-      description: List of all active stocks
     StocksListResponse:
       title: List of all active stocks response
       type: object
@@ -499,102 +341,6 @@ components:
                 type: string
                 description: Stock logo URL
                 example: https://firebasestorage.googleapis.com/v0/b/bamboo-16d59.appspot.com/o/stock-avatars%2Fwhite-logos%2FApple_APPL.png?alt=media&token=5a7398a8-bd35-466b-803c-04b6cbceff97
-    UserStockOwnership:
-      title: User Stock Ownership
-      type: object
-      description: Details of User Stock Ownership
-      properties:
-        currency_symbol:
-          type: string
-          description: Currency Symbol
-          example: $
-        equity_value:
-          type: number
-          description: Equity value
-          example: 2267.91
-        stocks:
-          type: object
-          description: Click to see sample details of user stock list below
-          properties:
-            name:
-              type: string
-              description: High
-              example: Apple, Inc.
-            symbol:
-              type: string
-              description: Stock symbol
-              example: AAPL
-            logo:
-              type: string
-              description: Stock logo with a background colour
-              example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
-            quantity:
-              type: number
-              description: price
-              default: 3.769942
-            price:
-              type: number
-              description: price
-              default: 257.85
-            avatar:
-              type: string
-              description: Avatar
-            total_return:
-              type: number
-              description: Total return
-              example: 226.94
-            total_percent_change:
-              type: number
-              description: Total percentage change
-              example: 34.45
-            background_color:
-              type: string
-              description: Stock background color
-              example: ff9201
-            value_change:
-              type: number
-              description: Price change
-              example: 16.51
-            cost_basis:
-              type: string
-              description: Current market price
-              example: 658.69
-            market_price:
-              type: string
-              description: Current market price
-              example: 257.9
-            percent_change:
-              type: number
-              description: Total percentage change
-              example: 34.45
-            user_equity:
-              type: string
-              description: User Equity
-              example: 855.14527384
-            market_cap:
-              type: integer
-              description: market_cap
-              example: 2081325483000
-            pe_ratio:
-              type: integer
-              description: market_cap
-              example: 2081325483000
-            div_yield:
-              type: integer
-              description: Dividend yield
-              example: null
-            eps:
-              type: integer
-              description: eps
-              example: 2.08
-            volume:
-              type: integer
-              description: Volume
-              example: 208132548
-            favourite:
-              type: string
-              description: Favourite
-              example: false
     ErrorResponse:
       title: Error response
       required:
@@ -606,17 +352,6 @@ components:
           description: Error response for external or internal errors not connected to data
           example: Message why request didn't succeed
       description: Error response for external or internal errors not connected to data
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
     StockDetails:
       title: Stock Pricing Details
       type: object
@@ -761,6 +496,177 @@ components:
           type: string
           description: Source
           example: IEX Trading Group, DriveWealth
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    StocksSearchResponse:
+      title: List of all Stock Search Results
+      type: object
+      properties:
+        currency_symbol:
+          type: string
+          description: Currency Symbol
+          example: $
+        result:
+          type: array
+          description: Stock search response
+          items:
+            title: Stock search response
+            type: object
+            properties:
+              value_change:
+                type: number
+                description: Stock value change
+              user_equity:
+                type: number
+                description: Stock user equity
+              total_return:
+                type: number
+                description: Stock total return
+              symbol:
+                type: string
+                description: Stock symbol
+                example: MDY
+              quantity:
+                type: number
+                description: Stock quantity
+              name:
+                type: string
+                description: Stock name
+                example: S&P MidCap 400 ETF SPDR
+              logo:
+                type: string
+                description: Stock logo with a background colour
+                example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
+              favourite:
+                type: string
+                description: Stock favourite
+                example: false
+              background_color:
+                type: string
+                description: Stock background color
+                example: FFFFFF
+              avatar:
+                type: string
+                description: Stock logo without background colour
+                example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
+            description: Stock basic details
+      description: List of all active stocks
+    UserStockOwnership:
+      title: User Stock Ownership
+      type: object
+      description: Details of User Stock Ownership
+      properties:
+        currency_symbol:
+          type: string
+          description: Currency Symbol
+          example: $
+        equity_value:
+          type: number
+          description: Equity value
+          example: 2267.91
+        stocks:
+          type: object
+          description: Click to see sample details of user stock list below
+          properties:
+            name:
+              type: string
+              description: High
+              example: Apple, Inc.
+            symbol:
+              type: string
+              description: Stock symbol
+              example: AAPL
+            logo:
+              type: string
+              description: Stock logo with a background colour
+              example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
+            quantity:
+              type: number
+              description: price
+              default: 3.769942
+            price:
+              type: number
+              description: price
+              default: 257.85
+            avatar:
+              type: string
+              description: Avatar
+            total_return:
+              type: number
+              description: Total return
+              example: 226.94
+            total_percent_change:
+              type: number
+              description: Total percentage change
+              example: 34.45
+            background_color:
+              type: string
+              description: Stock background color
+              example: ff9201
+            value_change:
+              type: number
+              description: Price change
+              example: 16.51
+            cost_basis:
+              type: string
+              description: Current market price
+              example: 658.69
+            market_price:
+              type: string
+              description: Current market price
+              example: 257.9
+            percent_change:
+              type: number
+              description: Total percentage change
+              example: 34.45
+            user_equity:
+              type: string
+              description: User Equity
+              example: 855.14527384
+            market_cap:
+              type: integer
+              description: market_cap
+              example: 2081325483000
+            pe_ratio:
+              type: integer
+              description: market_cap
+              example: 2081325483000
+            div_yield:
+              type: integer
+              description: Dividend yield
+              example: null
+            eps:
+              type: integer
+              description: eps
+              example: 2.08
+            volume:
+              type: integer
+              description: Volume
+              example: 208132548
+            favourite:
+              type: string
+              description: Favourite
+              example: false
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

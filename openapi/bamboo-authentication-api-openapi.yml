@@ -2,21 +2,19 @@ openapi: 3.2.0
 info:
   title: Bamboo Authentication API
   version: ''
-  description: Before you start making requests, you’ll need to generate an access token.
+  description: "Before you start making requests, you’ll need to generate an access token. Every request to the API must be authenticated using access tokens and user context headers — this ensures secure and authorized access to your resources.\n\nHere are a few quick tips to help you integrate smoothly and keep your tokens active:\n  - **x-client-token:** A tenant-level access token that expires after 24 hours. You can generate up to 3 tokens per hour.\n- **Refresh Strategy:** Generate a new token before the current one expires to keep your requests running without interruption.\n\nEach endpoint’s required headers are outlined throughout this documentation, so you always know what’s needed to make a successful call.\n"
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Authentication
-  description: Before you start making requests, you’ll need to generate an access token.
+  description: "Before you start making requests, you’ll need to generate an access token. Every request to the API must be authenticated using access tokens and user context headers — this ensures secure and authorized access to your resources.\n\nHere are a few quick tips to help you integrate smoothly and keep your tokens active:\n  - **x-client-token:** A tenant-level access token that expires after 24 hours. You can generate up to 3 tokens per hour.\n- **Refresh Strategy:** Generate a new token before the current one expires to keep your requests running without interruption.\n\nEach endpoint’s required headers are outlined throughout this documentation, so you always know what’s needed to make a successful call.\n"
 paths:
   /oauth/token:
     post:
       tags:
       - Authentication
       summary: Generate Access Token
-      description: 'This endpoint generates your access token, referred to as your `x-client-token` within Bamboo’s system.
-
-        The credentials needed to generate it will be provided by the Bamboo Team during account setup.'
+      description: "This endpoint generates your access token, referred to as your `x-client-token` within Bamboo’s system. \nThe credentials needed to generate it will be provided by the Bamboo Team during account setup. \n"
       operationId: Web.Api.AuthController.oauth
       parameters:
       - name: content-type

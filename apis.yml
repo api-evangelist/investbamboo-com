@@ -1,4 +1,4 @@
-aid: bamboo
+aid: investbamboo-com
 name: Bamboo Invest
 description: Bamboo is an African investment platform providing REST APIs for fractional stock investing, dollar investments, portfolio management, and access to US and Nigerian capital markets. The APIs enable fintech partners to integrate brokerage account creation, money movement, stock trading, and portfolio tracking into their own financial services applications.
 deliveryModel:
@@ -26,7 +26,7 @@ accessModel:
   generated: '2026-07-22'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/bamboo.png
-url: https://raw.githubusercontent.com/api-evangelist/bamboo/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/investbamboo-com/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
 specificationVersion: '0.23'
@@ -39,7 +39,7 @@ tags:
   - Fractional Shares
   - Africa
   - Nigeria
-  - Portfolio-Management
+  - Portfolio Management
   - Brokerage
   - Fintech
 tags_raw:
@@ -51,8 +51,9 @@ tags_raw:
   - Portfolio Management
   - Brokerage
   - Fintech
+  - Portfolio-Management
 apis:
-- aid: bamboo:bamboo-account-management-api
+- aid: investbamboo-com:bamboo-account-management-api
   name: Bamboo Invest Account Management API
   description: >-
     Account creation enables users to invest on Bamboo. Ensure KYC has been completed and each user’s
@@ -121,7 +122,7 @@ apis:
     url: openapi/bamboo-account-management-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-authentication-api
+- aid: investbamboo-com:bamboo-authentication-api
   name: Bamboo Invest Authentication API
   description: >-
     Before you start making requests, you’ll need to generate an access token. Every request to the API
@@ -147,7 +148,7 @@ apis:
     url: openapi/bamboo-authentication-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-deposits-api
+- aid: investbamboo-com:bamboo-deposits-api
   name: Bamboo Invest Deposits API
   description: >-
     Deposits fund user brokerage accounts for stock purchases. All deposits require verification through
@@ -198,7 +199,7 @@ apis:
     url: openapi/bamboo-deposits-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-exchange-rate-api
+- aid: investbamboo-com:bamboo-exchange-rate-api
   name: Bamboo Invest Exchange Rate API
   description: >-
     The exchange rate section provides you with an endpoint that fetches real-time exchange rates effortlessly,
@@ -212,7 +213,7 @@ apis:
     url: openapi/bamboo-exchange-rate-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-featured-themes-api
+- aid: investbamboo-com:bamboo-featured-themes-api
   name: Bamboo Invest Featured Themes API
   description: >-
     Stocks are grouped into various categories which help users explore and filter stocks based on common
@@ -227,7 +228,7 @@ apis:
     url: openapi/bamboo-featured-themes-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-financial-documents-api
+- aid: investbamboo-com:bamboo-financial-documents-api
   name: Bamboo Invest Financial Documents API
   description: "Access various financial documents required for user account management, tax reporting,\
     \ and regulatory compliance through secure document retrieval endpoints.\n\n##### Document Types and\
@@ -249,7 +250,7 @@ apis:
     url: openapi/bamboo-financial-documents-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-https-api
+- aid: investbamboo-com:bamboo-https-api
   name: 'Bamboo Invest Https: API'
   description: 'The Https: API from Bamboo Invest — 1 operation(s) for https:.'
   humanURL: https://docs.investbamboo.com/
@@ -263,7 +264,7 @@ apis:
     url: openapi/bamboo-https-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-lsx-api
+- aid: investbamboo-com:bamboo-lsx-api
   name: Bamboo Invest Lsx API
   description: The Lsx API from Bamboo Invest — 1 operation(s) for lsx.
   humanURL: https://docs.investbamboo.com/
@@ -275,7 +276,7 @@ apis:
     url: openapi/bamboo-lsx-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-market-activity-api
+- aid: investbamboo-com:bamboo-market-activity-api
   name: Bamboo Invest Market Activity API
   description: "The market activity section provides you with endpoints that return the opening and closing\
     \ times for markets we support, allowing you to check when market is open/closed. \n\nThis endpoint\
@@ -296,7 +297,7 @@ apis:
     url: openapi/bamboo-market-activity-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-ng-deposits-api
+- aid: investbamboo-com:bamboo-ng-deposits-api
   name: Bamboo Invest NG Deposits API
   description: The NG Deposits API from Bamboo Invest — 2 operation(s) for ng deposits.
   humanURL: https://docs.investbamboo.com/
@@ -308,7 +309,7 @@ apis:
     url: openapi/bamboo-ng-deposits-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-ng-securities-api
+- aid: investbamboo-com:bamboo-ng-securities-api
   name: Bamboo Invest NG Securities API
   description: >-
     The section provides us endpoints that allows a client to fetch all the information pertaining to
@@ -322,7 +323,7 @@ apis:
     url: openapi/bamboo-ng-securities-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-ng-stock-portfolio-api
+- aid: investbamboo-com:bamboo-ng-stock-portfolio-api
   name: Bamboo Invest NG Stock Portfolio API
   description: >-
     This section provides all the information a tenant needs to know about a user's investment portfolio
@@ -336,7 +337,7 @@ apis:
     url: openapi/bamboo-ng-stock-portfolio-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-ng-stock-trading-api
+- aid: investbamboo-com:bamboo-ng-stock-trading-api
   name: Bamboo Invest NG Stock Trading API
   description: >-
     The stock trading section details all the endpoints needed to calculate and make trade orders for
@@ -352,7 +353,7 @@ apis:
     url: openapi/bamboo-ng-stock-trading-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-ng-withdrawals-api
+- aid: investbamboo-com:bamboo-ng-withdrawals-api
   name: Bamboo Invest NG Withdrawals API
   description: The NG Withdrawals API from Bamboo Invest — 2 operation(s) for ng withdrawals.
   humanURL: https://docs.investbamboo.com/
@@ -364,7 +365,7 @@ apis:
     url: openapi/bamboo-ng-withdrawals-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-one-step-registration-api
+- aid: investbamboo-com:bamboo-one-step-registration-api
   name: Bamboo Invest One Step Registration API
   description: >-
     The One Step Registration API from Bamboo Invest — 1 operation(s) for one step registration.
@@ -377,7 +378,7 @@ apis:
     url: openapi/bamboo-one-step-registration-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-portfolio-reporting-api
+- aid: investbamboo-com:bamboo-portfolio-reporting-api
   name: Bamboo Invest Portfolio Reporting API
   description: >-
     The user's portfolio provides comprehensive views of investment performance, cash positions, and account
@@ -421,7 +422,7 @@ apis:
     url: openapi/bamboo-portfolio-reporting-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-stock-trading-api
+- aid: investbamboo-com:bamboo-stock-trading-api
   name: Bamboo Invest Stock Trading API
   description: The Stock Trading API from Bamboo Invest — 1 operation(s) for stock trading.
   humanURL: https://docs.investbamboo.com/
@@ -433,7 +434,7 @@ apis:
     url: openapi/bamboo-stock-trading-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-tenant-api
+- aid: investbamboo-com:bamboo-tenant-api
   name: Bamboo Invest Tenant API
   description: The Tenant API from Bamboo Invest — 1 operation(s) for tenant.
   humanURL: https://docs.investbamboo.com/
@@ -447,7 +448,7 @@ apis:
     url: openapi/bamboo-tenant-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-us-securities-api
+- aid: investbamboo-com:bamboo-us-securities-api
   name: Bamboo Invest US Securities API
   description: "The section provides comprehensive information about available US stocks, including real-time\
     \ pricing, company details, and market data. \n\nStock themes also help users discover investment\
@@ -462,7 +463,7 @@ apis:
     url: openapi/bamboo-us-securities-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-us-stock-trading-api
+- aid: investbamboo-com:bamboo-us-stock-trading-api
   name: Bamboo Invest US Stock Trading API
   description: >-
     Users can buy and sell US securities, with support for multiple order types and fractional shares.
@@ -534,7 +535,7 @@ apis:
     url: openapi/bamboo-us-stock-trading-api-openapi.yml
   - type: Documentation
     url: https://docs.investbamboo.com/
-- aid: bamboo:bamboo-withdrawals-api
+- aid: investbamboo-com:bamboo-withdrawals-api
   name: Bamboo Invest Withdrawals API
   description: >-
     Withdrawals allow users to extract funds from their brokerage accounts after successful trades. Understanding

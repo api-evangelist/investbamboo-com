@@ -2,31 +2,19 @@ openapi: 3.2.0
 info:
   title: Bamboo Exchange Rate API
   version: ''
-  description: The exchange rate section provides you with an endpoint that fetches real-time exchange rates effortlessly, enabling accurate currency conversions and financial calculations.
+  description: "The exchange rate section provides you with an endpoint that fetches real-time exchange rates effortlessly, enabling  accurate currency conversions and financial calculations. \n"
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Exchange Rate
-  description: The exchange rate section provides you with an endpoint that fetches real-time exchange rates effortlessly, enabling accurate currency conversions and financial calculations.
+  description: "The exchange rate section provides you with an endpoint that fetches real-time exchange rates effortlessly, enabling  accurate currency conversions and financial calculations. \n"
 paths:
   /api/tenant/exchange_rate:
     get:
       tags:
       - Exchange Rate
       summary: Fetch Exchange Rate
-      description: 'Real-time exchange rate data enables accurate currency conversions for deposit, withdrawals and trade transactions.
-
-
-        Exchange rate data provides buy rates for converting USD to local currency when displaying prices, sell rates for converting local currency to USD when processing deposits, real-time updates with rates refreshed throughout the trading day, and support for multiple currencies including NGN, GHS, and ZAR.
-
-
-        **Usage Guidelines:**
-
-        - If deposit is being made in local currency, use the sell rate for deposits.
-
-        - Use the Buy rate for Withdrawals if withdrawal is being converted back to local currency.
-
-        - Apply consistent rates across user sessions for pricing consistency'
+      description: "Real-time exchange rate data enables accurate currency conversions for deposit, withdrawals and trade transactions.\n\nExchange rate data provides buy rates for converting USD to local currency when displaying prices, sell rates for converting local currency to USD when processing deposits, real-time updates with rates refreshed throughout the trading day, and support for multiple currencies including NGN, GHS, and ZAR.\n\n**Usage Guidelines:** \n- If deposit is being made in local currency, use the sell rate for deposits.\n- Use the Buy rate for Withdrawals if withdrawal is being converted back to local currency.\n- Apply consistent rates across user sessions for pricing consistency\n"
       operationId: Web.Api.Tenant.ExchangeRateController.exchange_rate
       parameters:
       - name: content-type
@@ -64,6 +52,17 @@ paths:
                 $ref: '#/components/schemas/ResourceNotFound'
 components:
   schemas:
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
     ExchangeRatesResponse:
       title: Exchange rates response
       required:
@@ -106,17 +105,6 @@ components:
                 type: number
                 description: Buy rate for requested currency
                 example: 868
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

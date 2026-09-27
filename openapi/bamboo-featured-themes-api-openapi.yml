@@ -2,12 +2,16 @@ openapi: 3.2.0
 info:
   title: Bamboo Featured Themes API
   version: ''
-  description: Stocks are grouped into various categories which help users explore and filter stocks based on common themes, sectors, or other criteria. The endpoints in this section allow you to retrieve a list of categories that group different stocks together and also view details about these categories.
+  description: 'Stocks are grouped into various categories which help users explore and filter stocks based on common themes, sectors, or  other criteria. The endpoints in this section allow you to retrieve a list of categories that group different stocks together  and also view details about these categories.
+
+    '
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Featured Themes
-  description: Stocks are grouped into various categories which help users explore and filter stocks based on common themes, sectors, or other criteria. The endpoints in this section allow you to retrieve a list of categories that group different stocks together and also view details about these categories.
+  description: 'Stocks are grouped into various categories which help users explore and filter stocks based on common themes, sectors, or  other criteria. The endpoints in this section allow you to retrieve a list of categories that group different stocks together  and also view details about these categories.
+
+    '
 paths:
   /api/tenant/themes:
     get:

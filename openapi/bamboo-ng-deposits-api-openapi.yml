@@ -12,9 +12,7 @@ paths:
       tags:
       - NG Deposits
       summary: Create Deposit
-      description: 'This endpoint is used to send the details needed to create a deposit request for your users. After verification is completed,
-
-        the user''s position will be credited with the value requested. To get statuses about your deposit, head to the NG Stocks Events section.'
+      description: "This endpoint is used to send the details needed to create a deposit request for your users. After verification is completed, \nthe user's position will be credited with the value requested. To get statuses about your deposit, head to the [NG Stocks Events](#tag/NG-Stock-Events) section.\n"
       parameters:
       - name: content-type
         in: header
@@ -76,8 +74,6 @@ paths:
                 message: NGX account is not active
               schema:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
-      operationId: postApiLsxNgDeposit
-      x-operation-id-source: derived
   /api/lsx/ng/deposit/{reference}:
     get:
       tags:
@@ -123,8 +119,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
-      operationId: getApiLsxNgDepositByReference
-      x-operation-id-source: derived
 components:
   schemas:
     lsxngdeposit_by_reference_response:
@@ -177,33 +171,6 @@ components:
           type: string
           description: Status
           example: Successful
-    ErrorChangesetResponse:
-      title: Error changeset response
-      required:
-      - errors
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Message why request didn't succeed
-          example: Invalid credentials
-        errors:
-          type: object
-          properties: {}
-          description: Map of errors
-      description: Error response for request which manipulates data
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
     lsxngdeposit:
       title: Deposit request
       required:
@@ -284,6 +251,33 @@ components:
           type: string
           description: Status
           example: Pending
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    ErrorChangesetResponse:
+      title: Error changeset response
+      required:
+      - errors
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo
