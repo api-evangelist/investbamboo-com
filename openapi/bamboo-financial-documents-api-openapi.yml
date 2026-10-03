@@ -2,19 +2,31 @@ openapi: 3.2.0
 info:
   title: Bamboo Financial Documents API
   version: ''
-  description: "Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.\n\n##### Document Types and Generation\nThe system generates three primary document categories to meet regulatory requirements and provide users with comprehensive account records.\n\n**Trade Confirmations:**\n- **Generation:** Generated for users who have engaged in stock trades at the end of each trading day\n- **Content:** Trade details, execution prices, fees, settlement dates \n- **Purpose:** Legal confirmation of executed trades\n\n**Account Statements:** \n- **Generation:** Generated at the end of each month\n- **Content:** Portfolio holdings, cash balances, transaction history \n- **Purpose:** Comprehensive account activity summary\n\n**Tax Documents:** \n- **Generation:** Generated once, at the end of each year\n- **Content:** Realized gains/losses, dividend income, tax obligations \n- **Purpose:** Support user tax filing requirements\n"
+  description: Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Financial Documents
-  description: "Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.\n\n##### Document Types and Generation\nThe system generates three primary document categories to meet regulatory requirements and provide users with comprehensive account records.\n\n**Trade Confirmations:**\n- **Generation:** Generated for users who have engaged in stock trades at the end of each trading day\n- **Content:** Trade details, execution prices, fees, settlement dates \n- **Purpose:** Legal confirmation of executed trades\n\n**Account Statements:** \n- **Generation:** Generated at the end of each month\n- **Content:** Portfolio holdings, cash balances, transaction history \n- **Purpose:** Comprehensive account activity summary\n\n**Tax Documents:** \n- **Generation:** Generated once, at the end of each year\n- **Content:** Realized gains/losses, dividend income, tax obligations \n- **Purpose:** Support user tax filing requirements\n"
+  description: Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.
 paths:
   /api/document_list:
     get:
       tags:
       - Financial Documents
       summary: Fetch List of All Documents
-      description: "Document retrieval begins with obtaining available document lists filtered by document type for efficient access to specific document categories.\n\n**Document Type Parameters:**\n- confirms: Trade confirmation documents \n- statements: Monthly account statements \n- taxforms: Annual tax reporting documents\n\nDocument metadata includes unique file keys for document retrieval, generation dates showing when documents were created, coverage periods indicating date ranges covered by each document, and file formats with all documents provided as PDF files.\n"
+      description: 'Document retrieval begins with obtaining available document lists filtered by document type for efficient access to specific document categories.
+
+
+        **Document Type Parameters:**
+
+        - confirms: Trade confirmation documents
+
+        - statements: Monthly account statements
+
+        - taxforms: Annual tax reporting documents
+
+
+        Document metadata includes unique file keys for document retrieval, generation dates showing when documents were created, coverage periods indicating date ranges covered by each document, and file formats with all documents provided as PDF files.'
       operationId: Web.Api.Tenant.ExchangeRateController.exchange_rate
       parameters:
       - name: content-type
@@ -76,9 +88,7 @@ paths:
       description: 'This endpoint is used to access individual document download URLs using unique file key identifiers gotten from the `document_list` endpoint.
 
 
-        Security features include expiring URLs where download links expire for security, IP restrictions limiting access to authorized requests, and user verification ensuring documents are only accessible by account owners.
-
-        '
+        Security features include expiring URLs where download links expire for security, IP restrictions limiting access to authorized requests, and user verification ensuring documents are only accessible by account owners.'
       operationId: Web.Api.Tenant.DocumentController.document
       parameters:
       - name: content-type
@@ -135,17 +145,6 @@ paths:
                 $ref: '#/components/schemas/ResourceNotFound'
 components:
   schemas:
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
     USDocumentList:
       title: List of Documents by Document Type
       required:
@@ -174,6 +173,17 @@ components:
             file_key: '2024081601'
           - name: Aug 14, 2024 Trade Confirm
             file_key: '2024081401'
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
     USDocuments:
       title: URL to download a Single Document
       required:

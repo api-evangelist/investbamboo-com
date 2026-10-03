@@ -2,25 +2,19 @@ openapi: 3.2.0
 info:
   title: Bamboo NG Stock Portfolio API
   version: ''
-  description: 'This section provides all the information a tenant needs to know about a user''s investment portfolio values and general  user performance.
-
-    '
+  description: This section provides all the information a tenant needs to know about a user's investment portfolio values and general user performance.
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: NG Stock Portfolio
-  description: 'This section provides all the information a tenant needs to know about a user''s investment portfolio values and general  user performance.
-
-    '
+  description: This section provides all the information a tenant needs to know about a user's investment portfolio values and general user performance.
 paths:
   /api/lsx/ng/portfolio/breakdown:
     get:
       tags:
       - NG Stock Portfolio
       summary: Fetch User Portfolio
-      description: 'This endpoint returns the information of a user''s equity value, cash available for investing, and the user''s stock position in the  Nigerian Market.
-
-        '
+      description: This endpoint returns the information of a user's equity value, cash available for investing, and the user's stock position in the Nigerian Market.
       parameters:
       - name: content-type
         in: header
@@ -78,12 +72,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      operationId: getApiLsxNgPortfolioBreakdown
+      x-operation-id-source: derived
   /api/lsx/ng/user_cash_balance/{currency}:
     get:
       tags:
       - NG Stock Portfolio
       summary: Fetch User Cash Balance
-      description: "This endpoint returns data about the user's cash balance. \n"
+      description: This endpoint returns data about the user's cash balance.
       parameters:
       - name: content-type
         in: header
@@ -136,8 +132,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      operationId: getApiLsxNgUserCashBalanceByCurrency
+      x-operation-id-source: derived
 components:
   schemas:
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    lsxnguser_cash_balance_response:
+      title: User's Cash Balance
+      required:
+      - withdrawal_cash
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency
+          example: NGN
+        balance:
+          type: number
+          description: User current cash balance in provided currency
+          example: 5661255.97
     lsxngportfolio_breakdown_response:
       title: NGX Portfolio response
       type: object
@@ -174,42 +208,6 @@ components:
           type: number
           description: Buying power
           example: 0
-    lsxnguser_cash_balance_response:
-      title: User's Cash Balance
-      required:
-      - withdrawal_cash
-      type: object
-      properties:
-        currency:
-          type: string
-          description: Currency
-          example: NGN
-        balance:
-          type: number
-          description: User current cash balance in provided currency
-          example: 5661255.97
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
-    ErrorResponse:
-      title: Error response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error response for external or internal errors not connected to data
-          example: Message why request didn't succeed
-      description: Error response for external or internal errors not connected to data
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

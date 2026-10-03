@@ -12,9 +12,7 @@ paths:
       tags:
       - Lsx
       summary: NGX Dictionary
-      description: 'This endpoint provides the acceptable data for fetching the format for the states and LGAs required during account creation. This info is needed to enable users trade in the NG market.
-
-        '
+      description: This endpoint provides the acceptable data for fetching the format for the states and LGAs required during account creation. This info is needed to enable users trade in the NG market.
       responses:
         '200':
           description: Dictionary response
@@ -44,19 +42,26 @@ paths:
                   Country code can''t be blank'
               schema:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
+      operationId: getApiLsxNgDictionary
+      x-operation-id-source: derived
 components:
   schemas:
-    Unauthorized:
-      title: Unauthorized response
+    ErrorChangesetResponse:
+      title: Error changeset response
       required:
+      - errors
       - message
       type: object
       properties:
         message:
           type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
     ResourceNotFound:
       title: Resource not found
       required:
@@ -130,22 +135,17 @@ components:
             - Kwali
             - Municipal Area Council
           - etc: null
-    ErrorChangesetResponse:
-      title: Error changeset response
+    Unauthorized:
+      title: Unauthorized response
       required:
-      - errors
       - message
       type: object
       properties:
         message:
           type: string
-          description: Message why request didn't succeed
-          example: Invalid credentials
-        errors:
-          type: object
-          properties: {}
-          description: Map of errors
-      description: Error response for request which manipulates data
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

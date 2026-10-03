@@ -12,7 +12,9 @@ paths:
       tags:
       - NG Deposits
       summary: Create Deposit
-      description: "This endpoint is used to send the details needed to create a deposit request for your users. After verification is completed, \nthe user's position will be credited with the value requested. To get statuses about your deposit, head to the [NG Stocks Events](#tag/NG-Stock-Events) section.\n"
+      description: 'This endpoint is used to send the details needed to create a deposit request for your users. After verification is completed,
+
+        the user''s position will be credited with the value requested. To get statuses about your deposit, head to the NG Stocks Events section.'
       parameters:
       - name: content-type
         in: header
@@ -74,6 +76,8 @@ paths:
                 message: NGX account is not active
               schema:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
+      operationId: postApiLsxNgDeposit
+      x-operation-id-source: derived
   /api/lsx/ng/deposit/{reference}:
     get:
       tags:
@@ -119,8 +123,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
+      operationId: getApiLsxNgDepositByReference
+      x-operation-id-source: derived
 components:
   schemas:
+    lsxngdeposit_response:
+      title: Deposit response
+      required:
+      - amount
+      - currency
+      - dollar_amount
+      - dollar_fee
+      - exchange_rate
+      - fee
+      - provider
+      - provider_txref
+      - status
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount to be deposited
+          example: 200000
+        currency:
+          type: string
+          description: Currency
+          example: NGN
+        dollar_amount:
+          type: number
+          description: Dollar equivalent of amount to be deposited
+          example: 230.41
+        dollar_fee:
+          type: number
+          description: Dollar Fee
+          example: 0.02
+        exchange_rate:
+          type: number
+          description: Fee
+          example: 868
+        fee:
+          type: number
+          description: Fee
+          example: 50
+        provider:
+          type: string
+          description: API Consumer Name
+          example: invest-bamboo
+        provider_txref:
+          type: string
+          description: Deposit reference
+          example: INVcal2VzeVGJkCXNx
+        status:
+          type: string
+          description: Status
+          example: Pending
     lsxngdeposit_by_reference_response:
       title: Deposit request
       required:
@@ -201,56 +257,6 @@ components:
           type: number
           description: Amount to be deposited
           example: 200000
-    lsxngdeposit_response:
-      title: Deposit response
-      required:
-      - amount
-      - currency
-      - dollar_amount
-      - dollar_fee
-      - exchange_rate
-      - fee
-      - provider
-      - provider_txref
-      - status
-      type: object
-      properties:
-        amount:
-          type: number
-          description: Amount to be deposited
-          example: 200000
-        currency:
-          type: string
-          description: Currency
-          example: NGN
-        dollar_amount:
-          type: number
-          description: Dollar equivalent of amount to be deposited
-          example: 230.41
-        dollar_fee:
-          type: number
-          description: Dollar Fee
-          example: 0.02
-        exchange_rate:
-          type: number
-          description: Fee
-          example: 868
-        fee:
-          type: number
-          description: Fee
-          example: 50
-        provider:
-          type: string
-          description: API Consumer Name
-          example: invest-bamboo
-        provider_txref:
-          type: string
-          description: Deposit reference
-          example: INVcal2VzeVGJkCXNx
-        status:
-          type: string
-          description: Status
-          example: Pending
     Unauthorized:
       title: Unauthorized response
       required:

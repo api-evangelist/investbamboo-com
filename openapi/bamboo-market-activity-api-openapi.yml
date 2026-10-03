@@ -2,12 +2,12 @@ openapi: 3.2.0
 info:
   title: Bamboo Market Activity API
   version: ''
-  description: "The market activity section provides you with endpoints that return the opening and closing times for markets we support, allowing you to check when market is open/closed. \n\nThis endpoint supports **US Stock extended trading hours**, allowing users to place trades during pre-market and post-market sessions in addition to regular market hours.\n\n**Response Fields**\n\n`market_session` - Indicates which market session is currently open:\n  - `pre_market` - Pre-market session (4:00 AM to 9:30 AM ET)\n  - `core_market` - Regular market hours (9:30 AM - 4:00 PM ET)\n  - `post_market` - Post-market session (4:00 PM to 8:00 PM ET)\n\nEach field returns a boolean value (true if that session is currently open, false otherwise).\n\n`open_date` - Provides Unix timestamps for when each market session opens on the current trading day.\n\n`market_session_timestamp` - Provides Unix timestamps indicating when each market session opens for the current day.\n"
+  description: The market activity section provides you with endpoints that return the opening and closing times for markets we support, allowing you to check when market is open/closed.
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Market Activity
-  description: "The market activity section provides you with endpoints that return the opening and closing times for markets we support, allowing you to check when market is open/closed. \n\nThis endpoint supports **US Stock extended trading hours**, allowing users to place trades during pre-market and post-market sessions in addition to regular market hours.\n\n**Response Fields**\n\n`market_session` - Indicates which market session is currently open:\n  - `pre_market` - Pre-market session (4:00 AM to 9:30 AM ET)\n  - `core_market` - Regular market hours (9:30 AM - 4:00 PM ET)\n  - `post_market` - Post-market session (4:00 PM to 8:00 PM ET)\n\nEach field returns a boolean value (true if that session is currently open, false otherwise).\n\n`open_date` - Provides Unix timestamps for when each market session opens on the current trading day.\n\n`market_session_timestamp` - Provides Unix timestamps indicating when each market session opens for the current day.\n"
+  description: The market activity section provides you with endpoints that return the opening and closing times for markets we support, allowing you to check when market is open/closed.
 paths:
   /api/market/open_date:
     get:
@@ -17,9 +17,7 @@ paths:
       description: 'This endpoint indicates whether the US market is open/close. Orders placed when market is closed are queued for the next trading session.
 
 
-        Market status information includes a boolean indicator for whether the market is currently active, Unix timestamp of the current market date, operating trading hours, and holiday schedule showing market closures on US federal holidays.
-
-        '
+        Market status information includes a boolean indicator for whether the market is currently active, Unix timestamp of the current market date, operating trading hours, and holiday schedule showing market closures on US federal holidays.'
       operationId: Web.Api.Tenant.ExchangeRateController.market_activity
       parameters:
       - name: content-type
@@ -81,9 +79,7 @@ paths:
       description: 'This enables you to give your users the option to enable or disable extended hours trading for their accounts.
 
 
-        **NB:** This endpoint cannot be called for accounts that are pending brokerage account creation.
-
-        '
+        **NB:** This endpoint cannot be called for accounts that are pending brokerage account creation.'
       requestBody:
         required: true
         content:
@@ -139,8 +135,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      operationId: postApiExtendedHoursOptIn
+      x-operation-id-source: derived
 components:
   schemas:
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
     ResourceNotFound:
       title: Resource not found
       required:
@@ -208,17 +217,6 @@ components:
               type: number
               description: Post-market session timestamp
               example: 1759521600
-    ErrorResponse:
-      title: Error response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error response for external or internal errors not connected to data
-          example: Message why request didn't succeed
-      description: Error response for external or internal errors not connected to data
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

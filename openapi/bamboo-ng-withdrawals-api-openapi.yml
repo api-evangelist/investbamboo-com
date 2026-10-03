@@ -12,9 +12,7 @@ paths:
       tags:
       - NG Withdrawals
       summary: Initiate Withdrawal Request
-      description: 'This endpoint is used to withdraw from users'' cash balances.
-
-        '
+      description: This endpoint is used to withdraw from users' cash balances.
       operationId: Web.Api.WithdrawController.tenant_brokerage_withdraw_ngn
       parameters:
       - name: content-type
@@ -147,23 +145,30 @@ paths:
                   Country code can''t be blank'
               schema:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
+      operationId: getApiLsxNgWithdrawByReference
+      x-operation-id-source: derived
 components:
   schemas:
-    lsxngwithdraw_by_reference_response:
-      title: Withdraw status
+    lsxngwithdraw:
+      title: NGX Withdrawal Request body
       required:
-      - withdraw_type
-      - title
+      - amount
+      - currency
+      - txref
       type: object
       properties:
-        withdraw_type:
-          type: number
-          description: Amount to be deposited
+        amount:
+          type: integer
+          description: amount
           example: 1000
-        title:
+        currency:
           type: string
-          description: Currency
+          description: currency
           example: NGN
+        txref:
+          type: string
+          description: reference
+          example: INVKPxiJVc40BNaQBH
     lsxngwithdraw_response:
       title: Withdrawal response
       required:
@@ -190,37 +195,6 @@ components:
           description: Unauthorized/Invalid Token/Token has expired
           example: Invalid client token supplied.
       description: Token is invalid or have expired
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
-    lsxngwithdraw:
-      title: NGX Withdrawal Request body
-      required:
-      - amount
-      - currency
-      - txref
-      type: object
-      properties:
-        amount:
-          type: integer
-          description: amount
-          example: 1000
-        currency:
-          type: string
-          description: currency
-          example: NGN
-        txref:
-          type: string
-          description: reference
-          example: INVKPxiJVc40BNaQBH
     ErrorChangesetResponse:
       title: Error changeset response
       required:
@@ -237,6 +211,32 @@ components:
           properties: {}
           description: Map of errors
       description: Error response for request which manipulates data
+    lsxngwithdraw_by_reference_response:
+      title: Withdraw status
+      required:
+      - withdraw_type
+      - title
+      type: object
+      properties:
+        withdraw_type:
+          type: number
+          description: Amount to be deposited
+          example: 1000
+        title:
+          type: string
+          description: Currency
+          example: NGN
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

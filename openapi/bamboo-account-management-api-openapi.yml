@@ -2,12 +2,12 @@ openapi: 3.2.0
 info:
   title: Bamboo Account Management API
   version: ''
-  description: "Account creation enables users to invest on Bamboo. Ensure KYC has been completed and each user’s identity verified before creating a brokerage account.\n\n**Best Practice:** To avoid maintenance fees on inactive accounts, create and fund brokerage accounts **only when users initiate their first trade**. You may collect account details in advance but delay sending the request until they’re ready to buy.\n\n##### Prerequisites\n- **Minimum Age:** 18 years (verified via government-issued ID)\n- **Compliance:** Must meet local investment regulations\n\n##### Document Requirements\n<table>\n  <thead>\n    <tr>\n      <th>Country</th>\n      <th>Primary ID</th>\n      <th>Image Requirements</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>Nigeria</th>\n      <td>BVN</td>\n      <td>Passport photo</td>\n    </tr>\n    <tr>\n      <th>Ghana</th>\n      <td>National ID</td>\n      <td>Front & back ID images</td>\n    </tr>\n    <tr>\n      <th>South Africa</th>\n      <td>National ID</td>\n      <td>Front & back ID images</td>\n    </tr>\n  </tbody>\n</table>\n\n**Note:** Images must be in Base64 format. The `front_id_image` and `back_id_image` fields apply only to Ghana and South Africa.\n\n##### Phone Number Format\n- Must be in international format (e.g., +2347083864023)\n- Country code must match user’s residence\n- Used for notifications and account security\n"
+  description: Account creation enables users to invest on Bamboo.
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Account Management
-  description: "Account creation enables users to invest on Bamboo. Ensure KYC has been completed and each user’s identity verified before creating a brokerage account.\n\n**Best Practice:** To avoid maintenance fees on inactive accounts, create and fund brokerage accounts **only when users initiate their first trade**. You may collect account details in advance but delay sending the request until they’re ready to buy.\n\n##### Prerequisites\n- **Minimum Age:** 18 years (verified via government-issued ID)\n- **Compliance:** Must meet local investment regulations\n\n##### Document Requirements\n<table>\n  <thead>\n    <tr>\n      <th>Country</th>\n      <th>Primary ID</th>\n      <th>Image Requirements</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>Nigeria</th>\n      <td>BVN</td>\n      <td>Passport photo</td>\n    </tr>\n    <tr>\n      <th>Ghana</th>\n      <td>National ID</td>\n      <td>Front & back ID images</td>\n    </tr>\n    <tr>\n      <th>South Africa</th>\n      <td>National ID</td>\n      <td>Front & back ID images</td>\n    </tr>\n  </tbody>\n</table>\n\n**Note:** Images must be in Base64 format. The `front_id_image` and `back_id_image` fields apply only to Ghana and South Africa.\n\n##### Phone Number Format\n- Must be in international format (e.g., +2347083864023)\n- Country code must match user’s residence\n- Used for notifications and account security\n"
+  description: Account creation enables users to invest on Bamboo.
 paths:
   /api/one_step_registration:
     post:
@@ -15,7 +15,23 @@ paths:
       - Account Management
       summary: Create New User
       operationId: Web.Api.RegisterController.registration_step
-      description: "This single endpoint helps you create brokerage accounts for your users. The required data below are used to determine user trading eligibility and are **required by US regulations**:\n- **basic_info:** Personal details, contact information, residence\n- **verified_identity_info:** Government ID verification data\n- **affiliation_info:** Professional associations, director roles\n- **brokerage_account_info:** Investment profile required to confirm US trading eligibility\n\nA [dictionary endpoint](https://docs.investbamboo.com/#tag/Dictionaries) is provided below to give insight into all the questions and acceptable \nvalues for the fields within the payload.\n\nAdd `\"extended_hours_opt_in\"`: `\"REQUESTED\"` field to the request schema under brokerage_account_info to enable your users trade during extended hours.\n"
+      description: 'This single endpoint helps you create brokerage accounts for your users. The required data below are used to determine user trading eligibility and are **required by US regulations**:
+
+        - **basic_info:** Personal details, contact information, residence
+
+        - **verified_identity_info:** Government ID verification data
+
+        - **affiliation_info:** Professional associations, director roles
+
+        - **brokerage_account_info:** Investment profile required to confirm US trading eligibility
+
+
+        A dictionary endpoint is provided below to give insight into all the questions and acceptable
+
+        values for the fields within the payload.
+
+
+        Add `"extended_hours_opt_in"`: `"REQUESTED"` field to the request schema under brokerage_account_info to enable your users trade during extended hours.'
       parameters:
       - name: content-type
         in: header
@@ -408,7 +424,25 @@ paths:
       tags:
       - Account Management
       summary: Dictionary
-      description: "Returns acceptable values for account creation fields, ensuring data validation and compliance with brokerage requirements.\n\n**Categories:**\n- Employment Information – Status, type, industry, position.\n- Investment Profile – Experience, risk tolerance, goals.\n- Financial Information – Assets, source of wealth, marital status.\n\n**Usage:** \n- Values are case-sensitive.\n- Validate user inputs against dictionary before account creation.\n- Update dictionary cache periodically.\n"
+      description: 'Returns acceptable values for account creation fields, ensuring data validation and compliance with brokerage requirements.
+
+
+        **Categories:**
+
+        - Employment Information – Status, type, industry, position.
+
+        - Investment Profile – Experience, risk tolerance, goals.
+
+        - Financial Information – Assets, source of wealth, marital status.
+
+
+        **Usage:**
+
+        - Values are case-sensitive.
+
+        - Validate user inputs against dictionary before account creation.
+
+        - Update dictionary cache periodically.'
       operationId: Web.Api.RegisterController.dictionary
       responses:
         '200':
@@ -428,9 +462,7 @@ paths:
       tags:
       - Account Management
       summary: View User Profile
-      description: 'Retrieve comprehensive user profile information including account restrictions statuses.
-
-        '
+      description: Retrieve comprehensive user profile information including account restrictions statuses.
       operationId: Web.Api.ProfileController.profile
       parameters:
       - name: content-type
@@ -489,9 +521,7 @@ paths:
       tags:
       - Account Management
       summary: View User Investment Profile
-      description: 'Access detailed investment profile information and brokerage account details.
-
-        '
+      description: Access detailed investment profile information and brokerage account details.
       operationId: Web.Api.ProfileController.investment_profile
       parameters:
       - name: content-type
@@ -547,6 +577,121 @@ paths:
                 $ref: '#/components/schemas/ResourceNotFound'
 components:
   schemas:
+    ProfileResponse:
+      title: Profile response
+      required:
+      - account_number
+      - age
+      - carrot_integration_status
+      - citizenship
+      - city
+      - email
+      - email_verified
+      - engagement_status
+      - gender
+      - name
+      - phone_number
+      - postal_code
+      - province
+      - street
+      - surname
+      type: object
+      properties:
+        surname:
+          type: string
+          description: Surname
+          example: Doe
+        street:
+          type: string
+          description: Street
+          example: 4383 Ms. Godspower Savage Squares, Ngaski Lagos
+        province:
+          type: string
+          description: Province
+          example: Lagos State
+        postal_code:
+          type: string
+          description: Postal code
+          example: '+234'
+        phone_number:
+          type: string
+          description: Phone number
+          example: '+2347083864023'
+        next_of_kin:
+          type: string
+          description: Full name of Next of Kin
+          example: Phil Doe
+        name:
+          type: string
+          description: Name
+          example: John
+        gender:
+          type: string
+          description: Gender
+          example: Man
+        engagement_status:
+          type: string
+          description: The User's engagement status in the system. NOTE - use it only to show banner on main page.
+          example: no_trade
+          enum:
+          - no_deposit
+          - no_trade
+          - traded
+        email_verified:
+          type: boolean
+          description: Email verified
+          example: false
+        email:
+          type: string
+          description: Email
+          example: johndoe@gmail.com
+        city:
+          type: string
+          description: City
+          example: Lekki
+        citizenship:
+          type: string
+          description: Citizenship
+          example: Nigeria
+        carrot_integration_status:
+          type: string
+          description: Carrot integration status for user
+          example: not_available
+          enum:
+          - not_available
+          - available
+          - authorized
+        age:
+          type: integer
+          description: Age
+          example: 96
+        account_restriction:
+          title: User restriction details
+          type: object
+          properties:
+            restricted:
+              type: boolean
+              description: true if account is restricted, false if not
+              example: false
+            reason:
+              type: string
+              description: reason of account restriction
+              example: Account is under review
+        account_number:
+          type: string
+          description: Account number
+          example: '84861889'
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
     DictionaryResponse:
       title: US Dictionary response
       required:
@@ -746,28 +891,6 @@ components:
             PROPERTY: Sale of property
             SAVINGS: Savings from salary
       description: GET response with key-values
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
     InvestmentProfileResponse:
       title: Investment Profile response
       required:
@@ -874,110 +997,17 @@ components:
           - BUSINESS
           - INHERITANCE
           - INVESTMENTS
-    ProfileResponse:
-      title: Profile response
+    ResourceNotFound:
+      title: Resource not found
       required:
-      - account_number
-      - age
-      - carrot_integration_status
-      - citizenship
-      - city
-      - email
-      - email_verified
-      - engagement_status
-      - gender
-      - name
-      - phone_number
-      - postal_code
-      - province
-      - street
-      - surname
+      - message
       type: object
       properties:
-        surname:
+        message:
           type: string
-          description: Surname
-          example: Doe
-        street:
-          type: string
-          description: Street
-          example: 4383 Ms. Godspower Savage Squares, Ngaski Lagos
-        province:
-          type: string
-          description: Province
-          example: Lagos State
-        postal_code:
-          type: string
-          description: Postal code
-          example: '+234'
-        phone_number:
-          type: string
-          description: Phone number
-          example: '+2347083864023'
-        next_of_kin:
-          type: string
-          description: Full name of Next of Kin
-          example: Phil Doe
-        name:
-          type: string
-          description: Name
-          example: John
-        gender:
-          type: string
-          description: Gender
-          example: Man
-        engagement_status:
-          type: string
-          description: The User's engagement status in the system. NOTE - use it only to show banner on main page.
-          example: no_trade
-          enum:
-          - no_deposit
-          - no_trade
-          - traded
-        email_verified:
-          type: boolean
-          description: Email verified
-          example: false
-        email:
-          type: string
-          description: Email
-          example: johndoe@gmail.com
-        city:
-          type: string
-          description: City
-          example: Lekki
-        citizenship:
-          type: string
-          description: Citizenship
-          example: Nigeria
-        carrot_integration_status:
-          type: string
-          description: Carrot integration status for user
-          example: not_available
-          enum:
-          - not_available
-          - available
-          - authorized
-        age:
-          type: integer
-          description: Age
-          example: 96
-        account_restriction:
-          title: User restriction details
-          type: object
-          properties:
-            restricted:
-              type: boolean
-              description: true if account is restricted, false if not
-              example: false
-            reason:
-              type: string
-              description: reason of account restriction
-              example: Account is under review
-        account_number:
-          type: string
-          description: Account number
-          example: '84861889'
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

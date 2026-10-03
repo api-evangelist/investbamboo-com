@@ -2,19 +2,41 @@ openapi: 3.2.0
 info:
   title: Bamboo US Stock Trading API
   version: ''
-  description: "Users can buy and sell US securities, with support for multiple order types and fractional shares. Understanding order calculations, execution timing, and fees is crucial for integration.\n### Trading Fundamentals\n- **Fractional Shares:** Users can buy/sell portions of expensive stocks (e.g., 0.1 shares of a $3,000 stock), with minimum investment of $1 today. *Note* that fractional shares are supported for only MARKET orders to enable portfolio diversification for users with smaller capital.\n- **Market Hours and Execution:** Bamboo supports trading during US Stock extended hours, allowing users to place trades during pre and post market sessions alongside the regular trading hours. Orders placed outside trading hours wait for market to open and no active session on US market holidays, but users are able to still send in their trade requests.\n- **Settlement and Cash Impact:** Trades settle T+1; i.e., trade date + 1 business days. Buy orders immediately reduce buying power, sale proceeds appear as unsettled cash immediately and become withdrawable after T+1, while failed orders return funds to buying power instantly.\n\n<table>\n  <thead>\n    <tr>\n      <th>Order Types</th>\n      <th>Behaviours</th>\n      <th>Use Cases</th>\n      <th>Risks</th>\n      <th>Duration</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Market</td>\n      <td>Execute immediately at current market price</td>\n      <td>When speed of execution matters more than exact price</td>\n      <td>Price may move between order submission and execution</td>\n      <td>Immediately during market open</td>\n    </tr>\n    <tr>\n      <td>Limit</td>\n      <td>Execute only at specified price</td>\n      <td>`Buy` at specific price below current market or `SELL` at a price higher than market price</td>\n      <td>May never execute if price doesn't reach limit</td>\n      <td>Good Till Canceled (GTC) or specific expiration date (default OF 90 days)</td>\n    </tr>\n    <tr>\n      <td>Stop</td>\n      <td>Execute when stock reaches trigger price</td>\n      <td>`Buy` at specific price above current market or `SELL` at a price lower than market price</td>\n      <td>May never execute if price doesn't reach the set price</td>\n      <td>Good Till Canceled (GTC) or specific expiration date (default OF 90 days)</td>\n    </tr>\n  </tbody>\n</table>\n\n**NB:** Trading fees apply to all order types, are deducted from the user’s cash balance (upfront for buy orders, from proceeds for sell orders), and vary based on partnership agreements; use the <a href=\"#tag/US-Stock-Trading/operation/Web.Api.OrderController.calculate_market_order\"> calculate order endpoint </a> to determine exact fees before <a href=\"#tag/US-Stock-Trading/operation/Web.Api.OrderController.place_market_order\"> order placement</a>.\n"
+  description: Users can buy and sell US securities, with support for multiple order types and fractional shares.
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: US Stock Trading
-  description: "Users can buy and sell US securities, with support for multiple order types and fractional shares. Understanding order calculations, execution timing, and fees is crucial for integration.\n### Trading Fundamentals\n- **Fractional Shares:** Users can buy/sell portions of expensive stocks (e.g., 0.1 shares of a $3,000 stock), with minimum investment of $1 today. *Note* that fractional shares are supported for only MARKET orders to enable portfolio diversification for users with smaller capital.\n- **Market Hours and Execution:** Bamboo supports trading during US Stock extended hours, allowing users to place trades during pre and post market sessions alongside the regular trading hours. Orders placed outside trading hours wait for market to open and no active session on US market holidays, but users are able to still send in their trade requests.\n- **Settlement and Cash Impact:** Trades settle T+1; i.e., trade date + 1 business days. Buy orders immediately reduce buying power, sale proceeds appear as unsettled cash immediately and become withdrawable after T+1, while failed orders return funds to buying power instantly.\n\n<table>\n  <thead>\n    <tr>\n      <th>Order Types</th>\n      <th>Behaviours</th>\n      <th>Use Cases</th>\n      <th>Risks</th>\n      <th>Duration</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Market</td>\n      <td>Execute immediately at current market price</td>\n      <td>When speed of execution matters more than exact price</td>\n      <td>Price may move between order submission and execution</td>\n      <td>Immediately during market open</td>\n    </tr>\n    <tr>\n      <td>Limit</td>\n      <td>Execute only at specified price</td>\n      <td>`Buy` at specific price below current market or `SELL` at a price higher than market price</td>\n      <td>May never execute if price doesn't reach limit</td>\n      <td>Good Till Canceled (GTC) or specific expiration date (default OF 90 days)</td>\n    </tr>\n    <tr>\n      <td>Stop</td>\n      <td>Execute when stock reaches trigger price</td>\n      <td>`Buy` at specific price above current market or `SELL` at a price lower than market price</td>\n      <td>May never execute if price doesn't reach the set price</td>\n      <td>Good Till Canceled (GTC) or specific expiration date (default OF 90 days)</td>\n    </tr>\n  </tbody>\n</table>\n\n**NB:** Trading fees apply to all order types, are deducted from the user’s cash balance (upfront for buy orders, from proceeds for sell orders), and vary based on partnership agreements; use the <a href=\"#tag/US-Stock-Trading/operation/Web.Api.OrderController.calculate_market_order\"> calculate order endpoint </a> to determine exact fees before <a href=\"#tag/US-Stock-Trading/operation/Web.Api.OrderController.place_market_order\"> order placement</a>.\n"
+  description: Users can buy and sell US securities, with support for multiple order types and fractional shares.
 paths:
   /api/order/calculate:
     post:
       tags:
       - US Stock Trading
       summary: Calculate Order
-      description: "This endpoint estimates the exact order cost, fees, and trade feasibility for the specified order type before execution.  \n\nIt supports **Market**, **Limit**, and **Stop** order types and determines the precise values that should be used when placing an actual order.\n\nThe values returned guide what to send in the `/api/order` request.\n\n**Integration Flow:**\n- First, call this endpoint to calculate the order.\n- Then, use the `order_price` from the calculation response as the `total_price` when placing the order.\n- All other response fields (e.g., `price_per_share`, `quantity`, `fee`) must be reused exactly as returned.\n\n**Developer Note:**  \n- Multiple example payloads are available below. Please **switch to the relevant example (Market, Limit, or Stop)** before copying and testing your request.\n- Recall that **Limit/Stop orders** are *Good Till Canceled (GTC)* or the set `expiration_date` (default of 90 days applies if no expiration is set).\n"
+      description: 'This endpoint estimates the exact order cost, fees, and trade feasibility for the specified order type before execution.
+
+
+        It supports **Market**, **Limit**, and **Stop** order types and determines the precise values that should be used when placing an actual order.
+
+
+        The values returned guide what to send in the `/api/order` request.
+
+
+        **Integration Flow:**
+
+        - First, call this endpoint to calculate the order.
+
+        - Then, use the `order_price` from the calculation response as the `total_price` when placing the order.
+
+        - All other response fields (e.g., `price_per_share`, `quantity`, `fee`) must be reused exactly as returned.
+
+
+        **Developer Note:**
+
+        - Multiple example payloads are available below. Please **switch to the relevant example (Market, Limit, or Stop)** before copying and testing your request.
+
+        - Recall that **Limit/Stop orders** are *Good Till Canceled (GTC)* or the set `expiration_date` (default of 90 days applies if no expiration is set).'
       operationId: Web.Api.OrderController.calculate_market_order
       parameters:
       - name: content-type
@@ -98,7 +120,7 @@ paths:
       description: 'This is used to place an order using results from calculate order endpoint after confirming the user is eligible to make trades.
 
 
-        Bamboo supports trading during extended hours, to specify that you want your trade executed during extended hours, pass  `extended_hours_order`: `true` or `false` in your request payload.
+        Bamboo supports trading during extended hours, to specify that you want your trade executed during extended hours, pass `extended_hours_order`: `true` or `false` in your request payload.
 
 
         **Critical Requirements**
@@ -107,9 +129,7 @@ paths:
 
         - For `LIMIT/STOP` orders, use `price_per_share` from order calculation response
 
-        - **Note:** We currently only support LIMIT orders and whole unit trading during extended hours
-
-        '
+        - **Note:** We currently only support LIMIT orders and whole unit trading during extended hours'
       operationId: Web.Api.OrderController.place_market_order
       parameters:
       - name: content-type
@@ -219,9 +239,7 @@ paths:
 
         - **Cancelled:** Order cancelled by the user before execution
 
-        - **Rejected:** Order rejected by broker (invalid parameters like the price or quantity passed)
-
-        '
+        - **Rejected:** Order rejected by broker (invalid parameters like the price or quantity passed)'
       operationId: Web.Api.OrderController.status
       parameters:
       - name: content-type
@@ -310,9 +328,7 @@ paths:
         - Complete order details for user review
 
 
-        This endpoint supports comprehensive order management by monitoring all pending orders across user portfolios, tracking order expiration dates and renewal needs, providing real-time order status updates to users, and enabling order cancellation functionality.
-
-        '
+        This endpoint supports comprehensive order management by monitoring all pending orders across user portfolios, tracking order expiration dates and renewal needs, providing real-time order status updates to users, and enabling order cancellation functionality.'
       operationId: Web.Api.OrderController.pending
       parameters:
       - name: content-type
@@ -396,9 +412,7 @@ paths:
         - No fees are charged for order cancellation.
 
 
-        Cash impact of cancellation involves reserved cash being released back to available buying power immediately, making funds available for other trades instantly.
-
-        '
+        Cash impact of cancellation involves reserved cash being released back to available buying power immediately, making funds available for other trades instantly.'
       parameters:
       - name: content-type
         in: header
@@ -475,6 +489,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       x-codegen-request-body-name: body
+      operationId: postApiOrderByIdCancel
+      x-operation-id-source: derived
 components:
   schemas:
     OrderStockIdResponse:
@@ -487,6 +503,107 @@ components:
           type: string
           description: Order ID to fetch status by REST
           example: KJ.836a28cc-46ad-45d8-af25-a48812a9b7ae
+    PendingOrdersResponse:
+      title: List of pending orders
+      required:
+      - currency_symbol
+      - pending_orders
+      type: object
+      properties:
+        pending_orders:
+          type: array
+          description: Pending order list
+          items:
+            title: Pending order details
+            required:
+            - avatar
+            - avg_price
+            - background_color
+            - created_at
+            - creation_timestamp
+            - id
+            - limit_expiration
+            - logo
+            - name
+            - number
+            - order_price
+            - price_per_share
+            - quantity
+            - side
+            - status
+            - symbol
+            - type
+            type: object
+            properties:
+              type:
+                type: string
+                description: 'Order type: Market, Limit, Stop'
+              symbol:
+                type: string
+                description: Stock symbol
+              status:
+                type: string
+                description: 'Order status: New, Partial Fill, Fill, Canceled, Rejected'
+              side:
+                type: string
+                description: Order side Buy/Sell
+              quantity:
+                type: number
+                description: Quantity of shares requested up to 6 decimal places
+              price_per_share:
+                type: number
+                description: Price per 1.0 stock
+              order_price:
+                type: number
+                description: Order price
+              order_expiration_timestamp:
+                type: integer
+                description: Order expiration timestamp, unix UTC, for limit type only
+              number:
+                type: string
+                description: Order number
+              name:
+                type: string
+                description: Stock name
+              logo:
+                type: string
+                description: Stock logo
+              limit_expiration:
+                type: string
+                description: Expiration of order (limits only) ISO 8601
+              id:
+                type: string
+                description: Order ID
+              creation_timestamp:
+                type: number
+                description: Order creation date in UTC unix timestamp
+              created_at:
+                type: string
+                description: Date in ISO 8601
+              background_color:
+                type: string
+                description: Background color of stock in hex
+              avg_price:
+                type: number
+                description: Average price
+              avatar:
+                type: string
+                description: Stock avatar
+        currency_symbol:
+          type: string
+          description: Prices currency symbol
+          example: $
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
     CalculatedOrderResponse:
       title: Calculated order response
       required:
@@ -537,58 +654,10 @@ components:
           type: number
           description: calculated total price
           example: 10000
-    ErrorResponse:
-      title: Error response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error response for external or internal errors not connected to data
-          example: Message why request didn't succeed
-      description: Error response for external or internal errors not connected to data
-    StopOrderRequest:
-      type: object
-      properties:
-        order_type:
-          type: string
-          description: 'Order type options: `MARKET`, `LIMIT`, `STOP`'
-          enum:
-          - STOP
-        symbol:
-          type: string
-          description: Stock ticker symbol
-          example: AAPL
-        side:
-          type: string
-          description: BUY or SELL
-          enum:
-          - buy
-          - sell
-        price_per_share:
-          type: number
-          description: Current price per share
-          example: 9.13
-        price:
-          type: number
-          description: Price at which the user wants their LIMIT or STOP orders to be executed
-          example: 9.13
-        quantity:
-          type: number
-          description: Specified quantity
-          example: 100
-        sell_all:
-          type: boolean
-          description: set to true if the user wants to sell_all the shares they have for the specified stock symbol.
-          example: false
-      required:
-      - order_type
-      - symbol
-      - side
-      - price_per_share
-      - price
-      - quantity
+    CancelOrderStockIdResponse:
+      title: Order Cancelled
+      type: string
+      example: KJ.836a28cc-46ad-45d8-af25-a48812a9b7ae
     OrderStockRequest:
       title: Order Placement Parameters
       required:
@@ -693,6 +762,48 @@ components:
           description: Resource not found (an incorrect url may have been used)
           example: Resource Not Found
       description: Error response for when the resource is not found within our data.
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
+    MarketOrderRequest:
+      type: object
+      properties:
+        order_type:
+          type: string
+          description: 'Order type options: `MARKET`, `LIMIT`, `STOP`'
+          enum:
+          - MARKET
+        symbol:
+          type: string
+          description: Stock ticker symbol
+          example: AAPL
+        side:
+          type: string
+          description: BUY or SELL
+          enum:
+          - buy
+          - sell
+        amount:
+          type: number
+          description: Investment amount
+          default: 100000
+        sell_all:
+          type: boolean
+          description: set to true if the user wants to sell_all the shares they have for the specified stock symbol.
+          example: false
+      required:
+      - order_type
+      - symbol
+      - side
+      - amount
     OrderStatusResponse:
       title: Order status response
       type: object
@@ -777,119 +888,14 @@ components:
           type: string
           description: Update reason if order was Rejected
           example: market_order-buy-filled
-    CancelOrderStockIdResponse:
-      title: Order Cancelled
-      type: string
-      example: KJ.836a28cc-46ad-45d8-af25-a48812a9b7ae
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
-    PendingOrdersResponse:
-      title: List of pending orders
-      required:
-      - currency_symbol
-      - pending_orders
-      type: object
-      properties:
-        pending_orders:
-          type: array
-          description: Pending order list
-          items:
-            title: Pending order details
-            required:
-            - avatar
-            - avg_price
-            - background_color
-            - created_at
-            - creation_timestamp
-            - id
-            - limit_expiration
-            - logo
-            - name
-            - number
-            - order_price
-            - price_per_share
-            - quantity
-            - side
-            - status
-            - symbol
-            - type
-            type: object
-            properties:
-              type:
-                type: string
-                description: 'Order type: Market, Limit, Stop'
-              symbol:
-                type: string
-                description: Stock symbol
-              status:
-                type: string
-                description: 'Order status: New, Partial Fill, Fill, Canceled, Rejected'
-              side:
-                type: string
-                description: Order side Buy/Sell
-              quantity:
-                type: number
-                description: Quantity of shares requested up to 6 decimal places
-              price_per_share:
-                type: number
-                description: Price per 1.0 stock
-              order_price:
-                type: number
-                description: Order price
-              order_expiration_timestamp:
-                type: integer
-                description: Order expiration timestamp, unix UTC, for limit type only
-              number:
-                type: string
-                description: Order number
-              name:
-                type: string
-                description: Stock name
-              logo:
-                type: string
-                description: Stock logo
-              limit_expiration:
-                type: string
-                description: Expiration of order (limits only) ISO 8601
-              id:
-                type: string
-                description: Order ID
-              creation_timestamp:
-                type: number
-                description: Order creation date in UTC unix timestamp
-              created_at:
-                type: string
-                description: Date in ISO 8601
-              background_color:
-                type: string
-                description: Background color of stock in hex
-              avg_price:
-                type: number
-                description: Average price
-              avatar:
-                type: string
-                description: Stock avatar
-        currency_symbol:
-          type: string
-          description: Prices currency symbol
-          example: $
-    MarketOrderRequest:
+    StopOrderRequest:
       type: object
       properties:
         order_type:
           type: string
           description: 'Order type options: `MARKET`, `LIMIT`, `STOP`'
           enum:
-          - MARKET
+          - STOP
         symbol:
           type: string
           description: Stock ticker symbol
@@ -900,10 +906,18 @@ components:
           enum:
           - buy
           - sell
-        amount:
+        price_per_share:
           type: number
-          description: Investment amount
-          default: 100000
+          description: Current price per share
+          example: 9.13
+        price:
+          type: number
+          description: Price at which the user wants their LIMIT or STOP orders to be executed
+          example: 9.13
+        quantity:
+          type: number
+          description: Specified quantity
+          example: 100
         sell_all:
           type: boolean
           description: set to true if the user wants to sell_all the shares they have for the specified stock symbol.
@@ -912,7 +926,9 @@ components:
       - order_type
       - symbol
       - side
-      - amount
+      - price_per_share
+      - price
+      - quantity
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

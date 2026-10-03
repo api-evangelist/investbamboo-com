@@ -2,21 +2,19 @@ openapi: 3.2.0
 info:
   title: Bamboo NG Securities API
   version: ''
-  description: "The section provides us endpoints that allows a client to fetch all the information pertaining to the NG stocks available on Bamboo. \n"
+  description: The section provides us endpoints that allows a client to fetch all the information pertaining to the NG stocks available on Bamboo.
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: NG Securities
-  description: "The section provides us endpoints that allows a client to fetch all the information pertaining to the NG stocks available on Bamboo. \n"
+  description: The section provides us endpoints that allows a client to fetch all the information pertaining to the NG stocks available on Bamboo.
 paths:
   /api/lsx/ng/stocks:
     get:
       tags:
       - NG Securities
       summary: Fetch List of All Stocks
-      description: 'This endpoint fetches the list of stocks with basic information about them like their symbol and logo.
-
-        '
+      description: This endpoint fetches the list of stocks with basic information about them like their symbol and logo.
       operationId: Web.Api.StockController.index
       parameters:
       - name: content-type
@@ -90,9 +88,7 @@ paths:
       tags:
       - NG Securities
       summary: Fetch Stock by Symbol
-      description: 'This endpoint returns all the details of a specified stock. This is used to offer a user more insight into a specific  stock option.
-
-        '
+      description: This endpoint returns all the details of a specified stock. This is used to offer a user more insight into a specific stock option.
       operationId: Web.Api.StockDataController.about
       parameters:
       - name: content-type
@@ -163,10 +159,8 @@ paths:
       tags:
       - NG Securities
       summary: Fetch List of All Stocks
-      description: 'This endpoint fetches the list of stocks with basic information about them like their symbol and logo.
-
-        '
-      operationId: Web.Api.StockController.index
+      description: This endpoint fetches the list of stocks with basic information about them like their symbol and logo.
+      operationId: getApiLsxNgMyStocks
       parameters:
       - name: content-type
         in: header
@@ -225,19 +219,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      x-operation-id-source: normalized
+      x-operation-id-original: Web.Api.StockController.index
 components:
   schemas:
-    ErrorResponse:
-      title: Error response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error response for external or internal errors not connected to data
-          example: Message why request didn't succeed
-      description: Error response for external or internal errors not connected to data
     lsxngmy_stocks_response:
       title: Array of users NGX stocks
       type: object
@@ -312,17 +297,61 @@ components:
                 type: number
                 description: volume
                 example: 0
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
+    lsxngstock_about_info:
+      title: Stock About Info
       type: object
       properties:
-        message:
+        avatar:
           type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
+          description: Theme avatar
+          example: https://firebasestorage.googleapis.com/v0/b/bamboo-16d59.appspot.com/o/staging%2Fcategories%2FMost%20Popular.png1605885112566?alt=media&token=7300dc44-f067-4aec-a3a6-6e0498de775d
+        close_price:
+          type: integer
+          description: close_price
+          example: 33.4
+        description:
+          type: string
+          description: Stock name
+          example: ZENITHBANK
+        favourite:
+          type: string
+          description: Stock favourite
+          example: false
+        logo:
+          type: string
+          description: Stock logo URL
+        market_cap:
+          type: integer
+          description: market_cap
+          example: 0
+        market_price:
+          type: integer
+          description: market_price
+          example: 33.4
+        name:
+          type: string
+          description: Stock name
+          example: ZENITH BANK
+        open_price:
+          type: integer
+          description: open_price
+          example: 33.4
+        percent_change:
+          type: number
+          description: Total percentage change
+          example: 0
+        symbol:
+          type: string
+          description: Stock symbol
+          example: ZENITHBANK
+        value_change:
+          type: integer
+          description: Equity value change
+          example: 0
+        volume:
+          type: number
+          description: volume
+          example: 0
     Unauthorized:
       title: Unauthorized response
       required:
@@ -400,61 +429,28 @@ components:
                 type: number
                 description: volume
                 example: 0
-    lsxngstock_about_info:
-      title: Stock About Info
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
       type: object
       properties:
-        avatar:
+        message:
           type: string
-          description: Theme avatar
-          example: https://firebasestorage.googleapis.com/v0/b/bamboo-16d59.appspot.com/o/staging%2Fcategories%2FMost%20Popular.png1605885112566?alt=media&token=7300dc44-f067-4aec-a3a6-6e0498de775d
-        close_price:
-          type: integer
-          description: close_price
-          example: 33.4
-        description:
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
           type: string
-          description: Stock name
-          example: ZENITHBANK
-        favourite:
-          type: string
-          description: Stock favourite
-          example: false
-        logo:
-          type: string
-          description: Stock logo URL
-        market_cap:
-          type: integer
-          description: market_cap
-          example: 0
-        market_price:
-          type: integer
-          description: market_price
-          example: 33.4
-        name:
-          type: string
-          description: Stock name
-          example: ZENITH BANK
-        open_price:
-          type: integer
-          description: open_price
-          example: 33.4
-        percent_change:
-          type: number
-          description: Total percentage change
-          example: 0
-        symbol:
-          type: string
-          description: Stock symbol
-          example: ZENITHBANK
-        value_change:
-          type: integer
-          description: Equity value change
-          example: 0
-        volume:
-          type: number
-          description: volume
-          example: 0
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

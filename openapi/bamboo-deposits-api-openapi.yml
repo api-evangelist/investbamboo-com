@@ -2,19 +2,52 @@ openapi: 3.2.0
 info:
   title: Bamboo Deposits API
   version: ''
-  description: "Deposits fund user brokerage accounts for stock purchases. All deposits require verification through your webhook endpoint before funds are credited.\n\nOn the <a href=\"#tag/US-Stock-Portfolio/operation/Web.Api.PortfolioController.portfolio\">Portfolio endpoint</a>, different cash fields serve specific purposes as explained below:\n<table>\n  <thead>\n    <tr>\n      <th>Field</th>\n      <th>Description</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>cash</th>\n      <td>Total cash in the user's brokerage account available for investment (buying power). Includes deposits, stock sales, cancelled and rejected trades.</td>\n    </tr>\n    <tr>\n      <th>unsettled_cash</th>\n      <td>Funds from stock sales pending settlement; not yet available for withdrawal.</td>\n    </tr>\n    <tr>\n      <th>withdrawal_cash</th>\n      <td>Settled funds available for withdrawal from the user brokerage account.</td>\n    </tr>\n    <tr>\n      <th>actual_value</th>\n      <td>Total portfolio value, calculated as sum of US stock holdings, unsettled_cash, and cash balance.</td>\n    </tr>\n  </tbody>\n</table>\n\n**Note:** Your `withdrawal_cash` and `unsettled_cash` are components within your total cash balance. But those fields are used to specifically distinguish between cash settled/unsettled for withdrawal.\n"
+  description: Deposits fund user brokerage accounts for stock purchases.
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
 - name: Deposits
-  description: "Deposits fund user brokerage accounts for stock purchases. All deposits require verification through your webhook endpoint before funds are credited.\n\nOn the <a href=\"#tag/US-Stock-Portfolio/operation/Web.Api.PortfolioController.portfolio\">Portfolio endpoint</a>, different cash fields serve specific purposes as explained below:\n<table>\n  <thead>\n    <tr>\n      <th>Field</th>\n      <th>Description</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>cash</th>\n      <td>Total cash in the user's brokerage account available for investment (buying power). Includes deposits, stock sales, cancelled and rejected trades.</td>\n    </tr>\n    <tr>\n      <th>unsettled_cash</th>\n      <td>Funds from stock sales pending settlement; not yet available for withdrawal.</td>\n    </tr>\n    <tr>\n      <th>withdrawal_cash</th>\n      <td>Settled funds available for withdrawal from the user brokerage account.</td>\n    </tr>\n    <tr>\n      <th>actual_value</th>\n      <td>Total portfolio value, calculated as sum of US stock holdings, unsettled_cash, and cash balance.</td>\n    </tr>\n  </tbody>\n</table>\n\n**Note:** Your `withdrawal_cash` and `unsettled_cash` are components within your total cash balance. But those fields are used to specifically distinguish between cash settled/unsettled for withdrawal.\n"
+  description: Deposits fund user brokerage accounts for stock purchases.
 paths:
   /bamboo/webhook:
     post:
       tags:
       - Deposits
       summary: Create Deposit
-      description: "To make a deposit, you send a notification request with the necessary details to credit the user's brokerage account. Upon receiving the request, a record is created in our system and verification checks are performed to confirm the deposit source.\n\nVerification is carried out using an endpoint you provide to our integration team during account setup. Once the deposit is verified, the specified amount is credited to the user's brokerage account, and deposit status events are sent via Google Pub/Sub. (see details under [events section](#section/Deposit-Event))\n\n### Verification Endpoint Requirements:\n- **Request Type:** GET\n- **URL Pattern:** THE_URL/deposit/status/YOUR_UNIQUE_REFERENCE\n- **Authentication:** Static hash in headers (share this hash with Bamboo along with your verification URL)\n\n#### Example JSON Webhook Response:\n    {\n      \"data\": {\n        \"status\": \"settled\", // or \"failed\"\n        \"currency\": \"NGN\",\n        \"amount\": 30000.00\n      },\n      \"status\": \"settled\" // or \"failed\"  \n    }\n**NB:** You can also  monitor all deposit activity through the <a href=\"http://pbb.investbamboo.com/\"> PBB Dashboard</a>.\n"
+      description: 'To make a deposit, you send a notification request with the necessary details to credit the user''s brokerage account. Upon receiving the request, a record is created in our system and verification checks are performed to confirm the deposit source.
+
+
+        Verification is carried out using an endpoint you provide to our integration team during account setup. Once the deposit is verified, the specified amount is credited to the user''s brokerage account, and deposit status events are sent via Google Pub/Sub. (see details under events section)
+
+
+        ### Verification Endpoint Requirements:
+
+        - **Request Type:** GET
+
+        - **URL Pattern:** THE_URL/deposit/status/YOUR_UNIQUE_REFERENCE
+
+        - **Authentication:** Static hash in headers (share this hash with Bamboo along with your verification URL)
+
+
+        #### Example JSON Webhook Response:
+
+        {
+
+        "data": {
+
+        "status": "settled", // or "failed"
+
+        "currency": "NGN",
+
+        "amount": 30000.00
+
+        },
+
+        "status": "settled" // or "failed"
+
+        }
+
+        **NB:** You can also monitor all deposit activity through the PBB Dashboard.'
       operationId: Web.Api.TransactionController.webhook
       parameters:
       - name: content-type
@@ -99,9 +132,7 @@ paths:
       tags:
       - Deposits
       summary: Fetch All Deposits
-      description: 'Paginated list of all user deposits with date range filtering and status information
-
-        '
+      description: Paginated list of all user deposits with date range filtering and status information
       operationId: Web.Api.Tenant.TenantDepositController.index
       parameters:
       - name: accept-language
@@ -239,6 +270,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
+      operationId: getApiTenantDepositById
+      x-operation-id-source: derived
   /api/tenant/deposit/status/{txref}:
     get:
       tags:
@@ -290,8 +323,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
+      operationId: getApiTenantDepositStatusByTxref
+      x-operation-id-source: derived
 components:
   schemas:
+    DepositStatus:
+      title: Status of a Deposit
+      type: object
+      description: Deposit status
+      properties:
+        amount:
+          type: integer
+          description: amount
+          example: 100.02
+        currency:
+          type: string
+          description: currency
+          example: USD
+        status:
+          type: string
+          description: status
+          example: Settlemented
+        txref:
+          type: string
+          description: status
+          example: BIO63894410548a7f170d8159978UIO
     bamboowebhook:
       title: Deposit request for Banking Institutions
       required:
@@ -331,27 +387,33 @@ components:
           type: string
           description: Either "US" or "NGX". It's used to specify desired stock market. If no market is specified, it defaults to US.
           example: US
-    DepositStatus:
-      title: Status of a Deposit
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
       type: object
-      description: Deposit status
       properties:
-        amount:
-          type: integer
-          description: amount
-          example: 100.02
-        currency:
+        message:
           type: string
-          description: currency
-          example: USD
-        status:
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    ErrorChangesetResponse:
+      title: Error changeset response
+      required:
+      - errors
+      - message
+      type: object
+      properties:
+        message:
           type: string
-          description: status
-          example: Settlemented
-        txref:
-          type: string
-          description: status
-          example: BIO63894410548a7f170d8159978UIO
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
     TenantDepositsPaginationResponse:
       title: List of all deposits with pagination
       type: object
@@ -409,33 +471,6 @@ components:
                 example: 5000
             description: Deposit parameters
       description: List of deposits and next_token
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
-    ErrorChangesetResponse:
-      title: Error changeset response
-      required:
-      - errors
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Message why request didn't succeed
-          example: Invalid credentials
-        errors:
-          type: object
-          properties: {}
-          description: Map of errors
-      description: Error response for request which manipulates data
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo
