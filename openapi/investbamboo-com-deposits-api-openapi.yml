@@ -1,0 +1,510 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com Deposits API
+  version: ''
+  description: 'Operations tagged Deposits across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-deposits-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: Deposits
+  description: Deposits fund user brokerage accounts for stock purchases.
+paths:
+  /bamboo/webhook:
+    post:
+      tags:
+      - Deposits
+      summary: Create Deposit
+      description: 'To make a deposit, you send a notification request with the necessary details to credit the user''s brokerage account. Upon receiving the request, a record is created in our system and verification checks are performed to confirm the deposit source.
+
+
+        Verification is carried out using an endpoint you provide to our integration team during account setup. Once the deposit is verified, the specified amount is credited to the user''s brokerage account, and deposit status events are sent via Google Pub/Sub. (see details under events section)
+
+
+        ### Verification Endpoint Requirements:
+
+        - **Request Type:** GET
+
+        - **URL Pattern:** THE_URL/deposit/status/YOUR_UNIQUE_REFERENCE
+
+        - **Authentication:** Static hash in headers (share this hash with Bamboo along with your verification URL)
+
+
+        #### Example JSON Webhook Response:
+
+        {
+
+        "data": {
+
+        "status": "settled", // or "failed"
+
+        "currency": "NGN",
+
+        "amount": 30000.00
+
+        },
+
+        "status": "settled" // or "failed"
+
+        }
+
+        **NB:** You can also monitor all deposit activity through the PBB Dashboard.'
+      operationId: Web.Api.TransactionController.webhook
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Deposit request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bamboowebhook'
+        required: true
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                type: string
+                description: No response body for this endpoint
+                example: ''
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                title: Bad request
+                required:
+                - message
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Bad request
+                    example: Bad request
+                description: Bad request
+        '422':
+          description: Incomplete Parameters
+          content:
+            application/json:
+              example:
+                message: Error Message
+              schema:
+                $ref: '#/components/schemas/ErrorChangesetResponse'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/tenant/deposit:
+    get:
+      tags:
+      - Deposits
+      summary: Fetch All Deposits
+      description: Paginated list of all user deposits with date range filtering and status information
+      operationId: Web.Api.Tenant.TenantDepositController.index
+      parameters:
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of requested results default=20
+        schema:
+          type: string
+      - name: next_token
+        in: query
+        description: Next token for pagination
+        schema:
+          type: integer
+      - name: start_date
+        in: query
+        description: Unix datetime stamp
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        description: Unix datetime stamp
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantDepositsPaginationResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/tenant/deposit/{id}:
+    get:
+      tags:
+      - Deposits
+      summary: Fetch User-Specific Deposits
+      description: Individual user deposits for performance tracking
+      parameters:
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of requested results default=20
+        schema:
+          type: string
+      - name: next_token
+        in: query
+        description: Next token for pagination
+        schema:
+          type: integer
+      - name: start_date
+        in: query
+        description: Unix datetime stamp
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        description: Unix datetime stamp
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantDepositsPaginationResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      operationId: getApiTenantDepositById
+      x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/tenant/deposit/status/{txref}:
+    get:
+      tags:
+      - Deposits
+      summary: Deposit Status Check
+      description: Real-time status updates for specific deposit transactions
+      parameters:
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositStatus'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      operationId: getApiTenantDepositStatusByTxref
+      x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+components:
+  schemas:
+    bamboowebhook:
+      title: Deposit request for Banking Institutions
+      required:
+      - amount_paid
+      - currency
+      - provider
+      - reference
+      - phone_number
+      - transaction_date
+      type: object
+      properties:
+        amount_paid:
+          type: number
+          description: Amount to be deposited
+          example: 5000
+        currency:
+          type: string
+          description: Currency
+          example: NGN
+        provider:
+          type: string
+          description: API Consumer Name
+          example: invest-bamboo
+        reference:
+          type: string
+          description: Deposit reference
+          example: INVcal2VzeVGJkCXNx
+        phone_number:
+          type: string
+          description: User phone number
+          example: '+2348036477166'
+        transaction_date:
+          type: string
+          description: Date of creating the transaction
+          example: '2022-02-02'
+        market:
+          type: string
+          description: Either "US" or "NGX". It's used to specify desired stock market. If no market is specified, it defaults to US.
+          example: US
+    TenantDepositsPaginationResponse:
+      title: List of all deposits with pagination
+      type: object
+      properties:
+        next_token:
+          type: integer
+          description: Next token for pagination
+          example: 10
+        deposits:
+          type: array
+          description: Deposit response
+          items:
+            title: Deposit response
+            type: object
+            properties:
+              user_surname:
+                type: string
+                description: User surname
+                example: Doe
+              user_name:
+                type: string
+                description: User name
+                example: John
+              transaction_id:
+                type: string
+                description: transaction id for the deposit
+                example: INVcal2V2eVGJkCXNx
+              status:
+                type: string
+                description: Deposit status
+                example: pending
+              phone_number:
+                type: string
+                description: User's phone number
+                example: '+2348033741268'
+              id:
+                type: integer
+                description: Deposit id
+                example: 5804
+              email:
+                type: string
+                description: User email
+                example: johndoe@gmail.com
+              created_at:
+                type: integer
+                description: Creation date in unix timestamp UTC
+                example: '1759689482'
+              api_consumer_name:
+                type: string
+                description: api consumer name
+                example: invest-bamboo
+              amount:
+                type: string
+                description: amount
+                example: 5000
+            description: Deposit parameters
+      description: List of deposits and next_token
+    ErrorChangesetResponse:
+      title: Error changeset response
+      required:
+      - errors
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    DepositStatus:
+      title: Status of a Deposit
+      type: object
+      description: Deposit status
+      properties:
+        amount:
+          type: integer
+          description: amount
+          example: 100.02
+        currency:
+          type: string
+          description: currency
+          example: USD
+        status:
+          type: string
+          description: status
+          example: Settlemented
+        txref:
+          type: string
+          description: status
+          example: BIO63894410548a7f170d8159978UIO
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-deposits-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

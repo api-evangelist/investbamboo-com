@@ -1,0 +1,521 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com Withdrawals API
+  version: ''
+  description: 'Operations tagged Withdrawals across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-withdrawals-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: Withdrawals
+  description: Withdrawals allow users to extract funds from their brokerage accounts after successful trades.
+paths:
+  /api/tenant_brokerage_withdraw:
+    post:
+      tags:
+      - Withdrawals
+      summary: Create Withdrawal
+      description: 'Withdrawal requests follow a similar verification flow as deposits. You send a notification request with the necessary details to debit the user''s brokerage account, we verify that the user has the amount requested.
+
+        Once verified, the specified amount is deducted from the user''s brokerage account, and withdrawal status events are sent via Google Pub/Sub.
+
+
+        Offline settlement happens between our teams using established procedures. (see event details under withdrawal status events)'
+      operationId: Web.Api.WithdrawController.tenant_brokerage_withdraw_ngn
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: tenant withdraw body parameter for NGN
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantBrokerageWithdrawBody'
+      responses:
+        '200':
+          description: Withdrawal requested
+          content:
+            application/json:
+              schema:
+                type: string
+                description: No response body for this endpoint
+                example: ''
+        '401':
+          description: Token has expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '422':
+          description: Incomplete Parameters
+          content:
+            application/json:
+              example:
+                message: Error Message
+              schema:
+                $ref: '#/components/schemas/ErrorChangesetResponse'
+      x-codegen-request-body-name: body
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/tenant/withdraws:
+    get:
+      tags:
+      - Withdrawals
+      summary: Fetch All Withdrawals
+      description: Complete withdrawal history with date filtering
+      parameters:
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of requested results default=20
+        schema:
+          type: string
+      - name: next_token
+        in: query
+        description: Next token for pagination
+        schema:
+          type: integer
+      - name: start_date
+        in: query
+        description: Unix datetime stamp
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        description: Unix datetime stamp
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantWithdrawsPaginationResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      operationId: getApiTenantWithdraws
+      x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/tenant/withdraw/{id}:
+    get:
+      tags:
+      - Withdrawals
+      summary: Fetch User Withdrawals
+      description: Individual user withdrawal history for performance tracking
+      parameters:
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of requested results default=20
+        schema:
+          type: string
+      - name: next_token
+        in: query
+        description: Next token for pagination
+        schema:
+          type: integer
+      - name: start_date
+        in: query
+        description: Unix datetime stamp
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        description: Unix datetime stamp
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantWithdrawsPaginationResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      operationId: getApiTenantWithdrawById
+      x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/tenant/withdraw/status/{reference}:
+    get:
+      tags:
+      - Withdrawals
+      summary: Withdrawal Status Check
+      description: Real-time status checking for specific withdrawal transactions
+      operationId: Web.Api.Tenant.WithdrawController.withdraw_status
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: reference
+        in: path
+        description: withdrawal reference
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WithdrawStatusResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+components:
+  schemas:
+    WithdrawStatusResponse:
+      title: Withdraw status
+      type: object
+      properties:
+        status:
+          type: string
+          description: Withdraw status
+          example: pending
+        reference:
+          type: string
+          description: Withdraw reference
+          example: INVKPxiJVc40BNaQBH
+        currency:
+          type: string
+          description: Withdraw currency
+          example: NGN
+        amount:
+          type: number
+          description: Withdraw amount
+          example: 13400
+      description: Withdraw status
+    TenantWithdrawsPaginationResponse:
+      title: List of all withdrawals with pagination
+      type: object
+      properties:
+        next_token:
+          type: integer
+          description: Next token for pagination
+          example: 10
+        withdrawals:
+          type: array
+          description: Withdrawal response
+          items:
+            title: Deposit response
+            type: object
+            properties:
+              user_surname:
+                type: string
+                description: User surname
+                example: Doe
+              user_phone:
+                type: string
+                description: User's phone number
+                example: '+2348033741268'
+              user_name:
+                type: string
+                description: User name
+                example: John
+              user_indentifier:
+                type: string
+                description: User indentifier (BVN or NIN)
+                example: 22388291636
+              user_email:
+                type: string
+                description: User email
+                example: johndoe@gmail.com
+              swift_aba_code:
+                type: string
+                description: Swift or aba code - only if currency is USD
+              status:
+                type: string
+                description: Deposit status
+                example: pending
+              reference:
+                type: string
+                description: reference
+                example: INVKPxiJVc40BNaQBH
+              intermediary_bank_swift_code:
+                type: string
+                description: bank code
+              intermediary_bank:
+                type: string
+                description: Intermediary bank - only if currency is USD
+              id:
+                type: integer
+                description: Deposit id
+                example: 5804
+              fees:
+                type: string
+                description: Fees information
+              exchange_rate:
+                type: string
+                description: Exchange rate
+              dollar_fees:
+                type: string
+                description: Fees information in dollar
+              dollar_amount:
+                type: integer
+                description: amount
+                example: 130
+              currency:
+                type: string
+                description: currency
+              created_at:
+                type: integer
+                description: Creation date in unix timestamp UTC
+                example: 2022-02-02 01:10:20 UTC
+              beneficiary_name:
+                type: string
+                description: Beneficiary name - only if currency is USD
+              bank_zip_code:
+                type: string
+                description: Bank zip code - only if currency is USD
+              bank_state:
+                type: string
+                description: Bank state - only if currency is USD
+              bank_name:
+                type: string
+                description: Bank name - only if currency is USD
+              bank_country:
+                type: string
+                description: Bank country - only if currency is USD
+              bank_address:
+                type: string
+                description: Bank address - only if currency is USD
+              amount:
+                type: integer
+                description: amount
+                example: 13400
+              additional_instructions:
+                type: string
+                description: Additional instructuons - only if currency is USD
+              account_number:
+                type: string
+                description: account number
+                example: 23768954
+            description: Deposit parameters
+      description: List of deposits and next_token
+    ErrorChangesetResponse:
+      title: Error changeset response
+      required:
+      - errors
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    TenantBrokerageWithdrawBody:
+      title: Tenant Brokerage Request body for NGN
+      required:
+      - reference
+      - amount
+      - currency
+      type: object
+      properties:
+        currency:
+          type: string
+          description: currency
+          example: NGN
+        amount:
+          type: integer
+          description: amount
+          example: 13400
+        reference:
+          type: string
+          description: reference
+          example: INVKPxiJVc40BNaQBH
+        market:
+          type: string
+          description: Either "US" or "NGX". It is used to specify desired stock market. If no market is specified, it defaults to US.
+          example: US
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-withdrawals-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

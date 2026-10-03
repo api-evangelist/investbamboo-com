@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Bamboo Financial Documents API
+  title: Investbamboo Com Financial Documents API
   version: ''
-  description: Access various financial documents required for user account management, tax reporting, and regulatory compliance through secure document retrieval endpoints.
+  description: 'Operations tagged Financial Documents across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-financial-documents-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
@@ -80,6 +80,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
   /api/document:
     get:
       tags:
@@ -143,8 +145,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
 components:
   schemas:
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
     USDocumentList:
       title: List of Documents by Document Type
       required:
@@ -173,17 +188,6 @@ components:
             file_key: '2024081601'
           - name: Aug 14, 2024 Trade Confirm
             file_key: '2024081401'
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
     USDocuments:
       title: URL to download a Single Document
       required:
@@ -194,6 +198,9 @@ components:
           type: link
           description: Document URL
           example: https://dzb6emi8pracf.cloudfront.net/420d2907-bb49-421d-accd-9ad4692b0a51.1722266251918/Confirm_BBOO_001_BBMN000009_08302024.pdf?Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHBzOi8vZHpiNmVtaThwcmFjZi5jbG91ZGZyb250Lm5ldC80MjBkMjkwNy1iYjQ5LTQyMWQtYWNjZC05YWQ0NjkyYjBhNTEuMTcyMjI2NjI1MTkxOC9Db25maXJtX0JCT09fMDAxX0JCTU4wMDAwMDlfMDgzMDIwMjQucGRmIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzI1NTI1Njg2fSwiSXBBZGRyZXNzIjp7IkFXUzpTb3VyY2VJcCI6IjAuMC4wLjAvMCJ9fX1dfQ__&Signature=WL-Cm2B8BMOvT0ZZf6lMbIUmq1m4jF6atbtsalkgFKOyXs08eaA5nPFnOJjlQBmhqdzva8uGsKdV11U2Mmbmk3UXMzU8-sKQSMlMZ-awknHGSGELJbA1aOlbscsxeznP~MZhVL73ouKuX6scyqqk8AXkiTXTwKfJSxVhPiR0EAcrvW0GkrheiydXiti87eed07t-Tl8BGd7Du83ClueJZxJTTMhNGhuYhpvB-G7yzzRUJWIXsVhofGlmC9mChD~2R6OoaruQ7UckxlHL~IobKzm0oZLiRESiqyuHfgGwIZrY~KGVNXFmgbYNIiFZObjDgbMlVWErM-80VYiRtL9Ctw__&Key-Pair-Id=APKAJP3MFGZ6DRA4CW4Q
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-financial-documents-api-openapi.yml
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

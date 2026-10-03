@@ -1,0 +1,176 @@
+# x-archived-from: bamboo-lsx-api-openapi.yml
+# x-archived-on: 2026-10-02
+openapi: 3.2.0
+info:
+  title: Bamboo Lsx API
+  version: ''
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: Lsx
+paths:
+  /api/lsx/ng/dictionary:
+    get:
+      tags:
+      - Lsx
+      summary: NGX Dictionary
+      description: This endpoint provides the acceptable data for fetching the format for the states and LGAs required during account creation. This info is needed to enable users trade in the NG market.
+      responses:
+        '200':
+          description: Dictionary response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lsxngdictionary'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '422':
+          description: Incomplete Parameters
+          content:
+            application/json:
+              example:
+                message: 'Citizenship can''t be blank,
+
+                  Country code can''t be blank'
+              schema:
+                $ref: '#/components/schemas/ErrorChangesetResponse'
+      operationId: getApiLsxNgDictionary
+      x-operation-id-source: derived
+components:
+  schemas:
+    ErrorChangesetResponse:
+      title: Error changeset response
+      required:
+      - errors
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+    lsxngdictionary:
+      title: NGX Dictionary
+      type: object
+      properties:
+        states_and_lgas:
+          type: array
+          description: Arary of object with states_and_lgas for NG account creation
+          example:
+          - state: Adamawa
+            lgas:
+            - Demsa
+            - Fufure
+            - Ganye
+            - Gayuk
+            - Gombi
+            - Grie
+            - Hong
+            - Jada
+            - Larmurde
+            - Madagali
+            - Maiha
+            - Mayo Belwa
+            - Michika
+            - Mubi North
+            - Mubi South
+            - Numan
+            - Shelleng
+            - Song
+            - Toungo
+            - Yola North
+            - Yola South
+          - state: Lagos
+            lgas:
+            - Agege
+            - Ajeromi-Ifelodun
+            - Alimosho
+            - Amuwo-Odofin
+            - Badagry
+            - Apapa
+            - Epe
+            - Eti Osa
+            - Ibeju-Lekki
+            - Ifako-Ijaiye
+            - Ikeja
+            - Ikorodu
+            - Kosofe
+            - Lagos Island
+            - Mushin
+            - Lagos Mainland
+            - Ojo
+            - Oshodi-Isolo
+            - Shomolu
+            - Surulere Lagos State
+          - state: Federal Capital Territory
+            lgas:
+            - Abaji
+            - Bwari
+            - Gwagwalada
+            - Kuje
+            - Kwali
+            - Municipal Area Council
+          - etc: null
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

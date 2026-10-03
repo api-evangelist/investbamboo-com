@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Bamboo NG Deposits API
+  title: Investbamboo Com NG Deposits API
   version: ''
+  description: 'Operations tagged NG Deposits across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-ng-deposits-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
@@ -78,6 +79,8 @@ paths:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
       operationId: postApiLsxNgDeposit
       x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
   /api/lsx/ng/deposit/{reference}:
     get:
       tags:
@@ -125,58 +128,10 @@ paths:
                 $ref: '#/components/schemas/Unauthorized'
       operationId: getApiLsxNgDepositByReference
       x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
 components:
   schemas:
-    lsxngdeposit_response:
-      title: Deposit response
-      required:
-      - amount
-      - currency
-      - dollar_amount
-      - dollar_fee
-      - exchange_rate
-      - fee
-      - provider
-      - provider_txref
-      - status
-      type: object
-      properties:
-        amount:
-          type: number
-          description: Amount to be deposited
-          example: 200000
-        currency:
-          type: string
-          description: Currency
-          example: NGN
-        dollar_amount:
-          type: number
-          description: Dollar equivalent of amount to be deposited
-          example: 230.41
-        dollar_fee:
-          type: number
-          description: Dollar Fee
-          example: 0.02
-        exchange_rate:
-          type: number
-          description: Fee
-          example: 868
-        fee:
-          type: number
-          description: Fee
-          example: 50
-        provider:
-          type: string
-          description: API Consumer Name
-          example: invest-bamboo
-        provider_txref:
-          type: string
-          description: Deposit reference
-          example: INVcal2VzeVGJkCXNx
-        status:
-          type: string
-          description: Status
-          example: Pending
     lsxngdeposit_by_reference_response:
       title: Deposit request
       required:
@@ -227,6 +182,56 @@ components:
           type: string
           description: Status
           example: Successful
+    lsxngdeposit_response:
+      title: Deposit response
+      required:
+      - amount
+      - currency
+      - dollar_amount
+      - dollar_fee
+      - exchange_rate
+      - fee
+      - provider
+      - provider_txref
+      - status
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount to be deposited
+          example: 200000
+        currency:
+          type: string
+          description: Currency
+          example: NGN
+        dollar_amount:
+          type: number
+          description: Dollar equivalent of amount to be deposited
+          example: 230.41
+        dollar_fee:
+          type: number
+          description: Dollar Fee
+          example: 0.02
+        exchange_rate:
+          type: number
+          description: Fee
+          example: 868
+        fee:
+          type: number
+          description: Fee
+          example: 50
+        provider:
+          type: string
+          description: API Consumer Name
+          example: invest-bamboo
+        provider_txref:
+          type: string
+          description: Deposit reference
+          example: INVcal2VzeVGJkCXNx
+        status:
+          type: string
+          description: Status
+          example: Pending
     lsxngdeposit:
       title: Deposit request
       required:
@@ -257,17 +262,6 @@ components:
           type: number
           description: Amount to be deposited
           example: 200000
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
     ErrorChangesetResponse:
       title: Error changeset response
       required:
@@ -284,6 +278,20 @@ components:
           properties: {}
           description: Map of errors
       description: Error response for request which manipulates data
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-ng-deposits-api-openapi.yml
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

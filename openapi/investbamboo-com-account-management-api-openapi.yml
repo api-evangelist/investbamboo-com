@@ -1,0 +1,1047 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com Account Management API
+  version: ''
+  description: 'Operations tagged Account Management across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-account-management-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: Account Management
+  description: Account creation enables users to invest on Bamboo.
+paths:
+  /api/one_step_registration:
+    post:
+      tags:
+      - Account Management
+      summary: Create New User
+      operationId: Web.Api.RegisterController.registration_step
+      description: 'This single endpoint helps you create brokerage accounts for your users. The required data below are used to determine user trading eligibility and are **required by US regulations**:
+
+        - **basic_info:** Personal details, contact information, residence
+
+        - **verified_identity_info:** Government ID verification data
+
+        - **affiliation_info:** Professional associations, director roles
+
+        - **brokerage_account_info:** Investment profile required to confirm US trading eligibility
+
+
+        A dictionary endpoint is provided below to give insight into all the questions and acceptable
+
+        values for the fields within the payload.
+
+
+        Add `"extended_hours_opt_in"`: `"REQUESTED"` field to the request schema under brokerage_account_info to enable your users trade during extended hours.'
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Register credentials. (Provide details to subscribe to at least one market)
+        content:
+          application/json:
+            schema:
+              title: Register request body
+              required:
+              - basic_info
+              - verified_identity_info
+              - affiliation_info
+              - brokerage_account_info
+              type: object
+              properties:
+                basic_info:
+                  type: object
+                  title: User basic info
+                  required:
+                  - citizenship
+                  - city
+                  - country_code
+                  - date_of_birth
+                  - email
+                  - first_name
+                  - gender
+                  - last_name
+                  - phone_number
+                  - province
+                  - postal_code
+                  - residence_country_code
+                  - surname
+                  properties:
+                    residence_country_code:
+                      type: string
+                      description: '''GHA'' for Ghana, ''NGA'' for Nigeria and ''KEN'' for Kenya'
+                      example: NGA
+                    province:
+                      type: string
+                      description: Province
+                      example: Lagos State
+                    postal_code:
+                      type: string
+                      description: Postal code
+                      example: '100001'
+                    referral_code:
+                      type: string
+                      description: Referral code
+                      example: '113792'
+                    phone_number:
+                      type: string
+                      description: Phone number
+                      example: '+2347083864023'
+                    last_name:
+                      type: string
+                      description: Last Name
+                      example: Doe
+                    gender:
+                      type: string
+                      description: 'Gender options: Man/Woman'
+                      example: Man
+                    first_name:
+                      type: string
+                      description: First Name
+                      example: John
+                    email:
+                      type: string
+                      description: Email
+                      example: johndoe@gmail.com
+                    date_of_birth:
+                      type: string
+                      description: Date in format YYYY-MM-DD
+                      example: '1927-02-19'
+                    country_code:
+                      type: string
+                      description: 'Country Code: `NGA`, `USA`'
+                      example: NGA
+                    city:
+                      type: string
+                      description: Residence City
+                      example: Lagos
+                    citizenship:
+                      type: string
+                      description: Citizenship
+                      example: Nigerian
+                verified_identity_info:
+                  type: object
+                  title: User verified identity info
+                  required:
+                  - address
+                  - city
+                  - date_of_birth
+                  - document_type
+                  - email
+                  - expiration_date
+                  - full_name
+                  - gender
+                  - identifier
+                  - image
+                  - front_id_image
+                  - back_id_image
+                  - phone_number
+                  - residence_country
+                  - state
+                  properties:
+                    address:
+                      type: string
+                      description: address
+                      example: 22 Babatunde Anjous Lekki
+                    city:
+                      type: string
+                      description: City
+                      example: Lekki
+                    date_of_birth:
+                      type: string
+                      description: User date of birth
+                      example: 1927/02/19
+                    document_type:
+                      type: string
+                      description: Identification document type
+                      example: BVN
+                    email:
+                      type: string
+                      description: User email
+                    expiration_date:
+                      type: string
+                      description: ID expiration date
+                      example: 2026/10/10
+                    full_name:
+                      type: string
+                      description: User full name
+                      example: John Doe
+                    gender:
+                      type: string
+                      description: 'Gender options: Man/Woman'
+                      example: Man
+                    identifier:
+                      type: string
+                      description: Identifier
+                      example: '22488743663'
+                    image:
+                      type: string
+                      description: A passport photograph of the user. (Format required is Base64)
+                      example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB9gA...
+                    front_id_image:
+                      type: string
+                      description: Front page of a user's Identity document. (Apllicable to Ghana and SA accounts only. Format required is Base64)
+                      example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB9gA...
+                    back_id_image:
+                      type: string
+                      description: Back page of a user's Identity document. (Apllicable to Ghana and SA accounts only. Format required is Base64)
+                      example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB9gA...
+                    phone_number:
+                      type: string
+                      description: User phone number
+                      example: '+2347083864023'
+                    residence_country:
+                      type: string
+                      description: User residence country
+                      example: NGA
+                    state:
+                      type: string
+                      description: State
+                      example: Lagos
+                affiliation_info:
+                  type: object
+                  title: Affiliation info
+                  properties:
+                    director_of:
+                      type: string
+                      required: false
+                      description: If no, send null. If yes, please list the company name and its ticker symbol.
+                      example: ''
+                    broker:
+                      type: boolean
+                      description: If no, send false. If yes, send true
+                      example: false
+                brokerage_account_info:
+                  type: object
+                  title: Brokerage account info
+                  required:
+                  - company
+                  - employment_type
+                  - experience
+                  - goal
+                  - liquid
+                  - marital_status
+                  - net_worth
+                  - position
+                  - risk_tolerance
+                  - yearly_income
+                  - employment_status
+                  - source_of_wealth
+                  properties:
+                    employment_status:
+                      type: string
+                      description: Employment Status
+                      example: SELF_EMPLOYED
+                    yearly_income:
+                      type: integer
+                      description: Yearly Income
+                      example: 12500
+                    source_of_wealth:
+                      type: string
+                      description: Source of wealth
+                      example: COMPANY
+                    risk_tolerance:
+                      type: string
+                      description: Risk Tolerance
+                      example: LOW
+                    position:
+                      type: string
+                      description: Position
+                      example: AUDITOR
+                    net_worth:
+                      type: integer
+                      description: Net Worth
+                      example: 62500
+                    marital_status:
+                      type: string
+                      description: Martial Status
+                      example: MARRIED
+                    liquid:
+                      type: integer
+                      description: User's Liquidity Amount
+                      example: 12500
+                    goal:
+                      type: string
+                      description: Goal
+                      example: FREQUENT
+                    experience:
+                      type: string
+                      description: Experience
+                      example: NONE
+                    employment_type:
+                      type: string
+                      description: Employment Type
+                      example: AGRICULTURE
+                    company:
+                      type: string
+                      description: Company
+                      example: Phil Technologies LTD.
+                    extended_hours_opt_in:
+                      type: string
+                      default: REQUESTED
+                      description: 'Optional field. Include `"extended_hours_opt_in": "REQUESTED"` in the payload
+
+                        to allow the user to trade during extended hours. Omit this field if extended hours trading is not required.
+
+                        '
+            required: true
+      responses:
+        '200':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                title: Account info
+                required:
+                - expiration_time
+                - jwt
+                - refresh_token
+                - user
+                type: object
+                properties:
+                  expiration_time:
+                    type: integer
+                    description: expiration time
+                    example: 1697532406
+                  jwt:
+                    type: string
+                    description: Bearer `jwt`
+                    example: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3ZWIiLCJleHAiOjE2OTc1MzI0MDYsImlhdCI6MTY5NDk0MDQwNiwiaXNzIjoid2ViIiwianRpIjoiMTE5MGRjMDEtZjQxNS00NmQ3LWFjOTctYzM5M2Y2MWEzYWJjIiwibmJmIjoxNjk0OTQwNDA1LCJyZXNpZGVuY2VfY291bnRyeSI6Ik5HQSIsInN1YiI6NTc3MSwidHlwIjoiYWNjZXNzIn0.GN3THXBJPynv0BcKuWKc84UHexAD22iGtO8A7kSjR92VKxLaiXxz0bDC-CEa8pVKum3oVwjjdRdAXeJL6c4Tsw
+                  refresh_token:
+                    type: string
+                    description: Bearer refresh token
+                    example: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3ZWIiLCJleHAiOjE2OTczNTk2MDYsImlhdCI6MTY5NDk0MDQwNiwiaXNzIjoid2ViIiwianRpIjoiYWQ4MDA2MzMtMWU4Ny00MGQ0LWFkMTMtNzc4YjY0M2JlNWQwIiwibmJmIjoxNjk0OTQwNDA1LCJyZXNpZGVuY2VfY291bnRyeSI6Ik5HQSIsInN1YiI6NTc3MSwidHlwIjoicmVmcmVzaCJ9.a5Vn2ApDrDBnroDk-7n3neJOuZPDOJxSP29V85rej_eKx4w0JiJ112-tghkSi3xijf0RSkw_AeVq-9sS7bjr0w
+                  user:
+                    title: Response
+                    required:
+                    - application_id
+                    - bvn_api_fail
+                    - date_of_birth
+                    - email
+                    - first_name
+                    - full_name
+                    - id
+                    - last_name
+                    - name
+                    - phone_number
+                    - registration_step
+                    - surname
+                    type: object
+                    properties:
+                      application_id:
+                        type: integer
+                        description: User's application ID
+                        example: 50083181
+                      bvn_api_fail:
+                        type: boolean
+                        description: Field only if BVN api fails
+                        example: false
+                      date_of_birth:
+                        type: string
+                        description: User date of birth
+                        example: '1927-02-19'
+                      email:
+                        type: string
+                        description: User email
+                        example: johndoe@gmail.com
+                      first_name:
+                        type: string
+                        description: User first name
+                        example: John
+                      full_name:
+                        type: string
+                        description: User full name
+                        example: John Doe
+                      id:
+                        type: integer
+                        description: User's id
+                        example: 4101
+                      last_name:
+                        type: string
+                        description: User last name
+                        example: Doe
+                      name:
+                        type: string
+                        description: User first name
+                        example: John
+                      phone_number:
+                        type: string
+                        description: User phone number
+                        example: '+2347083864023'
+                      registration_step:
+                        type: string
+                        description: User's next registration step
+                        example: Pending review
+                      surname:
+                        type: string
+                        description: User surname
+                        example: Doe
+        '401':
+          description: Token has expired or invalid token
+          content:
+            application/json:
+              schema:
+                title: Unauthorized response
+                required:
+                - message
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Unauthorized/Invalid Token
+                description: Token is invalid or have expired
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/dictionary:
+    get:
+      tags:
+      - Account Management
+      summary: Dictionary
+      description: 'Returns acceptable values for account creation fields, ensuring data validation and compliance with brokerage requirements.
+
+
+        **Categories:**
+
+        - Employment Information – Status, type, industry, position.
+
+        - Investment Profile – Experience, risk tolerance, goals.
+
+        - Financial Information – Assets, source of wealth, marital status.
+
+
+        **Usage:**
+
+        - Values are case-sensitive.
+
+        - Validate user inputs against dictionary before account creation.
+
+        - Update dictionary cache periodically.'
+      operationId: Web.Api.RegisterController.dictionary
+      responses:
+        '200':
+          description: Dictionary response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DictionaryResponse'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/profile:
+    get:
+      tags:
+      - Account Management
+      summary: View User Profile
+      description: Retrieve comprehensive user profile information including account restrictions statuses.
+      operationId: Web.Api.ProfileController.profile
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/investment_profile:
+    get:
+      tags:
+      - Account Management
+      summary: View User Investment Profile
+      description: Access detailed investment profile information and brokerage account details.
+      operationId: Web.Api.ProfileController.investment_profile
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User Investment Profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvestmentProfileResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+components:
+  schemas:
+    InvestmentProfileResponse:
+      title: Investment Profile response
+      required:
+      - position
+      - marital_status
+      - employment_status
+      - company
+      - employment_type - goal
+      - experience
+      - yearly_income
+      - liquid
+      - net_worth
+      - risk_tolerance
+      - dependents
+      - source_of_wealth
+      type: object
+      properties:
+        position:
+          type:
+          - string
+          - 'null'
+          description: Job position or title
+          example: ARTIST
+        marital_status:
+          type: string
+          description: Marital status
+          example: SINGLE
+          enum:
+          - SINGLE
+          - MARRIED
+          - DIVORCED
+          - WIDOWED
+        employment_status:
+          type: string
+          description: Current employment situation
+          example: UNEMPLOYED
+          enum:
+          - EMPLOYED
+          - SELF_EMPLOYED
+          - UNEMPLOYED
+          - RETIRED
+          - STUDENT
+        company:
+          type:
+          - string
+          - 'null'
+          description: Company name where employed
+          example: BAMBOO
+        employment_type:
+          type:
+          - string
+          - 'null'
+          description: Industry or type of employment
+          example: MANAGEMENT
+        goal:
+          type: string
+          description: Investment goal or trading frequency
+          example: ACTIVE_DAILY
+          enum:
+          - ACTIVE_DAILY
+          - GROWTH
+          - INCOME
+          - SPECULATION
+          - PRESERVATION
+        experience:
+          type: string
+          description: Previous investment experience level
+          example: NONE
+          enum:
+          - NONE
+          - LIMITED
+          - GOOD
+          - EXTENSIVE
+        yearly_income:
+          type: integer
+          description: Annual income in USD
+          example: 12500
+        liquid:
+          type: integer
+          description: Liquid assets amount in USD
+          example: 12500
+        net_worth:
+          type: integer
+          description: Total net worth in USD
+          example: 12500
+        risk_tolerance:
+          type: string
+          description: Investment risk comfort level
+          example: HIGH
+          enum:
+          - LOW
+          - MODERATE
+          - HIGH
+        dependents:
+          type: integer
+          description: Number of financial dependents
+          example: 0
+        source_of_wealth:
+          type: string
+          description: Primary source of wealth
+          example: SAVINGS
+          enum:
+          - EMPLOYMENT
+          - BUSINESS
+          - INHERITANCE
+          - INVESTMENTS
+    ProfileResponse:
+      title: Profile response
+      required:
+      - account_number
+      - age
+      - carrot_integration_status
+      - citizenship
+      - city
+      - email
+      - email_verified
+      - engagement_status
+      - gender
+      - name
+      - phone_number
+      - postal_code
+      - province
+      - street
+      - surname
+      type: object
+      properties:
+        surname:
+          type: string
+          description: Surname
+          example: Doe
+        street:
+          type: string
+          description: Street
+          example: 4383 Ms. Godspower Savage Squares, Ngaski Lagos
+        province:
+          type: string
+          description: Province
+          example: Lagos State
+        postal_code:
+          type: string
+          description: Postal code
+          example: '+234'
+        phone_number:
+          type: string
+          description: Phone number
+          example: '+2347083864023'
+        next_of_kin:
+          type: string
+          description: Full name of Next of Kin
+          example: Phil Doe
+        name:
+          type: string
+          description: Name
+          example: John
+        gender:
+          type: string
+          description: Gender
+          example: Man
+        engagement_status:
+          type: string
+          description: The User's engagement status in the system. NOTE - use it only to show banner on main page.
+          example: no_trade
+          enum:
+          - no_deposit
+          - no_trade
+          - traded
+        email_verified:
+          type: boolean
+          description: Email verified
+          example: false
+        email:
+          type: string
+          description: Email
+          example: johndoe@gmail.com
+        city:
+          type: string
+          description: City
+          example: Lekki
+        citizenship:
+          type: string
+          description: Citizenship
+          example: Nigeria
+        carrot_integration_status:
+          type: string
+          description: Carrot integration status for user
+          example: not_available
+          enum:
+          - not_available
+          - available
+          - authorized
+        age:
+          type: integer
+          description: Age
+          example: 96
+        account_restriction:
+          title: User restriction details
+          type: object
+          properties:
+            restricted:
+              type: boolean
+              description: true if account is restricted, false if not
+              example: false
+            reason:
+              type: string
+              description: reason of account restriction
+              example: Account is under review
+        account_number:
+          type: string
+          description: Account number
+          example: '84861889'
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    DictionaryResponse:
+      title: US Dictionary response
+      required:
+      - assets_range
+      - employment_status
+      - employment_type
+      - experience
+      - goal
+      - marital_status
+      - position
+      - risk_tolerance
+      - source_of_wealth
+      type: object
+      properties:
+        assets_range:
+          type: array
+          description: 'Arary of object with assets ranges: $0-$24,999 etc.'
+          example:
+          - '12500': ₦0-₦9,000,000
+          - '62500': ₦9,000,001-₦36,000,001
+          - '175000': ₦36,000,001-₦90,000,000
+          - '250000': ₦90,000,001+
+        employment_status:
+          type: object
+          properties: {}
+          description: 'Employment status: Employed, Self-Employed etc.'
+          example:
+          - EMPLOYED: Employed
+            RETIRED: Retired
+            SELF_EMPLOYED: Self Employed/Business Owner
+            STUDENT: Student
+            UNEMPLOYED: Not employed
+        employment_type:
+          type: object
+          properties: {}
+          description: 'Employment type: Art, Food etc.'
+          example:
+          - AGRICULTURE: Agriculture, Forestry, Fishing and Hunting
+            ART: Arts, Entertainment, and Recreation
+            CONSTRUCTION: Construction
+            EDUCATION: Educational Services
+            FINANCE: Finance and Insurance
+            FOOD: Accommodation and Food Services
+            HEALTH: Health Care and Social Assistance
+            INFORMATION: Information
+            MANAGEMENT: Management of Companies and Enterprises
+            MANUFACTURING: Manufacturing
+            MINING: Mining, Quarrying, and Oil and Gas Extraction
+            PROFESSIONAL: Professional, Scientific, and Technical Services
+            PUBLIC: Public Administration
+            REAL_ESTATE: Real Estate and Rental and Leasing
+            RETAIL: Retail Trade
+            TRANSPORT: Transportation and Warehousing
+            UTILITIES: Utilities
+            WASTE: Administrative and Support and Waste Management and Remediation Services
+            WHOLESALE: Wholesale Trade
+        experience:
+          type: array
+          description: 'Arary of object with experience in investing: years ranges'
+          example:
+          - NONE: None
+          - YRS_1_2: 1-2 years
+          - YRS_3_5: 3-5 years
+          - YRS_5_10: 5-10 years
+          - YRS_10_: 10+ years
+        goal:
+          type: object
+          properties: {}
+          description: 'Goal in investing: active, frequent etc.'
+          example:
+          - ACTIVE_DAILY: Active trader, daily trader
+            FREQUENT: Frequent trader, depending on the market
+            INFREQUENT: Trading infrequently when I see an opportunity
+            LONG_TERM: Long–term buy & hold investing
+            NEW: New to investing
+        marital_status:
+          type: object
+          properties: {}
+          description: 'marital status: Single, Divorced etc.'
+          example:
+          - DIVORCED: Divorced
+            MARRIED: Married
+            PARTNER: Domestic Partner
+            SINGLE: Single
+            WIDOWED: Widowed
+        position:
+          type: object
+          properties: {}
+          description: 'Position in Company: agent, administrator etc.'
+          example:
+          - ARTIST: Artist/Performer/Actor/Dancer
+            TRANSPORTER: Transporter
+            APPRAISER: Appraiser
+            PILOT: Pilot
+            IMPEX: Importer/Exporter
+            BROKER: Broker
+            CLERGY: Clergy
+            FISHERMAN: Fisherman
+            BUSINESS_EXEC: Business Executive (VP, Director, etc.)
+            CONSULTANT: Consultant
+            ASSISTANT: Assistant
+            BARBER: Barber/Beautician/Hairstylist
+            SCIENTIST: Scientist
+            JANITOR: Janitor
+            ANALYST: Analyst
+            MECHANIC: Mechanic
+            MORTICIAN: Mortician/Funeral Director
+            FINANCIAL: Financial Planner
+            SECURITY: Security Guard
+            AMBASSADOR: Ambassador/Consulate Professional
+            LABORER: Laborer
+            CIVIL: Civil Servant
+            CLERK: Clerk
+            JEWELER: Jeweler
+            INSPECTOR: Inspector/Investigator
+            ENGINEER: Engineer
+            NURSE: Nurse
+            DOCTOR: Doctor/Dentist/Veterinarian/Surgeon
+            CHIROPRACTOR: Chiropractor
+            POLICE: Police Officer/Firefighter/Law Enforcement Professional
+            DEVELOPER: Developer
+            TEACHER: Teacher/Professor
+            EXAMINER: Examiner
+            TRAINER: Trainer/Instructor
+            TELLER: Teller
+            PM: Project Manager
+            COMPLIANCE: Compliance/Regulatory Professional
+            PHYSICAL: Physical Therapist
+            CONTRACTOR: Contractor
+            INVESTMENT: Investment Advisor/Investment Manager
+            AUDITOR: Auditor
+            RESEARCHER: Researcher
+            TRADESPERSON: Tradesperson/Craftsperson
+            SOCIAL: Social Worker
+            DEALER: Dealer
+            EXTERMINATOR: Exterminator
+            OFFICE: Office Associate
+            MANAGER: Manager
+            LANDSCAPER: Landscaper
+            ACTUARY: Actuary
+            FLIGHT: Flight Attendant
+            FARMER: Farmer/Rancher
+            AUCTIONEER: Auctioneer
+            ATHLETE: Athlete
+            ADMINISTRATOR: Administrator
+            HR: Human Resources Professional
+            NUTRITIONIST: Nutritionist
+            ACCOUNTANT: Accountant/CPA/Bookkeeper/Controller
+            DISTRIBUTOR: Distributor
+            INTERN: Intern
+            LENDING: Lending Professional
+            CASHIER: Cashier
+            AGENT: Agent
+            CAREGIVER: Caregiver
+            SEAMSTRESS: Seamstress/Tailor
+            WRITER: Writer/Journalist/Editor
+            REP: Registered Rep
+            MILITARY: Military, Officer or Associated
+            COUNSELOR: Counselor/Therapist
+            SALES: Salesperson
+            DRIVER: Driver
+            PHARMACIST: Pharmacist
+            BUSINESS_OWNER: Business Owner
+            INVESTOR: Investor
+            FACTORY: Factory/Warehouse Worker
+            TECHNICIAN: Technician
+            POLITICIAN: Politician
+            ATC: Air Traffic Controller
+            ATTENDANT: Attendant
+            CARPENTER: Carpenter/Construction Worker
+            ADVERTISER: Advertiser/Marketer/PR Professional
+            ARCHITECT: Architect/Designer
+            CUSTOMER_SERVICE: Customer Service Representative
+            IT: IT Professional/IT Associate
+            ATTORNEY: Attorney/Judge/Legal Professional
+            ADJUSTER: Adjuster
+            UNDERWRITER: Underwriter
+            CHEF: Chef/Cook
+            SAILOR: Sailor/Seaman
+        risk_tolerance:
+          type: array
+          description: 'Arary of object with risk tolerance: low, hight etc.'
+          example:
+          - LOW: Low Risk
+          - MODERATE: Moderate Risk
+          - SPECULATION: Speculative Risk
+          - HIGH: High Risk
+        source_of_wealth:
+          type: array
+          description: 'Arary of object with risk tolerance: low, hight etc.'
+          example:
+          - COMPANY: Company sale
+            GIFT: Gift
+            INHERITANCE: Inheritance
+            INVESTMENTS: Sales of shares or other investments/liquidation of an investment portfolio
+            LOAN: Loan
+            PROPERTY: Sale of property
+            SAVINGS: Savings from salary
+      description: GET response with key-values
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-account-management-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

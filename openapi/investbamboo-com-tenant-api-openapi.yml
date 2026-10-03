@@ -1,0 +1,270 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com Tenant API
+  version: ''
+  description: 'Operations tagged Tenant across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-tenant-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: Tenant
+paths:
+  /api/tenant/brokerage_accounts:
+    post:
+      tags:
+      - Tenant
+      summary: Market Activation for Existing Users
+      description: 'In a situation where a user is interested in a market that was not originally activated during their original account
+
+        creation, this endpoint is used to activate the desired market for that existing user.
+
+
+        It is important to note that if a user has a market already activated, the payload for that market should not be passed.'
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Register credentials (Pass details for only the market the user is interested in activating)
+        content:
+          application/json:
+            schema:
+              title: Register request
+              type: object
+              properties:
+                ngx_market_info:
+                  type: object
+                  title: NGX Market Info
+                  properties:
+                    local_govt:
+                      type: string
+                      required: false
+                      description: Input user state of origin
+                      example: Delta
+                    city:
+                      type: string
+                      required: false
+                      description: Input user LGA
+                      example: Warri North
+                    address1:
+                      type: string
+                      required: false
+                      description: Input user resident address
+                      example: 520 Ettie Courts
+                    mother_maiden_name:
+                      type: string
+                      required: false
+                      description: Mother's maiden name
+                      example: Sarah
+                    next_of_kin_phone_number:
+                      type: string
+                      required: false
+                      description: Next of kin phone number
+                      example: Delta
+                    next_of_kin_first_name:
+                      type: string
+                      required: false
+                      description: Next of kin first name
+                      example: Bella
+                    next_of_kin_last_name:
+                      type: string
+                      required: false
+                      description: Next of kin last name
+                      example: Doe
+                usx_market_info:
+                  type: object
+                  title: NGX Market Info
+                  properties:
+                    affiliation_info:
+                      type: object
+                      title: Affiliation info
+                      properties:
+                        director_of:
+                          type: string
+                          required: false
+                          description: If no, send null. If yes, please list the company name and its ticker symbol.
+                          example: ''
+                        broker:
+                          type: boolean
+                          description: If no, send false. If yes, send true
+                          example: false
+                    brokerage_account_info:
+                      type: object
+                      title: Brokerage account info
+                      required:
+                      - company
+                      - employment_type
+                      - experience
+                      - goal
+                      - liquid
+                      - marital_status
+                      - net_worth
+                      - position
+                      - risk_tolerance
+                      - yearly_income
+                      - employment_status
+                      - source_of_wealth
+                      properties:
+                        employment_status:
+                          type: string
+                          description: Employment Status
+                          example: SELF_EMPLOYED
+                        yearly_income:
+                          type: integer
+                          description: Yearly Income
+                          example: 12500
+                        source_of_wealth:
+                          type: string
+                          description: Source of wealth
+                          example: COMPANY
+                        risk_tolerance:
+                          type: string
+                          description: Risk Tolerance
+                          example: LOW
+                        position:
+                          type: string
+                          description: Position
+                          example: AUDITOR
+                        net_worth:
+                          type: integer
+                          description: Net Worth
+                          example: 62500
+                        marital_status:
+                          type: string
+                          description: Martial Status
+                          example: MARRIED
+                        liquid:
+                          type: integer
+                          description: User's Liquidity Amount
+                          example: 12500
+                        goal:
+                          type: string
+                          description: Goal
+                          example: FREQUENT
+                        experience:
+                          type: string
+                          description: Experience
+                          example: NONE
+                        employment_type:
+                          type: string
+                          description: Employment Type
+                          example: AGRICULTURE
+                        company:
+                          type: string
+                          description: Company
+                          example: Phil Technologies LTD.
+      responses:
+        '200':
+          '401':
+            description: Token has expired or invalid token
+            content:
+              application/json:
+                schema:
+                  title: Unauthorized response
+                  required:
+                  - message
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      description: Unauthorized/Invalid Token
+                  description: Token is invalid or have expired
+          description: Request processing
+          content:
+            application/json:
+              schema:
+                title: Request processing
+                required:
+                - message
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Request processing
+                    example: Your request is being processed
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+      operationId: postApiTenantBrokerageAccounts
+      x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+components:
+  schemas:
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-tenant-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

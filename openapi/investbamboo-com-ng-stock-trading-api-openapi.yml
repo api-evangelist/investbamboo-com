@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Bamboo NG Stock Trading API
+  title: Investbamboo Com NG Stock Trading API
   version: ''
-  description: The stock trading section details all the endpoints needed to calculate and make trade orders for all NG stock available on Bamboo. Please note that trade charges are applicable and should be agreed upon with the business team. During system setup, the agreed charges would be applied by the integration team.
+  description: 'Operations tagged NG Stock Trading across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-ng-stock-trading-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
@@ -80,6 +80,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
   /api/lsx/ng/order/:order_id:
     get:
       tags:
@@ -151,6 +153,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
   /api/lsx/ng/order/:order_id/status:
     get:
       tags:
@@ -223,6 +227,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: getApiLsxNgOrder:orderIdStatus
       x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
   /api/lsx/ng/pending_orders:
     get:
       tags:
@@ -289,6 +295,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: getApiLsxNgPendingOrders
       x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
   /api/lsx/ng/order/:order_id/cancel:
     post:
       tags:
@@ -355,8 +363,145 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: postApiLsxNgOrder:orderIdCancel
       x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
 components:
   schemas:
+    lsxngcancel_orders_response:
+      title: Cancel an Order on the NGX
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: sting
+          description: Order cancellation message
+          example: Order Cancelled
+    lsxngorder_status_response:
+      title: NGX Order status response
+      type: object
+      properties:
+        dollar_fee:
+          type: number
+          description: Dollar Fee
+          example: 0.42
+        dollar_price:
+          type: number
+          description: Dollar equivalent of price for order
+          example: 0.42
+        id:
+          type: string
+          description: Order ID
+          example: BB.LAMB_21046bcd-0400-4ac1-a6a1-91c439455ef2
+        naira_fee:
+          type: float
+          description: Naira fee
+          example: 33.15
+        naira_price:
+          type: number
+          description: Naira price for order
+          example: 364.65
+        price:
+          type: number
+          description: Price
+          example: 33.15
+        quantity:
+          type: number
+          description: Quantity requested
+          example: 10
+        side:
+          type: string
+          description: Side; BUY or SELL
+          example: BUY
+        status:
+          type: string
+          description: Status
+          example: Successful
+        symbol:
+          type: string
+          description: Stock symbol to `BUY` or `SELL`
+          default: DDD
+        type:
+          type: string
+          description: 'Type: MARKET, STOP, LIMIT'
+          example: MARKET
+    lsxngcalculate_order_response:
+      title: Calculated order response
+      required:
+      - currency
+      - currency_symbol
+      - fee
+      - order_price
+      - price_per_share
+      - quantity
+      - side
+      - symbol
+      - total_price
+      - type
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency based on currency passed in header
+          example: NGN
+        currency_symbol:
+          type: string
+          description: Currency symbol based on currency passed in header
+          example: ₦
+        fee:
+          type: integer
+          description: calculated fees
+          example: 33.15
+        order_price:
+          type: number
+          description: calculated order price
+          example: 331.5
+        price_per_share:
+          type: number
+          description: Stock price per share
+          example: 33.15
+        quantity:
+          type: number
+          description: Calculated quantity
+          example: 10
+        side:
+          type: string
+          description: Market side, BUY or SELL
+          example: BUY
+        symbol:
+          type: string
+          description: Stock symbol
+          example: ZENITHBANK
+        total_price:
+          type: number
+          description: calculated total price
+          example: 364.65
+        type:
+          type: boolean
+          description: Trade type, MARKET, LIMIT or STOP
+          example: null
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
     lsxngpending_order_response:
       title: NGX Pending Order Response
       type: object
@@ -439,17 +584,6 @@ components:
           type: string
           description: Currency Symbol
           example: ₦
-    Unauthorized:
-      title: Unauthorized response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Unauthorized/Invalid Token/Token has expired
-          example: Invalid client token supplied.
-      description: Token is invalid or have expired
     lsxngorder_details_response:
       title: NGX Order details response
       type: object
@@ -532,17 +666,17 @@ components:
           type: string
           description: 'Type: MARKET, STOP, LIMIT'
           example: MARKET
-    ResourceNotFound:
-      title: Resource not found
+    Unauthorized:
+      title: Unauthorized response
       required:
       - message
       type: object
       properties:
         message:
           type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
     lsxngcalculate_order:
       title: Calculate order request
       required:
@@ -578,130 +712,9 @@ components:
           type: string
           description: Currency
           example: NGN
-    lsxngorder_status_response:
-      title: NGX Order status response
-      type: object
-      properties:
-        dollar_fee:
-          type: number
-          description: Dollar Fee
-          example: 0.42
-        dollar_price:
-          type: number
-          description: Dollar equivalent of price for order
-          example: 0.42
-        id:
-          type: string
-          description: Order ID
-          example: BB.LAMB_21046bcd-0400-4ac1-a6a1-91c439455ef2
-        naira_fee:
-          type: float
-          description: Naira fee
-          example: 33.15
-        naira_price:
-          type: number
-          description: Naira price for order
-          example: 364.65
-        price:
-          type: number
-          description: Price
-          example: 33.15
-        quantity:
-          type: number
-          description: Quantity requested
-          example: 10
-        side:
-          type: string
-          description: Side; BUY or SELL
-          example: BUY
-        status:
-          type: string
-          description: Status
-          example: Successful
-        symbol:
-          type: string
-          description: Stock symbol to `BUY` or `SELL`
-          default: DDD
-        type:
-          type: string
-          description: 'Type: MARKET, STOP, LIMIT'
-          example: MARKET
-    lsxngcancel_orders_response:
-      title: Cancel an Order on the NGX
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: sting
-          description: Order cancellation message
-          example: Order Cancelled
-    lsxngcalculate_order_response:
-      title: Calculated order response
-      required:
-      - currency
-      - currency_symbol
-      - fee
-      - order_price
-      - price_per_share
-      - quantity
-      - side
-      - symbol
-      - total_price
-      - type
-      type: object
-      properties:
-        currency:
-          type: string
-          description: Currency based on currency passed in header
-          example: NGN
-        currency_symbol:
-          type: string
-          description: Currency symbol based on currency passed in header
-          example: ₦
-        fee:
-          type: integer
-          description: calculated fees
-          example: 33.15
-        order_price:
-          type: number
-          description: calculated order price
-          example: 331.5
-        price_per_share:
-          type: number
-          description: Stock price per share
-          example: 33.15
-        quantity:
-          type: number
-          description: Calculated quantity
-          example: 10
-        side:
-          type: string
-          description: Market side, BUY or SELL
-          example: BUY
-        symbol:
-          type: string
-          description: Stock symbol
-          example: ZENITHBANK
-        total_price:
-          type: number
-          description: calculated total price
-          example: 364.65
-        type:
-          type: boolean
-          description: Trade type, MARKET, LIMIT or STOP
-          example: null
-    ErrorResponse:
-      title: Error response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error response for external or internal errors not connected to data
-          example: Message why request didn't succeed
-      description: Error response for external or internal errors not connected to data
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-ng-stock-trading-api-openapi.yml
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

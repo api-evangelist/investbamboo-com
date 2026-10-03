@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Bamboo Market Activity API
+  title: Investbamboo Com Market Activity API
   version: ''
-  description: The market activity section provides you with endpoints that return the opening and closing times for markets we support, allowing you to check when market is open/closed.
+  description: 'Operations tagged Market Activity across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-market-activity-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
@@ -71,6 +71,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
   /api/extended_hours/opt_in:
     post:
       tags:
@@ -137,19 +139,10 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: postApiExtendedHoursOptIn
       x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
 components:
   schemas:
-    ErrorResponse:
-      title: Error response
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error response for external or internal errors not connected to data
-          example: Message why request didn't succeed
-      description: Error response for external or internal errors not connected to data
     ResourceNotFound:
       title: Resource not found
       required:
@@ -161,6 +154,17 @@ components:
           description: Resource not found (an incorrect url may have been used)
           example: Resource Not Found
       description: Error response for when the resource is not found within our data.
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
     USMarketActivityStatus:
       title: US Market Activity response
       required:
@@ -217,6 +221,9 @@ components:
               type: number
               description: Post-market session timestamp
               example: 1759521600
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-market-activity-api-openapi.yml
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

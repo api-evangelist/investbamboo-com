@@ -1,0 +1,507 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com One Step Registration API
+  version: ''
+  description: 'Operations tagged One Step Registration across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-one-step-registration-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: One Step Registration
+paths:
+  /api/v2/one_step_registration:
+    post:
+      tags:
+      - One Step Registration
+      summary: Create New User
+      operationId: Web.Api.RegisterController.registration_step
+      description: 'This endpoint combines all the registration steps into a single API endpoint. To use this endpoint, you have to provide all
+
+        fields in the defined payload, and also ensure that the user’s ID has been verified. Please note that you are required to
+
+        subscribe to at least one market on user''s first account activation.
+
+
+        A dictionary endpoint is provided below to give insight into all the questions and acceptable
+
+        values for the fields within the payload.'
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Register credentials. (Provide details to subscribe to at least one market)
+        content:
+          application/json:
+            schema:
+              title: Register request body
+              required:
+              - basic_info
+              - verified_identity_info
+              type: object
+              properties:
+                basic_info:
+                  type: object
+                  title: User basic info
+                  required:
+                  - citizenship
+                  - city
+                  - country_code
+                  - date_of_birth
+                  - email
+                  - first_name
+                  - gender
+                  - last_name
+                  - phone_number
+                  - province
+                  - postal_code
+                  - residence_country_code
+                  - surname
+                  properties:
+                    residence_country_code:
+                      type: string
+                      description: '''GHA'' for Ghana, ''NGA'' for Nigeria and ''KEN'' for Kenya'
+                      example: NGA
+                    province:
+                      type: string
+                      description: Province
+                      example: Lagos State
+                    postal_code:
+                      type: string
+                      description: Postal code
+                      example: '100001'
+                    referral_code:
+                      type: string
+                      description: Referral code
+                      example: '113792'
+                    phone_number:
+                      type: string
+                      description: Phone number
+                      example: '+2347083864023'
+                    last_name:
+                      type: string
+                      description: Last Name
+                      example: Doe
+                    gender:
+                      type: string
+                      description: 'Gender options: Man/Woman'
+                      example: Man
+                    first_name:
+                      type: string
+                      description: First Name
+                      example: John
+                    email:
+                      type: string
+                      description: Email
+                      example: johndoe@gmail.com
+                    date_of_birth:
+                      type: string
+                      description: Date in format YYYY-MM-DD
+                      example: '1927-02-19'
+                    country_code:
+                      type: string
+                      description: 'Country Code: `NGA`, `USA`'
+                      example: NGA
+                    city:
+                      type: string
+                      description: Residence City
+                      example: Lagos
+                    citizenship:
+                      type: string
+                      description: Citizenship
+                      example: Nigerian
+                verified_identity_info:
+                  type: object
+                  title: User verified identity info
+                  required:
+                  - address
+                  - city
+                  - date_of_birth
+                  - document_type
+                  - email
+                  - expiration_date
+                  - full_name
+                  - gender
+                  - identifier
+                  - image
+                  - front_id_image
+                  - back_id_image
+                  - phone_number
+                  - residence_country
+                  - state
+                  properties:
+                    address:
+                      type: string
+                      description: address
+                      example: 22 Babatunde Anjous Lekki
+                    city:
+                      type: string
+                      description: City
+                      example: Lekki
+                    date_of_birth:
+                      type: string
+                      description: User date of birth
+                      example: 1927/02/19
+                    document_type:
+                      type: string
+                      description: Identification document type
+                      example: BVN
+                    email:
+                      type: string
+                      description: User email
+                    expiration_date:
+                      type: string
+                      description: ID expiration date
+                      example: 2026/10/10
+                    full_name:
+                      type: string
+                      description: User full name
+                      example: John Doe
+                    gender:
+                      type: string
+                      description: 'Gender options: Man/Woman'
+                      example: Man
+                    identifier:
+                      type: string
+                      description: Identifier
+                      example: '22488743663'
+                    image:
+                      type: string
+                      description: A passport photograph of the user. (Format required is Base64)
+                      example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB9gA...
+                    front_id_image:
+                      type: string
+                      description: Front page of a user's Identity document. (Apllicable to Ghana and SA accounts only. Format required is Base64)
+                      example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB9gA...
+                    back_id_image:
+                      type: string
+                      description: Back page of a user's Identity document. (Apllicable to Ghana and SA accounts only. Format required is Base64)
+                      example: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB9gA...
+                    phone_number:
+                      type: string
+                      description: User phone number
+                      example: '+2347083864023'
+                    residence_country:
+                      type: string
+                      description: User residence country
+                      example: NGA
+                    state:
+                      type: string
+                      description: State
+                      example: Lagos
+                usx_market_info:
+                  type: object
+                  title: US Market Info
+                  properties:
+                    affiliation_info:
+                      type: object
+                      title: Affiliation info
+                      properties:
+                        director_of:
+                          type: string
+                          required: false
+                          description: If no, send null. If yes, please list the company name and its ticker symbol.
+                          example: ''
+                        broker:
+                          type: boolean
+                          description: If no, send false. If yes, send true
+                          example: false
+                    brokerage_account_info:
+                      type: object
+                      title: Brokerage account info
+                      required:
+                      - company
+                      - employment_type
+                      - experience
+                      - goal
+                      - liquid
+                      - marital_status
+                      - net_worth
+                      - position
+                      - risk_tolerance
+                      - yearly_income
+                      - employment_status
+                      - source_of_wealth
+                      properties:
+                        employment_status:
+                          type: string
+                          description: Employment Status
+                          example: SELF_EMPLOYED
+                        yearly_income:
+                          type: integer
+                          description: Yearly Income
+                          example: 12500
+                        source_of_wealth:
+                          type: string
+                          description: Source of wealth
+                          example: COMPANY
+                        risk_tolerance:
+                          type: string
+                          description: Risk Tolerance
+                          example: LOW
+                        position:
+                          type: string
+                          description: Position
+                          example: AUDITOR
+                        net_worth:
+                          type: integer
+                          description: Net Worth
+                          example: 62500
+                        marital_status:
+                          type: string
+                          description: Martial Status
+                          example: MARRIED
+                        liquid:
+                          type: integer
+                          description: User's Liquidity Amount
+                          example: 12500
+                        goal:
+                          type: string
+                          description: Goal
+                          example: FREQUENT
+                        experience:
+                          type: string
+                          description: Experience
+                          example: NONE
+                        employment_type:
+                          type: string
+                          description: Employment Type
+                          example: AGRICULTURE
+                        company:
+                          type: string
+                          description: Company
+                          example: Phil Technologies LTD.
+                ngx_market_info:
+                  type: object
+                  title: NGX Market Info
+                  properties:
+                    local_govt:
+                      type: string
+                      required: false
+                      description: Input user state of origin
+                      example: Delta
+                    city:
+                      type: string
+                      required: false
+                      description: Input user LGA
+                      example: Warri North
+                    address1:
+                      type: string
+                      required: false
+                      description: Input user resident address
+                      example: 520 Ettie Courts
+                    mother_maiden_name:
+                      type: string
+                      required: false
+                      description: Mother's maiden name
+                      example: Christy
+                    next_of_kin_phone_number:
+                      type: string
+                      required: false
+                      description: Next of kin phone number
+                      example: Delta
+                    next_of_kin_first_name:
+                      type: string
+                      required: false
+                      description: Next of kin first name
+                      example: John
+                    next_of_kin_last_name:
+                      type: string
+                      required: false
+                      description: Next of kin last name
+                      example: Doe
+                    account_number:
+                      type: string
+                      required: true
+                      description: Account number for processing Dividends
+                      example: 0735904459
+                    account_name:
+                      type: string
+                      description: Account Name
+                      example: John Doe
+                    destination_branch_code:
+                      type: string
+                      description: Branch Sort Code for the account details provided
+                      example: '044'
+                    success:
+                      type: boolean
+                      description: Success status
+                      example: true
+        required: true
+      responses:
+        '200':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                title: Account info
+                required:
+                - expiration_time
+                - jwt
+                - refresh_token
+                - user
+                type: object
+                properties:
+                  expiration_time:
+                    type: integer
+                    description: expiration time
+                    example: 1697532406
+                  jwt:
+                    type: string
+                    description: Bearer `jwt`
+                    example: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3ZWIiLCJleHAiOjE2OTc1MzI0MDYsImlhdCI6MTY5NDk0MDQwNiwiaXNzIjoid2ViIiwianRpIjoiMTE5MGRjMDEtZjQxNS00NmQ3LWFjOTctYzM5M2Y2MWEzYWJjIiwibmJmIjoxNjk0OTQwNDA1LCJyZXNpZGVuY2VfY291bnRyeSI6Ik5HQSIsInN1YiI6NTc3MSwidHlwIjoiYWNjZXNzIn0.GN3THXBJPynv0BcKuWKc84UHexAD22iGtO8A7kSjR92VKxLaiXxz0bDC-CEa8pVKum3oVwjjdRdAXeJL6c4Tsw
+                  refresh_token:
+                    type: string
+                    description: Bearer refresh token
+                    example: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3ZWIiLCJleHAiOjE2OTczNTk2MDYsImlhdCI6MTY5NDk0MDQwNiwiaXNzIjoid2ViIiwianRpIjoiYWQ4MDA2MzMtMWU4Ny00MGQ0LWFkMTMtNzc4YjY0M2JlNWQwIiwibmJmIjoxNjk0OTQwNDA1LCJyZXNpZGVuY2VfY291bnRyeSI6Ik5HQSIsInN1YiI6NTc3MSwidHlwIjoicmVmcmVzaCJ9.a5Vn2ApDrDBnroDk-7n3neJOuZPDOJxSP29V85rej_eKx4w0JiJ112-tghkSi3xijf0RSkw_AeVq-9sS7bjr0w
+                  user:
+                    title: Response
+                    required:
+                    - application_id
+                    - bvn_api_fail
+                    - date_of_birth
+                    - email
+                    - first_name
+                    - full_name
+                    - id
+                    - last_name
+                    - name
+                    - phone_number
+                    - registration_step
+                    - surname
+                    type: object
+                    properties:
+                      application_id:
+                        type: integer
+                        description: User's application ID
+                        example: 50083181
+                      bvn_api_fail:
+                        type: boolean
+                        description: Field only if BVN api fails
+                        example: false
+                      date_of_birth:
+                        type: string
+                        description: User date of birth
+                        example: '1927-02-19'
+                      email:
+                        type: string
+                        description: User email
+                        example: johndoe@gmail.com
+                      first_name:
+                        type: string
+                        description: User first name
+                        example: John
+                      full_name:
+                        type: string
+                        description: User full name
+                        example: John Doe
+                      id:
+                        type: integer
+                        description: User's id
+                        example: 4101
+                      last_name:
+                        type: string
+                        description: User last name
+                        example: Doe
+                      name:
+                        type: string
+                        description: User first name
+                        example: John
+                      phone_number:
+                        type: string
+                        description: User phone number
+                        example: '+2347083864023'
+                      registration_step:
+                        type: string
+                        description: User's next registration step
+                        example: Pending review
+                      surname:
+                        type: string
+                        description: User surname
+                        example: Doe
+        '401':
+          description: Token has expired or invalid token
+          content:
+            application/json:
+              schema:
+                title: Unauthorized response
+                required:
+                - message
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Unauthorized/Invalid Token
+                description: Token is invalid or have expired
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+components:
+  schemas:
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-one-step-registration-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

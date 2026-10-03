@@ -1,0 +1,243 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com NG Stock Portfolio API
+  version: ''
+  description: 'Operations tagged NG Stock Portfolio across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-ng-stock-portfolio-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: NG Stock Portfolio
+  description: This section provides all the information a tenant needs to know about a user's investment portfolio values and general user performance.
+paths:
+  /api/lsx/ng/portfolio/breakdown:
+    get:
+      tags:
+      - NG Stock Portfolio
+      summary: Fetch User Portfolio
+      description: This endpoint returns the information of a user's equity value, cash available for investing, and the user's stock position in the Nigerian Market.
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: currency
+        in: header
+        description: NGN - to get prices in Naira
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: NGX Portfolio response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lsxngportfolio_breakdown_response'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '422':
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getApiLsxNgPortfolioBreakdown
+      x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/lsx/ng/user_cash_balance/{currency}:
+    get:
+      tags:
+      - NG Stock Portfolio
+      summary: Fetch User Cash Balance
+      description: This endpoint returns data about the user's cash balance.
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Portfolio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lsxnguser_cash_balance_response'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '422':
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getApiLsxNgUserCashBalanceByCurrency
+      x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+components:
+  schemas:
+    lsxngportfolio_breakdown_response:
+      title: NGX Portfolio response
+      type: object
+      properties:
+        withdrawable_cash:
+          type: number
+          description: Maximum amount that can be withdrawn
+          example: 0
+        total_user_equity:
+          type: number
+          description: total_user_equity
+          example: 0
+        total_percent_change:
+          type: number
+          description: Total portfolio change
+          example: 0
+        total_return:
+          type: number
+          description: Stock total return
+          example: 0
+        total_cost:
+          type: number
+          description: Stock total return
+          example: 0
+        currency:
+          type: string
+          description: Withdraw currency
+          example: NGN
+        change:
+          type: integer
+          description: Change
+          example: 33.4
+        available_to_invest:
+          type: number
+          description: Buying power
+          example: 0
+    lsxnguser_cash_balance_response:
+      title: User's Cash Balance
+      required:
+      - withdrawal_cash
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency
+          example: NGN
+        balance:
+          type: number
+          description: User current cash balance in provided currency
+          example: 5661255.97
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-ng-stock-portfolio-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

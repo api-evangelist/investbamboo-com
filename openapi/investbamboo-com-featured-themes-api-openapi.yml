@@ -1,0 +1,211 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com Featured Themes API
+  version: ''
+  description: 'Operations tagged Featured Themes across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-featured-themes-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: Featured Themes
+  description: Stocks are grouped into various categories which help users explore and filter stocks based on common themes, sectors, or other criteria. The endpoints in this section allow you to retrieve a list of categories that group different stocks together and also view details about these categories.
+paths:
+  /api/tenant/themes:
+    get:
+      tags:
+      - Featured Themes
+      summary: Fetch List of Themes
+      description: This is the endpoint to fetch the list of all Themed categories within our system.
+      operationId: Web.Api.ThemeController.index
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: If standard user -> 'standard’, if manager -> 'manager’.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThemesListingResponse'
+        '401':
+          description: Token has expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      x-codegen-request-body-name: body
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/tenant/themed_stock/{theme_id}:
+    get:
+      tags:
+      - Featured Themes
+      summary: View Theme Details
+      description: This endpoint is used to fetch an existing theme by its unique theme id.
+      operationId: Web.Api.ThemeController.show
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: If standard user -> 'standard’, if manager -> 'manager’.
+        required: true
+        schema:
+          type: string
+      - name: featured
+        in: query
+        description: Featured Themes Flag
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThemesListingResponse'
+        '401':
+          description: Token has expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      x-codegen-request-body-name: body
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+components:
+  schemas:
+    ThemesListingResponse:
+      title: List of all themes
+      type: object
+      properties:
+        themes:
+          type: array
+          description: Themes listing response
+          items:
+            title: Themes listing response
+            type: object
+            properties:
+              name:
+                type: string
+                description: Theme name
+                example: Most Popularr
+              id:
+                type: number
+                description: Theme ID
+                example: 45
+              hex_color:
+                type: string
+                description: Theme hex_color
+                example: D5F59A
+              description:
+                type: string
+                description: Theme description
+                example: The most-owned stocks in the Bamboo community.
+              color:
+                type: string
+                description: Theme color
+                example: Blue
+              avatar:
+                type: string
+                description: Theme avatar
+                example: https://firebasestorage.googleapis.com/v0/b/bamboo-16d59.appspot.com/o/staging%2Fcategories%2FMost%20Popular.png1605885112566?alt=media&token=7300dc44-f067-4aec-a3a6-6e0498de775d
+            description: Theme basic response details
+        currency_symbol:
+          type: string
+          description: Theme currency symbol
+          example: $
+      description: List of all active stocks
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-featured-themes-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

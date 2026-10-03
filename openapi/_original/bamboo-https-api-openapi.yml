@@ -1,25 +1,27 @@
+# x-archived-from: bamboo-https-api-openapi.yml
+# x-archived-on: 2026-10-02
 openapi: 3.2.0
 info:
-  title: Bamboo Lsx API
+  title: 'Bamboo Https: API'
   version: ''
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
-- name: Lsx
+- name: 'Https:'
 paths:
-  /api/lsx/ng/dictionary:
+  https://cscs-banks.investbamboo.com/:
     get:
       tags:
-      - Lsx
-      summary: NGX Dictionary
-      description: This endpoint provides the acceptable data for fetching the format for the states and LGAs required during account creation. This info is needed to enable users trade in the NG market.
+      - 'Https:'
+      summary: Supported Banks and Sort Codes for NGX Trades
+      description: This endpoint provides a list of all supported banks and sort codes by the Nigerian Brokerage Commissions. The bank details provided are used for sending users their dividends from companies they've traded with in the Nigerian market.
       responses:
         '200':
           description: Dictionary response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/lsxngdictionary'
+                $ref: '#/components/schemas/cscs_banks_and_sortcodes'
         '401':
           description: Token have expired or invalid token
           content:
@@ -42,7 +44,7 @@ paths:
                   Country code can''t be blank'
               schema:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
-      operationId: getApiLsxNgDictionary
+      operationId: getHttps:CscsBanksInvestbambooCom
       x-operation-id-source: derived
 components:
   schemas:
@@ -73,68 +75,64 @@ components:
           description: Resource not found (an incorrect url may have been used)
           example: Resource Not Found
       description: Error response for when the resource is not found within our data.
-    lsxngdictionary:
-      title: NGX Dictionary
+    cscs_banks_and_sortcodes:
+      title: Supported banks and sortcodes
       type: object
       properties:
-        states_and_lgas:
+        cscs_banks:
           type: array
           description: Arary of object with states_and_lgas for NG account creation
           example:
-          - state: Adamawa
-            lgas:
-            - Demsa
-            - Fufure
-            - Ganye
-            - Gayuk
-            - Gombi
-            - Grie
-            - Hong
-            - Jada
-            - Larmurde
-            - Madagali
-            - Maiha
-            - Mayo Belwa
-            - Michika
-            - Mubi North
-            - Mubi South
-            - Numan
-            - Shelleng
-            - Song
-            - Toungo
-            - Yola North
-            - Yola South
-          - state: Lagos
-            lgas:
-            - Agege
-            - Ajeromi-Ifelodun
-            - Alimosho
-            - Amuwo-Odofin
-            - Badagry
-            - Apapa
-            - Epe
-            - Eti Osa
-            - Ibeju-Lekki
-            - Ifako-Ijaiye
-            - Ikeja
-            - Ikorodu
-            - Kosofe
-            - Lagos Island
-            - Mushin
-            - Lagos Mainland
-            - Ojo
-            - Oshodi-Isolo
-            - Shomolu
-            - Surulere Lagos State
-          - state: Federal Capital Territory
-            lgas:
-            - Abaji
-            - Bwari
-            - Gwagwalada
-            - Kuje
-            - Kwali
-            - Municipal Area Council
-          - etc: null
+          - name: Access Bank Nigeria Plc
+            sort_code: '044'
+          - name: Ecobank Nigeria
+            sort_code: '050'
+          - name: Enterprise Bank Plc
+            sort_code: 084
+          - name: Fidelity Bank Plc
+            sort_code: '070'
+          - name: First Bank of Nigeria Plc
+            sort_code: '011'
+          - name: First City Monument Bank
+            sort_code: '214'
+          - name: Guaranty Trust Bank Plc
+            sort_code: 058
+          - name: Heritage Banking Company Ltd
+            sort_code: '030'
+          - name: Jaiz Bank
+            sort_code: '301'
+          - name: Keystone Bank Ltd
+            sort_code: 082
+          - name: Mainstreet Bank Plc
+            sort_code: '014'
+          - name: Skye Bank Plc / Polaris Bank
+            sort_code: '076'
+          - name: Stanbic IBTC Plc
+            sort_code: '221'
+          - name: Sterling Bank Plc
+            sort_code: '232'
+          - name: Union Bank Nigeria Plc
+            sort_code: '032'
+          - name: United Bank for Africa Plc
+            sort_code: '033'
+          - name: Unity Bank Plc
+            sort_code: '215'
+          - name: WEMA Bank Plc
+            sort_code: '035'
+          - name: Zenith Bank International
+            sort_code: '057'
+          - name: Paralex Bank
+            sort_code: '104'
+          - name: Lotus Bank Ltd
+            sort_code: '601'
+          - name: Titan Trust Bank
+            sort_code: '102'
+          - name: TAJ Bank
+            sort_code: '302'
+          - name: Coronation Bank
+            sort_code: '559'
+          - name: Globus Bank
+            sort_code: '103'
     Unauthorized:
       title: Unauthorized response
       required:

@@ -1,0 +1,941 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com US Securities API
+  version: ''
+  description: 'Operations tagged US Securities across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-us-securities-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: US Securities
+  description: 'The section provides comprehensive information about available US stocks, including real-time pricing, company details, and market data.
+
+
+    Stock themes also help users discover investment opportunities based on trends, sectors, and investment strategies. See the Featured Themes section for detailed information about theme-based stock discovery and categorization.'
+paths:
+  /api/stocks:
+    get:
+      tags:
+      - US Securities
+      summary: Fetch List of All Stocks
+      description: 'This endpoint fetches the list of stocks with basic information about them like their symbol and logo for building stock catalogs and search functionality.
+
+
+        **Stock catalog features include:**
+
+        - **Basic information:** with symbol, company name, and logo imagery
+
+        - **Pagination support:** for efficient loading of large stock universes
+
+        - **Search integration:** providing foundation data for search functionality
+
+        - **High-quality** company logos for UI integration
+
+
+        Integration considerations include caching stock lists to reduce API calls, updating periodically for new stock additions, and using pagination for optimal performance.'
+      operationId: Web.Api.StockController.index
+      parameters:
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of requested results. (Default = 20)
+        schema:
+          type: string
+      - name: next_token
+        in: query
+        description: Next token for pagination
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Stock list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StocksListResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/tenant/stock/{symbol}/details:
+    get:
+      tags:
+      - US Securities
+      summary: Fetch Stock Details
+      description: 'This endpoint returns comprehensive details of a specific stock, including its pricing information, designed to provide users with in-depth insight into the stock.
+
+
+        **Comprehensive stock information includes:**
+
+        - **Real-time pricing:** with current price, daily change, and percentage movement
+
+        - **Market data:** showing volume, market cap, P/E ratio, and 52-week high/low
+
+        - **Company information:** including business description, CEO, and sector classification
+
+        - **Investment story:** with detailed analysis and investment thesis
+
+        - **Dividend information:** showing yield and payment history
+
+        - **Earnings data:** with historical earnings and upcoming dates
+
+
+        **Enhanced features:**
+
+        - Support multi-currency pricing requests in local currency
+
+        - ich content with company stories and investment analysis
+
+        - Visual assets including company logos and brand colors for UI theming
+
+        - Market context with industry comparisons and sector performance
+
+        - Indicates that extended hours trading is active for that particular stock.
+
+
+        **Note:** We currently only support LIMIT orders and whole unit trading during extended hours.'
+      operationId: Web.Api.StockDataController.details
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: currency
+        in: header
+        description: NGN - to order in Naira
+        schema:
+          type: string
+      - name: symbol
+        in: path
+        description: Stock Symbol
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Stock pricing details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockDetails'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '422':
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/stock/search:
+    get:
+      tags:
+      - US Securities
+      summary: Search Stocks
+      description: 'This endpoint searches for a stock by a given query phrase or set of phrases, supporting advanced search capabilities with multiple filtering and sorting options.
+
+
+        The search functionality supports complex queries like filtering stocks between specific price ranges, performance thresholds, or market cap sizes, with predefined filters for top gainers, top losers, and user-owned stocks.
+
+
+        ##### Advanced search capabilities include:
+
+
+        **Query Options:**
+
+        - **Text Search:** Query by company names, stock symbols, ticker matching
+
+        - **Theme Filtering:** Filter by investment themes and categories
+
+        - **Multi-Parameter:** Combine text search with theme filters
+
+
+        **Sorting Options:**
+
+        - **Alphabetical:** `alphabetical:asc` or `alphabetical:desc`
+
+        - **Price-Based:** `price:asc`, `percent_change:asc`
+
+        - **Fundamentals:** `market_cap:asc`, `pe_ratio:asc`, `eps:asc`
+
+        - **Trading Metrics:** `volume:asc`, `div_yield:asc`
+
+
+        **Advanced Filtering:**
+
+        - **Price Ranges:** `price;a:10,price;b:50` (between $10-$50)
+
+        - **Performance:** `percent_change;a:5` (gaining above 5%)
+
+        - **Market Cap:** `market_cap;b:1000000000` (under $1B market cap)
+
+        - **Fundamentals:** `pe_ratio;a:15` (P/E ratio above 15)
+
+        - **Predefined Filters:** `top_gainers`, `top_losers`, `my_stocks`
+
+
+        **Example Usage:**
+
+
+        GET /api/stock/search?query=apple&sorting=market_cap:desc&filters=price;a:100,my_stocks'
+      operationId: Web.Api.StockController.search
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      - name: query
+        in: query
+        description: Query phrase to match stock name or symbol
+        required: true
+        schema:
+          type: string
+      - name: theme_id
+        in: query
+        description: Theme id to filter by. This takes only one value
+        schema:
+          type: string
+      - name: sorting
+        in: query
+        description: 'Used to sort the search either by ascending order, descending order, etc. The acceptable values are stated in the description above.
+
+          '
+        example: alphabetical:asc
+        schema:
+          type: string
+      - name: filters
+        in: query
+        description: 'Used to filter the search by providing certain string values separated by a comma. The expected values to be passed for the filters param are stated in the description above.
+
+          '
+        example: price;a:10, price;b:50
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Stock list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StocksSearchResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+  /api/my_stocks:
+    get:
+      tags:
+      - US Securities
+      summary: Fetch User Stock Ownership
+      description: 'This endpoint is used to get the list of stocks a user owns, providing a complete view of their current investment positions.
+
+
+        ##### User portfolio stocks include:
+
+        - **Owned positions:** showing all stocks currently held by the user
+
+        - **Position details:** with share quantities, current values, and performance metrics
+
+        - **Equity breakdown:** showing individual stock contributions to total portfolio
+
+        - **Multi-currency support:** displaying local currency values with exchange rates
+
+
+        This endpoint supports portfolio management by tracking all user investments in one view, calculating portfolio diversity and concentration, monitoring individual position performance, and supporting portfolio rebalancing decisions.'
+      operationId: Web.Api.StockDataController.ownership
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      - name: x-request-source
+        in: header
+        description: The tenant's username
+        required: true
+        schema:
+          type: string
+      - name: currency
+        in: header
+        description: NGN - to order in Naira
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Stock pricing details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStockOwnership'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '422':
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+components:
+  schemas:
+    UserStockOwnership:
+      title: User Stock Ownership
+      type: object
+      description: Details of User Stock Ownership
+      properties:
+        currency_symbol:
+          type: string
+          description: Currency Symbol
+          example: $
+        equity_value:
+          type: number
+          description: Equity value
+          example: 2267.91
+        stocks:
+          type: object
+          description: Click to see sample details of user stock list below
+          properties:
+            name:
+              type: string
+              description: High
+              example: Apple, Inc.
+            symbol:
+              type: string
+              description: Stock symbol
+              example: AAPL
+            logo:
+              type: string
+              description: Stock logo with a background colour
+              example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
+            quantity:
+              type: number
+              description: price
+              default: 3.769942
+            price:
+              type: number
+              description: price
+              default: 257.85
+            avatar:
+              type: string
+              description: Avatar
+            total_return:
+              type: number
+              description: Total return
+              example: 226.94
+            total_percent_change:
+              type: number
+              description: Total percentage change
+              example: 34.45
+            background_color:
+              type: string
+              description: Stock background color
+              example: ff9201
+            value_change:
+              type: number
+              description: Price change
+              example: 16.51
+            cost_basis:
+              type: string
+              description: Current market price
+              example: 658.69
+            market_price:
+              type: string
+              description: Current market price
+              example: 257.9
+            percent_change:
+              type: number
+              description: Total percentage change
+              example: 34.45
+            user_equity:
+              type: string
+              description: User Equity
+              example: 855.14527384
+            market_cap:
+              type: integer
+              description: market_cap
+              example: 2081325483000
+            pe_ratio:
+              type: integer
+              description: market_cap
+              example: 2081325483000
+            div_yield:
+              type: integer
+              description: Dividend yield
+              example: null
+            eps:
+              type: integer
+              description: eps
+              example: 2.08
+            volume:
+              type: integer
+              description: Volume
+              example: 208132548
+            favourite:
+              type: string
+              description: Favourite
+              example: false
+    StocksListResponse:
+      title: List of all active stocks response
+      type: object
+      properties:
+        next_token:
+          type: integer
+          description: Next token for pagination
+          example: 10
+        stocks:
+          type: array
+          description: Stock response
+          items:
+            title: Stock response
+            type: object
+            properties:
+              name:
+                type: string
+                description: Stock name
+                example: Apple Inc
+              symbol:
+                type: string
+                description: Stock symbol
+                example: AAPL
+              logo:
+                type: string
+                description: Stock logo URL
+                example: https://firebasestorage.googleapis.com/v0/b/bamboo-16d59.appspot.com/o/stock-avatars%2Fwhite-logos%2FApple_APPL.png?alt=media&token=5a7398a8-bd35-466b-803c-04b6cbceff97
+    StocksSearchResponse:
+      title: List of all Stock Search Results
+      type: object
+      properties:
+        currency_symbol:
+          type: string
+          description: Currency Symbol
+          example: $
+        result:
+          type: array
+          description: Stock search response
+          items:
+            title: Stock search response
+            type: object
+            properties:
+              value_change:
+                type: number
+                description: Stock value change
+              user_equity:
+                type: number
+                description: Stock user equity
+              total_return:
+                type: number
+                description: Stock total return
+              symbol:
+                type: string
+                description: Stock symbol
+                example: MDY
+              quantity:
+                type: number
+                description: Stock quantity
+              name:
+                type: string
+                description: Stock name
+                example: S&P MidCap 400 ETF SPDR
+              logo:
+                type: string
+                description: Stock logo with a background colour
+                example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
+              favourite:
+                type: string
+                description: Stock favourite
+                example: false
+              background_color:
+                type: string
+                description: Stock background color
+                example: FFFFFF
+              avatar:
+                type: string
+                description: Stock logo without background colour
+                example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
+            description: Stock basic details
+      description: List of all active stocks
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+    StockDetails:
+      title: Stock Pricing Details
+      type: object
+      properties:
+        high:
+          type: string
+          description: High
+          example: 257.9
+        low:
+          type: string
+          description: High
+          example: 257.45
+        name:
+          type: string
+          description: High
+          example: Apple, Inc.
+        open:
+          type: string
+          description: High
+          example: 257.86
+        symbol:
+          type: string
+          description: Stock symbol
+          example: AAPL
+        logo:
+          type: string
+          description: Stock logo with a background colour
+          example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
+        currency_symbol:
+          type: string
+          description: Currency Symbol
+          example: $
+        price:
+          type: number
+          description: price
+          default: 257.85
+        avatar:
+          type: string
+          description: Avatar
+        story:
+          type: string
+          description: Stock story
+          example: "When we talk about “the value of branding” and “brand investing”, you need look no further than Apple to understand how important and powerful a well-branded company can be... and how clearly that can be reflected in its share price.\n\nIn fact, in 2014, Interbrand determined Apple to be the world's most valuable brand and Forbes named Apple the most admired company in the world for five consecutive years.\n\nThat reputation carries over into each one of its products and services, including the iPhone, iPad, iPod, Mac computer, iTunes, iCloud and the Safari web browser.\n\nApple was founded by Steve Jobs, Steve Wozniak and Ronald Wayne on April Fools' Day of 1976. Their first product was the Apple 1 Personal Computer Kit and each one was painstakingly hand-built by Wozniak.\n\nBy the end of the 1970s, Apple had earned enough profits to bring on a full-time staff of computer designers and a legitimate production line.\n\nIn 1980, Apple went public and generated more capital than any IPO since Ford Motor Company did in 1956.\n\nIn January 1984, Apple grabbed the world's attention with the introduction of the Macintosh, changing personal computing forever.\n\nIn 1985, Steve Jobs was ousted, and went on to found NeXT, and also buy Pixar, and eventually returned as CEO in July 1997.\n\nIn August 1998, Jobs rejuvenated the stagnant Apple with the introduction of the iMac, stunning the tech industry.\n\nBy the end of 2001, a staple of Apple emerged, the iPod and iTunes, which later evolved into Apple Music. Apple also created the OS X software the same year, which was later used to power the iPhone, iPad, and Apple Watch.\n\nIn January 2007, Apple unveiled its first iPhone, and we all know how that story goes. Since then, Apple has sold more than 2 billion units. \n\nIn the following 3 years, the iPhone was improved, while the iPad and Apple TV were developed. \n\nIn 2011, Jobs, who had been diagnosed with pancreatic cancer, resigned as CEO and became chairman of the board. Tim Cook was named the new CEO in August of that year. Six weeks later, Jobs succumbed to his illness, and his death provoked widespread mourning as well as statements from Bill Gates, George Lucas and President Barack Obama.\n\nUnder Tim Cook’s leadership, the company has continued its astounding growth. In 2015, Apple released the Apple Watch, the first entirely new product in the post-Jobs era.\n\nIn 2016, Apple released the AirPods — a new wireless earphone. \n\nIn 2018, Apple became the first US company to be valued above $1 trillion.\n\nMarch 2019 - After more than four decades making money primarily by selling gadgets, Apple said it intended to expand efforts in monthly subscriptions. The company has expanded services in news, streaming, music, video-games and more. \n\nAs of 2020, the company’s wearables segment, including the Apple Watch and AirPods, had overtaken the Mac in revenue generation. The same year the company announced the Apple HomePod. \n\n_MyWallSt operates a full disclosure policy. MyWallSt staff hold long positions in this stock._"
+        background_color:
+          type: string
+          description: Stock background color
+          example: ff9201
+        extended_hours_status:
+          type: string
+          example: active
+          description: 'Indicates that extended hours trading is active for this stock. Always returns `"active"`.
+
+            '
+        percent_change:
+          type: number
+          description: Total percentage change
+          example: 1.4200000000000002
+        price_change:
+          type: number
+          description: Price change
+          example: 2.8
+        earnings:
+          type: array
+          description: earnings
+          example: []
+        avg_volume:
+          type: integer
+          description: avg_volume
+          example: 43464062
+        dividend_yield:
+          type: integer
+          description: avg_volume
+          example: 43464062
+        latest_update:
+          type: integer
+          description: avg_volume
+          example: 43464062
+        latest_volume:
+          type: integer
+          description: avg_volume
+          example: 43464062
+        market_cap:
+          type: integer
+          description: market_cap
+          example: 2081325483000
+        pe_ratio:
+          type: integer
+          description: market_cap
+          example: 2081325483000
+        wk_52_high:
+          type: integer
+          description: market_cap
+          example: 2081325483000
+        wk_52_low:
+          type: integer
+          description: market_cap
+          example: 2081325483000
+        short_description:
+          type: string
+          description: Short description
+          example: Apple is one of the world's largest companies. Its most well-known products are the iPhone, iPod and MAC computer. Apple is currently the world's most valuable brand.
+        about:
+          title: Company details response
+          type: object
+          properties:
+            sector:
+              type: string
+              description: Company sector
+              example: Manufacturing
+            description:
+              type: string
+              description: Company description
+              example: Apple Inc. is an American multinational technology company headquartered in Cupertino, California. Apple is the worlds largest technology company by revenue, with US$394.3 billion in 2022 revenue. As of March 2023, Apple is the worlds biggest company by market capitalization.
+            ceo:
+              type: string
+              description: CEO
+              example: Timothy Cook
+        categories:
+          type: array
+          description: List of categories where stock belongs to
+          example: []
+        opinion:
+          title: Stock opinion
+          type: object
+          properties:
+            points:
+              type: array
+              description: Array of strings - bullet points
+              example:
+              - Massive cash reserves
+              - Proven pricing power
+              - Strong customer loyalty
+            text:
+              type: string
+              description: Opinion text
+              example: "There’s a scene in the 1994 film 'Forrest Gump' where the protagonist casually announces that due to an investment in “some kind of fruit company”, he wouldn’t have to worry about money any more. How many people watched that scene at the time of its release and thought they’d missed the boat on an investment in Apple?\n\nThe stock is currently up over 15,000% since.\n\nNow worth roughly $2 trillion and boasting 1.65 billion active devices, I still believe there are plenty of reasons to be an Apple investor.\n\nThe world’s largest public company has been accused of failing to be truly innovative in a post-Jobs era. While the annual keynote from Cupertino may not attract the same fervour as it did during the release of the first iPod or iPhone, behind the scenes Tim Cook is slowly building a robust and highly-profitable services business. The App Store, Apple Pay, and Apple Music are all becoming an integral part of this business story. Between 2016 and 2020, the company managed to double its services revenue and quarter after quarter this segment continues to grow. Thanks to its consistent new offerings, such as Apple Fitness+, Apple now has over 620 million paid subscriptions. This considerable consumer base now allows the brand to turn towards cross-selling and up-selling in the the form of Apple One, a bundling service which will combine popular offerings and encourage consumers to pay one, flat fee. \n\nNotable innovation also comes in the form of wearables, such as as the Apple Watch and AirPods, which continue to lure new buyers with their tiered, accessible pricing. As of 2020, the segment now generates more revenue than Mac computers and this growth doesn't seem to be slowing down, analysts expect the wearable market to expand between 15-25% annually. The Apple Watch dominates its competition, controlling 36% market share, and with the release of Apple Fitness+, it becomes a viable option within the connected fitness space. \n\nImportantly, while iPhone sales slowed in 2019 and became a concern for investors, the release of the iPhone 12 and its 5G capability brought this segment record-setting sales figures. The first quarter of 2021 saw 17% revenue growth year-over-year. \n\nThis combination of hardware, software, and services creates a sticky ecosystem that leads to lifelong customers. Combined with its powerful brand (the most valuable in the world), Apple are able to maintain high margins, which generates huge amounts of cash for research and development, stock buybacks, and dividends. Their balance sheet was so impressive that Warren Buffett, who typically avoids tech companies, loaded up on Apple stock over the last few years, becoming one of their largest shareholders.\n\nThat being said, investors and Apple must keep their eyes on the horizon as the company faces scrutiny for its monopoly of the App Store. It is unclear if the current administration will take action against the company but Apple did acknowledge this as a risk to its financial condition in its most recent annual report. \n\nDespite this, Apple's dedication to innovation has granted it years of growth and capital. Combined with the company's talent, experience, and brand, it should continue to overcome obstacles and succeed. \n\nApple is the king of consumer hardware and its stock would be a great bedrock for any portfolio."
+            update_date:
+              type: string
+              description: Update date
+              example: '2023-09-25T06:54:25'
+        data_source:
+          type: string
+          description: Source
+          example: IEX Trading Group, DriveWealth
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    StockDetails_2:
+      title: Stock Pricing Details
+      type: object
+      properties:
+        high:
+          type: string
+          description: High
+          example: 257.9
+        low:
+          type: string
+          description: High
+          example: 257.45
+        name:
+          type: string
+          description: High
+          example: Apple, Inc.
+        open:
+          type: string
+          description: High
+          example: 257.86
+        symbol:
+          type: string
+          description: Stock symbol
+          example: AAPL
+        logo:
+          type: string
+          description: Stock logo with a background colour
+          example: https://d3an3cesqmrf1x.cloudfront.net/images/symbols/mdy.png
+        currency_symbol:
+          type: string
+          description: Currency Symbol
+          example: $
+        price:
+          type: number
+          description: price
+          default: 257.85
+        avatar:
+          type: string
+          description: Avatar
+        story:
+          type: string
+          description: Stock story
+          example: "When we talk about “the value of branding” and “brand investing”, you need look no further than Apple to understand how important and powerful a well-branded company can be... and how clearly that can be reflected in its share price.\n\nIn fact, in 2014, Interbrand determined Apple to be the world's most valuable brand and Forbes named Apple the most admired company in the world for five consecutive years.\n\nThat reputation carries over into each one of its products and services, including the iPhone, iPad, iPod, Mac computer, iTunes, iCloud and the Safari web browser.\n\nApple was founded by Steve Jobs, Steve Wozniak and Ronald Wayne on April Fools' Day of 1976. Their first product was the Apple 1 Personal Computer Kit and each one was painstakingly hand-built by Wozniak.\n\nBy the end of the 1970s, Apple had earned enough profits to bring on a full-time staff of computer designers and a legitimate production line.\n\nIn 1980, Apple went public and generated more capital than any IPO since Ford Motor Company did in 1956.\n\nIn January 1984, Apple grabbed the world's attention with the introduction of the Macintosh, changing personal computing forever.\n\nIn 1985, Steve Jobs was ousted, and went on to found NeXT, and also buy Pixar, and eventually returned as CEO in July 1997.\n\nIn August 1998, Jobs rejuvenated the stagnant Apple with the introduction of the iMac, stunning the tech industry.\n\nBy the end of 2001, a staple of Apple emerged, the iPod and iTunes, which later evolved into Apple Music. Apple also created the OS X software the same year, which was later used to power the iPhone, iPad, and Apple Watch.\n\nIn January 2007, Apple unveiled its first iPhone, and we all know how that story goes. Since then, Apple has sold more than 2 billion units. \n\nIn the following 3 years, the iPhone was improved, while the iPad and Apple TV were developed. \n\nIn 2011, Jobs, who had been diagnosed with pancreatic cancer, resigned as CEO and became chairman of the board. Tim Cook was named the new CEO in August of that year. Six weeks later, Jobs succumbed to his illness, and his death provoked widespread mourning as well as statements from Bill Gates, George Lucas and President Barack Obama.\n\nUnder Tim Cook’s leadership, the company has continued its astounding growth. In 2015, Apple released the Apple Watch, the first entirely new product in the post-Jobs era.\n\nIn 2016, Apple released the AirPods — a new wireless earphone. \n\nIn 2018, Apple became the first US company to be valued above $1 trillion.\n\nMarch 2019 - After more than four decades making money primarily by selling gadgets, Apple said it intended to expand efforts in monthly subscriptions. The company has expanded services in news, streaming, music, video-games and more. \n\nAs of 2020, the company’s wearables segment, including the Apple Watch and AirPods, had overtaken the Mac in revenue generation. The same year the company announced the Apple HomePod. \n\n_MyWallSt operates a full disclosure policy. MyWallSt staff hold long positions in this stock._"
+        background_color:
+          type: string
+          description: Stock background color
+          example: ff9201
+        extended_hours_status:
+          type: string
+          example: active
+          description: 'Indicates that extended hours trading is active for this stock. Always returns `"active"`.
+
+            '
+        percent_change:
+          type: number
+          description: Total percentage change
+          example: 1.4200000000000002
+        price_change:
+          type: number
+          description: Price change
+          example: 2.8
+        earnings:
+          type: array
+          description: earnings
+          example: []
+        avg_volume:
+          type: integer
+          description: avg_volume
+          example: 43464062
+        dividend_yield:
+          type: integer
+          description: avg_volume
+          example: 43464062
+        latest_update:
+          type: integer
+          description: avg_volume
+          example: 43464062
+        latest_volume:
+          type: integer
+          description: avg_volume
+          example: 43464062
+        market_cap:
+          type: integer
+          description: market_cap
+          example: 2081325483000
+        pe_ratio:
+          type: integer
+          description: market_cap
+          example: 2081325483000
+        wk_52_high:
+          type: integer
+          description: market_cap
+          example: 2081325483000
+        wk_52_low:
+          type: integer
+          description: market_cap
+          example: 2081325483000
+        short_description:
+          type: string
+          description: Short description
+          example: Apple is one of the world's largest companies. Its most well-known products are the iPhone, iPod and MAC computer. Apple is currently the world's most valuable brand.
+        about:
+          title: Company details response
+          type: object
+          properties:
+            sector:
+              type: string
+              description: Company sector
+              example: Manufacturing
+            description:
+              type: string
+              description: Company description
+              example: Apple Inc. is an American multinational technology company headquartered in Cupertino, California. Apple is the worlds largest technology company by revenue, with US$394.3 billion in 2022 revenue. As of March 2023, Apple is the worlds biggest company by market capitalization.
+            ceo:
+              type: string
+              description: CEO
+              example: Timothy Cook
+        categories:
+          type: array
+          description: List of categories where stock belongs to
+          example: []
+        opinion:
+          title: Stock opinion
+          type: object
+          properties:
+            points:
+              type: array
+              description: Array of strings - bullet points
+              example:
+              - Massive cash reserves
+              - Proven pricing power
+              - Strong customer loyalty
+            text:
+              type: string
+              description: Opinion text
+              example: "There’s a scene in the 1994 film 'Forrest Gump' where the protagonist casually announces that due to an investment in “some kind of fruit company”, he wouldn’t have to worry about money any more. How many people watched that scene at the time of its release and thought they’d missed the boat on an investment in Apple?\n\nThe stock is currently up over 15,000% since.\n\nNow worth roughly $2 trillion and boasting 1.65 billion active devices, I still believe there are plenty of reasons to be an Apple investor.\n\nThe world’s largest public company has been accused of failing to be truly innovative in a post-Jobs era. While the annual keynote from Cupertino may not attract the same fervour as it did during the release of the first iPod or iPhone, behind the scenes Tim Cook is slowly building a robust and highly-profitable services business. The App Store, Apple Pay, and Apple Music are all becoming an integral part of this business story. Between 2016 and 2020, the company managed to double its services revenue and quarter after quarter this segment continues to grow. Thanks to its consistent new offerings, such as Apple Fitness+, Apple now has over 620 million paid subscriptions. This considerable consumer base now allows the brand to turn towards cross-selling and up-selling in the the form of Apple One, a bundling service which will combine popular offerings and encourage consumers to pay one, flat fee. \n\nNotable innovation also comes in the form of wearables, such as as the Apple Watch and AirPods, which continue to lure new buyers with their tiered, accessible pricing. As of 2020, the segment now generates more revenue than Mac computers and this growth doesn't seem to be slowing down, analysts expect the wearable market to expand between 15-25% annually. The Apple Watch dominates its competition, controlling 36% market share, and with the release of Apple Fitness+, it becomes a viable option within the connected fitness space. \n\nImportantly, while iPhone sales slowed in 2019 and became a concern for investors, the release of the iPhone 12 and its 5G capability brought this segment record-setting sales figures. The first quarter of 2021 saw 17% revenue growth year-over-year. \n\nThis combination of hardware, software, and services creates a sticky ecosystem that leads to lifelong customers. Combined with its powerful brand (the most valuable in the world), Apple are able to maintain high margins, which generates huge amounts of cash for research and development, stock buybacks, and dividends. Their balance sheet was so impressive that Warren Buffett, who typically avoids tech companies, loaded up on Apple stock over the last few years, becoming one of their largest shareholders.\n\nThat being said, investors and Apple must keep their eyes on the horizon as the company faces scrutiny for its monopoly of the App Store. It is unclear if the current administration will take action against the company but Apple did acknowledge this as a risk to its financial condition in its most recent annual report. \n\nDespite this, Apple's dedication to innovation has granted it years of growth and capital. Combined with the company's talent, experience, and brand, it should continue to overcome obstacles and succeed. \n\nApple is the king of consumer hardware and its stock would be a great bedrock for any portfolio."
+            update_date:
+              type: string
+              description: Update date
+              example: '2023-09-25T06:54:25'
+        data_source:
+          type: string
+          description: Source
+          example: IEX Trading Group, DriveWealth
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-us-securities-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

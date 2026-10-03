@@ -1,0 +1,649 @@
+# x-archived-from: bamboo-portfolio-reporting-api-openapi.yml
+# x-archived-on: 2026-10-02
+openapi: 3.2.0
+info:
+  title: Bamboo Portfolio Reporting API
+  version: ''
+  description: The user's portfolio provides comprehensive views of investment performance, cash positions, and account status.
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: Portfolio Reporting
+  description: The user's portfolio provides comprehensive views of investment performance, cash positions, and account status.
+paths:
+  /api/portfolio:
+    get:
+      tags:
+      - Portfolio Reporting
+      summary: Fetch User Portfolio
+      description: 'This endpoint returns summarized information about a user''s total portfolio value, gains and losses, cash positions, and pending deposits and withdrawals with regards to the US market.
+
+        ##### The portfolio overview includes:
+
+        - **Current valuation:** with real-time portfolio value and daily changes
+
+        - **Comprehensive cash positions:** breaking down all cash types and availability
+
+        - **Currency conversion:** showing values in both USD and the user''s local currency
+
+        - **Deposit and withdrawal status:** for pending money movement operations
+
+        - **Account restrictions:** indicating any limitations on account activities'
+      operationId: Web.Api.PortfolioController.portfolio
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: currency
+        in: header
+        description: NGN - to get prices in Naira
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Portfolio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '422':
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/portfolio/breakdown:
+    get:
+      tags:
+      - Portfolio Reporting
+      summary: Fetch User Portfolio Breakdown
+      description: 'This endpoint provides information about the user''s good faith violation status, account restrictions, money available for investment or withdrawal, and overall investment performance metrics.
+
+
+        ##### Advanced portfolio analytics include:
+
+        - **Good faith violations:** showing trading rule violation count and impact
+
+        - **Available to invest:** Exact buying power for new trades
+
+        - **Withdrawable cash:** showing funds eligible for withdrawal
+
+        - **Total return analysis:** with comprehensive performance metrics
+
+        - **Equity Value:** Current value of all stock holdings
+
+
+        Risk management information covers day trading restrictions based on account equity levels, violation tracking for pattern day trader rule compliance, and overall account health status.'
+      operationId: Web.Api.PortfolioController.portfolio_breakdown
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: currency
+        in: header
+        description: NGN - to get prices in Naira
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Portfolio breakdown
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioBreakdownResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '422':
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/stock/{stockSymbol}/ownership:
+    get:
+      tags:
+      - Portfolio Reporting
+      summary: Fetch User Ownership Details
+      description: 'This endpoint provides detailed ownership information about a specific stock that a user owns, including insights into portfolio performance since acquiring the stock.
+
+        ##### Individual stock analysis covers:
+
+        - Position size showing shares owned and current market value
+
+        - Performance tracking with total return and daily return for the holding
+
+        - Cost basis indicating average purchase price and total invested amount
+
+        - Portfolio diversity percentage that this holding represents
+
+        - Outstanding buy or sell orders for this stock
+
+
+        This data supports detailed stock performance analysis, portfolio rebalancing decisions, tax reporting and cost basis tracking, and individual position management.'
+      operationId: Web.Api.PortfolioController.ownership
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: currency
+        in: header
+        description: NGN - to get prices in Naira
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API consumer token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Portfolio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/USOwnershipResponse'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '422':
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    USOwnershipResponse:
+      title: User Ownership Details
+      required:
+      - currency_symbol
+      - ownership
+      - pending_orders
+      type: object
+      properties:
+        currency_symbol:
+          type: number
+          description: currency_symbol
+          example: ₦
+        ownership:
+          type: object
+          description: Value of portfolio
+          properties:
+            shares:
+              type: number
+              description: shares
+              example: 1.29493296
+            average_cost:
+              type: number
+              description: average_cost
+              example: 162502.55
+            equity:
+              type: number
+              description: equity
+              example: 220027.57
+            portfolio_diversity:
+              type: number
+              description: portfolio_diversity
+              example: 75
+            todays_return:
+              type: boolean
+              description: todays_return
+              example: -4815.55
+            todays_return_percent:
+              type: number
+              description: todays_return_percent
+              example: -2.14
+            total_return:
+              type: number
+              description: total_return
+              example: 9596.86
+            total_return_percent:
+              type: string
+              description: total_return_percent
+              example: 4.560546875
+        pending_orders:
+          type: string
+          description: pending_orders
+          example: []
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
+    PortfolioBreakdownResponse:
+      title: Portfolio breakdown response
+      required:
+      - available_to_invest
+      - base_wallet_balance
+      - currency_symbol
+      - equity_value
+      - number_of_violations
+      - restricted_by_dw
+      - total_aum
+      - total_invested
+      - total_percent_change
+      - total_return
+      - value
+      - withdrawable_cash
+      type: object
+      properties:
+        withdrawable_cash:
+          type: number
+          description: Maximum amount that can be withdrawn
+          example: 0
+        value:
+          type: number
+          description: Value of portfolio
+          example: 0
+        total_return:
+          type: number
+          description: Total return
+          example: 0
+        total_percent_change:
+          type: number
+          description: Total portfolio change
+          example: 0
+        total_invested:
+          type: number
+          description: Total invested
+          example: 0
+        total_aum:
+          type: number
+          description: Total AUM
+          example: 0
+        restricted_by_dw:
+          type: boolean
+          description: Restricted by DW
+          example: false
+        number_of_violations:
+          type: number
+          description: Number of GFV for account
+          example: 0
+        equity_value:
+          type: number
+          description: Equity value
+          example: 0
+        currency_symbol:
+          type: string
+          description: Prices currency symbol
+          example: $
+        base_wallet_balance:
+          type: number
+          description: Base wallet Balance
+          example: 0
+        available_to_invest:
+          type: number
+          description: Buying power
+          example: 0
+    ErrorResponse:
+      title: Error response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error response for external or internal errors not connected to data
+          example: Message why request didn't succeed
+      description: Error response for external or internal errors not connected to data
+    PortfolioResponse:
+      title: Portfolio response
+      required:
+      - account_restricted
+      - actual_value
+      - base_wallet_balance
+      - carrot_held_value
+      - cash
+      - currency_code
+      - currency_name
+      - currency_symbol
+      - dollar_balance
+      - dollar_cash
+      - naira_to_usd
+      - pending_deposit
+      - processing_gift_received
+      - processing_gift_sent
+      - processing_withdrawal
+      - referral_cashback_blocked_value
+      - reserved_cash
+      - residence_country
+      - total_cash
+      - unsettled_cash
+      - usd_to_naira
+      - extended_hours_status
+      - usd_to_user_currency
+      - user_currency_symbol
+      - user_currency_to_usd
+      - value
+      - value_change
+      - value_percent_change
+      - withdraw_details
+      - withdrawal_cash
+      type: object
+      properties:
+        withdrawal_cash:
+          type: integer
+          description: Withdrawal cash
+          example: 0
+        withdraw_details:
+          type: array
+          description: withdraw details
+          items:
+            title: withdraw details response
+            type: object
+            properties:
+              country:
+                type: string
+                description: country required for mobile money details i.e only for GHA users
+                example: Nigeria
+              name:
+                type: string
+                description: name required for mobile money details i.e only for GHA users
+                example: John
+              network:
+                type: string
+                description: network required for mobile money details i.e only for GHA users
+              phone_number:
+                type: string
+                description: phone_number required for mobile money details i.e only for GHA users
+              user_id:
+                type: integer
+                description: user_id required for mobile money details i.e only for GHA users
+              bank_code:
+                type: string
+                description: bank_code for bank details i.e for NGA users
+              bank_fw_id:
+                type: string
+                description: bank_fw_id required for bank details i.e for NGA users
+              bank_name:
+                type: string
+                description: bank_name required for bank details i.e for NGA users
+                example: Sterling Bank
+              account_number:
+                type: string
+                description: account_number required for bank details i.e for NGA users
+                example: 0211873910
+              beneficiary_name:
+                type: string
+                description: beneficiary_name for bank details i.e for NGA users
+                example: John Doe
+        value_percent_change:
+          type: integer
+          description: Equity value percent change
+          example: 0
+        value_change:
+          type: integer
+          description: Equity value change
+          example: 0
+        value:
+          type: integer
+          description: Portfolio value cash + equity value
+          example: 0
+        user_currency_to_usd:
+          type: integer
+          description: User currency to USD exchange rate
+          example: 0.001152073732718894
+        user_currency_symbol:
+          type: string
+          description: User currency symbol based on residence country
+          example: ₦
+        usd_to_user_currency:
+          type: integer
+          description: USD to user currency exchange rate
+          example: 868
+        usd_to_naira:
+          type: integer
+          description: USD to Naira exchange rate
+          example: 868
+        extended_hours_status:
+          type:
+          - string
+          - 'null'
+          enum:
+          - ENABLED
+          - DISABLED
+          description: 'Indicates the user''s extended hours trading status.
+
+            - `null`: Returned for existing users or when `extended_hours_opt_in` was not included during onboarding.
+
+            - `ENABLED`: Returned when the user''s brokerage account is successfully created or they later opt in via the extended_hours opt_in endpoint.
+
+            - `DISABLED`: Returned when the user opts out via the extended_hours opt_in endpoint.
+
+            '
+        unsettled_cash:
+          type: integer
+          description: The amount of Unsettled cash a user has after stock sale
+          example: 0
+        total_cash:
+          type: integer
+          description: Total cash
+          example: 0
+        residence_country:
+          type: string
+          description: 'Residence country of user: GHA, NGA or KEN'
+          example: NGA
+        reserved_cash:
+          type: integer
+          description: Reserved cash (mostly unsettled cash)
+          example: 0
+        referral_cashback_blocked_value:
+          type: integer
+          description: Non-withdrawal referral cashback until after 30 days
+          example: 0
+        processing_withdrawal:
+          type: integer
+          description: Processing withdrawal money
+          example: 0
+        processing_gift_sent:
+          type: integer
+          description: Processing gift sent
+          example: 0
+        processing_gift_received:
+          type: integer
+          description: Processing gift received
+          example: 0
+        pending_deposit:
+          type: integer
+          description: Pending deposit money
+          example: 0
+        naira_to_usd:
+          type: integer
+          description: Naira to USD exchange rate
+          example: 0.001152073732718894
+        dollar_cash:
+          type: integer
+          description: Cash available to invest aka buying power always in $
+          example: 0
+        dollar_balance:
+          type: integer
+          description: dollar balance
+          example: 0
+        currency_symbol:
+          type: string
+          description: Prices currency symbol
+          example: ₦
+        currency_name:
+          type: string
+          description: Naira, Shilling or Cedi
+          example: Nigerian Naira
+        currency_code:
+          type: string
+          description: NGN, KES or GHS
+          example: NGN
+        cash:
+          type: number
+          description: Total cash in user's brokerage account. (Also the cash available for user to invest aka buying power)
+          example: 0
+        carrot_held_value:
+          type: number
+          description: Carrot held value most likely for liquidation
+          example: 0
+        base_wallet_balance:
+          type: number
+          description: Base wallet Balance
+          example: 0
+        actual_value:
+          type: number
+          description: Total sum of a  user's portfolio. i.e, a sum of the amount of US Stocks they own, amount in unsettled cash and amount in their brokerage account
+          example: 0
+        account_restricted:
+          type: boolean
+          description: Account restricted
+          example: false
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

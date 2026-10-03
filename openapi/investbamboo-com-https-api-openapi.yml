@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
-  title: 'Bamboo Https: API'
+  title: 'Investbamboo Com Https: API'
   version: ''
+  description: 'Operations tagged Https: across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-https-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
@@ -44,6 +45,8 @@ paths:
                 $ref: '#/components/schemas/ErrorChangesetResponse'
       operationId: getHttps:CscsBanksInvestbambooCom
       x-operation-id-source: derived
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
 components:
   schemas:
     ErrorChangesetResponse:
@@ -62,17 +65,6 @@ components:
           properties: {}
           description: Map of errors
       description: Error response for request which manipulates data
-    ResourceNotFound:
-      title: Resource not found
-      required:
-      - message
-      type: object
-      properties:
-        message:
-          type: string
-          description: Resource not found (an incorrect url may have been used)
-          example: Resource Not Found
-      description: Error response for when the resource is not found within our data.
     cscs_banks_and_sortcodes:
       title: Supported banks and sortcodes
       type: object
@@ -131,6 +123,17 @@ components:
             sort_code: '559'
           - name: Globus Bank
             sort_code: '103'
+    ResourceNotFound:
+      title: Resource not found
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Resource not found (an incorrect url may have been used)
+          example: Resource Not Found
+      description: Error response for when the resource is not found within our data.
     Unauthorized:
       title: Unauthorized response
       required:
@@ -142,6 +145,9 @@ components:
           description: Unauthorized/Invalid Token/Token has expired
           example: Invalid client token supplied.
       description: Token is invalid or have expired
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-https-api-openapi.yml
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo

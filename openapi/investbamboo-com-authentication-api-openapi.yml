@@ -1,0 +1,155 @@
+openapi: 3.2.0
+info:
+  title: Investbamboo Com Authentication API
+  version: ''
+  description: 'Operations tagged Authentication across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-authentication-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: Authentication
+  description: Before you start making requests, you’ll need to generate an access token.
+paths:
+  /oauth/token:
+    post:
+      tags:
+      - Authentication
+      summary: Generate Access Token
+      description: 'This endpoint generates your access token, referred to as your `x-client-token` within Bamboo’s system.
+
+        The credentials needed to generate it will be provided by the Bamboo Team during account setup.'
+      operationId: Web.Api.AuthController.oauth
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        required: true
+        schema:
+          type: string
+          default: application/json
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        required: true
+        schema:
+          type: string
+          default: en
+      - name: app-key
+        in: header
+        description: Application key that uniquely identifies a tenant as an API consumer.
+        example: 1755d3dd-e6b9-4df1-9537-eb9017da70g9
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Tenant Level Authentication Request
+        content:
+          application/json:
+            schema:
+              title: Tenant login request
+              required:
+              - username
+              - password
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username
+                  example: invest-bamboo
+                password:
+                  type: string
+                  description: Password
+                  example: 32qC6I2U5J-0i73zJDEdapFJvwICJAl1I7ScekqupVfouiAMz_J7obWHI3kuDVOL
+              description: POST request body parameters
+      responses:
+        '200':
+          description: Tenant Login Successful
+          content:
+            application/json:
+              schema:
+                title: Response
+                required:
+                - access_token
+                - expires_in
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    required:
+                    - access_token
+                    description: Tenant access token (x-client-token)
+                    example: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikx6aTZoUVRwc2gtS21BNjdzbXdCWiJ9.
+
+                      eyJodHRwczovL2V4YW1wbGUuY29tL2NsYWltIjoiYmFyIiwiaXNzIjoiaHR0cHM6Ly9pbnZlc3RiYW1ib28uYXV0aDAuY29tLyIsInN1YiI6IjZWdUVjV1NFdUZWdGRJM1ExYlliRVV6UGZOVHljTkM4QGNsaWVudHMiLCJhdWQiOiJodHRwczovL3Bvd2VyZWQtYnktYmFtYm9vLXNhbmRib3guaW52ZXN0YmFtYm9vLmNvbS8iLCJpYXQiOjE3NTk1MDU1MzQsImV4cCI6MTc1OTU5MTkzNCwic2NvcGUiOiJyZWFkOmJhbWJvb19kYXRhIGV4dHJhIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIiwiYXpwIjoiNlZ1RWNXU0V1RlZ0ZEkzUTFiWWJFVXpQZk5UeWNOQzgifQ.
+
+                      F-bR5wEFxtD-3Y93Lzjfi2UY_9V9k8ckGkndhnLa-SXjp9GvitG79MSyUaNahvT6TVmFUw6Us59GhQAltlcETPoBk3wF934FbfGyofAPzsJ6j2mLIHY2YH-l4KO7_ZA9KAPeh8lGN24R5ZMLuDFGjbteNcHp_rCba1KhTYA_EJIL8p2zYsfYn72PAMb0pWUb5v9YC_HYNf95Q5bNHp0W0m7ZI21VwPVD0TRAazT931xCkF4d0oukvEmGkZ0ns8u1VxsZ0b2nUzV0K1YL6nBn68lg8b7lX7tLMReGUCxE_qsfI1vr0WYvQxCrmvjUsMFrDvW5oDlASa25WOcxYDWweQ
+
+                      '
+                  expires_in:
+                    type: string
+                    description: Token expiration time in seconds
+                    example: 86400
+                description: Result of POST request on tenant login
+        '401':
+          description: Invalid app key supplied
+          content:
+            application/json:
+              schema:
+                title: Unauthorized response
+                required:
+                - message
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Unauthorized/Invalid Token
+                    example: Invalid app key supplied
+                description: Token is invalid or has expired
+        '422':
+          description: Incorrect Parameters
+          content:
+            application/json:
+              schema:
+                title: Error changeset response
+                required:
+                - errors
+                - message
+                type: object
+                properties:
+                  message:
+                    type: string
+                    required: true
+                    description: Message why request didn't succeed
+                    example: Wrong username or password
+                description: Error response for request which manipulates data
+      x-codegen-request-body-name: body
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-authentication-api-openapi.yml
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

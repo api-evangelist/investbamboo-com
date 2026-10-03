@@ -1,0 +1,314 @@
+# x-archived-from: bamboo-ng-deposits-api-openapi.yml
+# x-archived-on: 2026-10-02
+openapi: 3.2.0
+info:
+  title: Bamboo NG Deposits API
+  version: ''
+servers:
+- url: https://powered-by-bamboo-sandbox.investbamboo.com
+tags:
+- name: NG Deposits
+paths:
+  /api/lsx/ng/deposit:
+    post:
+      tags:
+      - NG Deposits
+      summary: Create Deposit
+      description: 'This endpoint is used to send the details needed to create a deposit request for your users. After verification is completed,
+
+        the user''s position will be credited with the value requested. To get statuses about your deposit, head to the NG Stocks Events section.'
+      parameters:
+      - name: content-type
+        in: header
+        description: Acceptable content type
+        example: application/json
+        required: true
+        schema:
+          type: string
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: NGX Deposit request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/lsxngdeposit'
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lsxngdeposit_response'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '422':
+          description: Incomplete Parameters
+          content:
+            application/json:
+              example:
+                message: NGX account is not active
+              schema:
+                $ref: '#/components/schemas/ErrorChangesetResponse'
+      operationId: postApiLsxNgDeposit
+      x-operation-id-source: derived
+  /api/lsx/ng/deposit/{reference}:
+    get:
+      tags:
+      - NG Deposits
+      summary: Fetch Deposits by Reference
+      description: This is used to fetch a deposit by its specific transaction reference number.
+      parameters:
+      - name: accept-language
+        in: header
+        description: Acceptable language; 'en' for English
+        example: en
+        required: true
+        schema:
+          type: string
+      - name: x-user-id
+        in: header
+        description: Required for user authentication
+        required: true
+        schema:
+          type: string
+      - name: x-subject-type
+        in: header
+        description: For user request -> 'tenant'.
+        required: true
+        schema:
+          type: string
+      - name: x-client-token
+        in: header
+        description: API Consumer Authorisation Token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lsxngdeposit_by_reference_response'
+        '401':
+          description: Token have expired or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      operationId: getApiLsxNgDepositByReference
+      x-operation-id-source: derived
+components:
+  schemas:
+    lsxngdeposit_response:
+      title: Deposit response
+      required:
+      - amount
+      - currency
+      - dollar_amount
+      - dollar_fee
+      - exchange_rate
+      - fee
+      - provider
+      - provider_txref
+      - status
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount to be deposited
+          example: 200000
+        currency:
+          type: string
+          description: Currency
+          example: NGN
+        dollar_amount:
+          type: number
+          description: Dollar equivalent of amount to be deposited
+          example: 230.41
+        dollar_fee:
+          type: number
+          description: Dollar Fee
+          example: 0.02
+        exchange_rate:
+          type: number
+          description: Fee
+          example: 868
+        fee:
+          type: number
+          description: Fee
+          example: 50
+        provider:
+          type: string
+          description: API Consumer Name
+          example: invest-bamboo
+        provider_txref:
+          type: string
+          description: Deposit reference
+          example: INVcal2VzeVGJkCXNx
+        status:
+          type: string
+          description: Status
+          example: Pending
+    lsxngdeposit_by_reference_response:
+      title: Deposit request
+      required:
+      - amount
+      - currency
+      - dollar_amount
+      - dollar_fee
+      - exchange_rate
+      - fee
+      - provider
+      - provider_txref
+      - status
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount to be deposited
+          example: 200000
+        currency:
+          type: string
+          description: Currency
+          example: NGN
+        dollar_amount:
+          type: number
+          description: Dollar equivalent of amount to be deposited
+          example: 230.41
+        dollar_fee:
+          type: number
+          description: Dollar Fee
+          example: 0.02
+        exchange_rate:
+          type: number
+          description: Fee
+          example: 868
+        fee:
+          type: number
+          description: Fee
+          example: 50
+        provider:
+          type: string
+          description: API Consumer Name
+          example: invest-bamboo
+        provider_txref:
+          type: string
+          description: Deposit reference
+          example: INVcal2VzeVGJkCXNx
+        status:
+          type: string
+          description: Status
+          example: Successful
+    lsxngdeposit:
+      title: Deposit request
+      required:
+      - amount
+      - currency
+      - fee
+      - provider_txref
+      - provider
+      type: object
+      properties:
+        provider_txref:
+          type: string
+          description: Deposit reference
+          example: INVcal2VzeVGJkCXNx
+        provider:
+          type: string
+          description: API Consumer Name
+          example: invest-bamboo
+        fee:
+          type: number
+          description: Fee
+          example: 20
+        currency:
+          type: string
+          description: Currency
+          example: NGN
+        amount:
+          type: number
+          description: Amount to be deposited
+          example: 200000
+    Unauthorized:
+      title: Unauthorized response
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Unauthorized/Invalid Token/Token has expired
+          example: Invalid client token supplied.
+      description: Token is invalid or have expired
+    ErrorChangesetResponse:
+      title: Error changeset response
+      required:
+      - errors
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message why request didn't succeed
+          example: Invalid credentials
+        errors:
+          type: object
+          properties: {}
+          description: Map of errors
+      description: Error response for request which manipulates data
+x-logo:
+  url: bamboo-logo.png
+  altText: bamboo logo
+x-tagGroups:
+- name: Authentication
+  tags:
+  - Authentication
+  - Account Management
+- name: Money Movement
+  tags:
+  - Overview
+  - Deposits
+  - Withdrawals
+- name: US Brokerage Services
+  tags:
+  - Portfolio Reporting
+  - US Securities
+  - US Stock Trading
+  - US Stock Events
+- name: Utilities
+  tags:
+  - Dictionaries
+  - Market Activity
+  - Exchange Rate
+  - Featured Themes
+  - Financial Documents

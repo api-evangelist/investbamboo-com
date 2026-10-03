@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Bamboo Exchange Rate API
+  title: Investbamboo Com Exchange Rate API
   version: ''
-  description: The exchange rate section provides you with an endpoint that fetches real-time exchange rates effortlessly, enabling accurate currency conversions and financial calculations.
+  description: 'Operations tagged Exchange Rate across 2 of this provider''s published API definitions: bamboo-openapi.json, bamboo-exchange-rate-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://powered-by-bamboo-sandbox.investbamboo.com
 tags:
@@ -62,6 +62,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResourceNotFound'
+    servers:
+    - url: https://powered-by-bamboo-sandbox.investbamboo.com
 components:
   schemas:
     ResourceNotFound:
@@ -117,6 +119,9 @@ components:
                 type: number
                 description: Buy rate for requested currency
                 example: 868
+x-refined-from:
+- bamboo-openapi.json
+- bamboo-exchange-rate-api-openapi.yml
 x-logo:
   url: bamboo-logo.png
   altText: bamboo logo
