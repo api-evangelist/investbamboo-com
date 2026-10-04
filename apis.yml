@@ -42,6 +42,7 @@ tags:
   - Portfolio Management
   - Brokerage
   - Fintech
+  - Financial Services
 tags_raw:
   - Investments
   - Stocks
@@ -52,6 +53,7 @@ tags_raw:
   - Brokerage
   - Fintech
   - Portfolio-Management
+  - Financial Services
 apis:
 - aid: investbamboo-com:investbamboo-com-account-management-api
   name: Bamboo Invest Account Management API
@@ -256,6 +258,8 @@ apis:
   humanURL: https://docs.investbamboo.com/
   baseURL: https://api.investbamboo.com
   tags:
+  - HTTP
+  tags_raw:
   - 'Https:'
   properties:
   - type: OpenAPI
@@ -438,6 +442,8 @@ apis:
   humanURL: https://docs.investbamboo.com/
   baseURL: https://api.investbamboo.com
   tags:
+  - Tenants
+  tags_raw:
   - Tenant
   properties:
   - type: OpenAPI
