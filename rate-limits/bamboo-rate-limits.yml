@@ -1,3 +1,8 @@
+# Provenance stamped 2026-10-07 (roadmap#943): written by an API Evangelist sweep (dated 2026-06-13 by the file itself), not
+# harvested from the provider. `method: generated` so the economics campaign may replace it with a
+# dated, verbatim transcription; every figure below is unverified until it does.
+method: generated
+generated: '2026-06-13'
 name: Bamboo Invest API Rate Limits
 description: Rate limit information for the Bamboo Invest REST API. Bamboo's public documentation does not publish explicit rate limit thresholds. Limits are enforced at the API gateway layer and are communicated to API partners directly. The following reflects known patterns based on available documentation and standard fintech API practices.
 url: https://docs.investbamboo.com/api/
