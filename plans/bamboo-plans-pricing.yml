@@ -55,3 +55,28 @@ plans:
       - Fractional stock trading
       - Webhook-based event notifications
       - KYC/identity verification integration
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  units: []
+  plans:
+  - name: Consumer - US Stocks
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Consumer - Nigerian Stocks (NGX)
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: API Partner Program
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
